@@ -1,10 +1,10 @@
 package elements;
 
-import map.MapDirection;
-import map.MoveDirection;
-import map.Vector2d;
-import map.WorldMap;
+import map.*;
+
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Animal implements IMapElement{
@@ -14,20 +14,13 @@ public class Animal implements IMapElement{
     private Vector2d position;
     private WorldMap map;
     private int[] genome = new int[32];
+    private Set<IPositionChangeObserver> observers = new HashSet<>();
 
     public Animal() {
     }
 
     public boolean canReproduce() {
         return energy >= MIN_REPRODUCTION_ENERGY;
-    }
-
-    public void reproduce(Animal parentB) {
-        if (this.canReproduce() && parentB.canReproduce()) {
-            energy = (int) Math.floor(0.75 * energy);
-            parentB.energy = (int) Math.floor(0.75 * parentB.energy);
-        }
-        energy = (int) Math.floor(0.75 * energy);
     }
 
     public int[] getGenome() {
@@ -46,28 +39,29 @@ public class Animal implements IMapElement{
         this.energy += energy;
     }
 
-    private void eatGrass(Grass grass) {
-        map.removeGrass(grass);
-        increaseEnergy(grass.getNutritionValue());
-    }
-
     public void move(MoveDirection direction) {
         switch (direction) {
             case TURN:
                 this.direction = MapDirection.values()[(this.direction.ordinal() + genome[ThreadLocalRandom.current().nextInt(genome.length)]) % MapDirection.values().length];
                 break;
             case MOVE:
-                Vector2d newPosition = position.add(this.direction.toUnitVector());
-                if (map.canMoveTo(newPosition)) {
-                    Object objectAtNewPosition = map.objectAt(newPosition);
-                    if (objectAtNewPosition instanceof Grass) eatGrass((Grass) objectAtNewPosition);
-                    position = newPosition;
-                } else {
-                    Object objectAtNewPosition = map.objectAt(newPosition);
-                    if (objectAtNewPosition instanceof Animal) reproduce((Animal) objectAtNewPosition);
-                }
+                Vector2d oldPosition = this.position;
+                position = position.add(this.direction.toUnitVector());
+                observers.forEach(e -> e.positionChanged(this, oldPosition));
                 break;
         }
+    }
+
+    public void addObserver(IPositionChangeObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(IPositionChangeObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void clearObservers() {
+        observers.clear();
     }
 
     public Vector2d getPosition() {

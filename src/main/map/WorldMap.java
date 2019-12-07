@@ -22,7 +22,13 @@ public class WorldMap implements IWorldMap {
 
     @Override
     public void run(MoveDirection[] directions) {
-
+        int i = 0;
+        if (animals.isEmpty()) return;
+        for (MoveDirection direction : directions) {
+            Animal animal = animals.get(i % animals.size());
+            animal.move(direction);
+            i++;
+        }
     }
 
     public WorldMap(int width, int height) {
@@ -79,6 +85,7 @@ public class WorldMap implements IWorldMap {
         }
         animals.add(animal);
         addAnimalToPosition(animal, normalisePosition(animal.getPosition()));
+        animal.addObserver(this);
     }
 
     private void addAnimalToPosition(Animal animal, Vector2d position){
@@ -197,5 +204,6 @@ public class WorldMap implements IWorldMap {
         occupiedPositions.get(position).remove(animal);
         if(occupiedPositions.get(position).isEmpty())
             occupiedPositions.remove(position);
+        animal.removeObserver(this);
     }
 }

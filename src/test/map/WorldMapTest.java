@@ -62,7 +62,27 @@ class WorldMapTest {
     }
 
     @Test
-    void testPositionChanged() {
+    void testRun() {
+        Animal animal1 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(99, 29)).facingDirection(MapDirection.NORTH).build();
+        Animal animal2 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(50, 29)).facingDirection(MapDirection.NORTHEAST).build();
+        Animal animal3 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(0, 3)).facingDirection(MapDirection.SOUTH).build();
+        Animal animal4 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(0, 1)).facingDirection(MapDirection.NORTH).build();
+        map.placeAnimal(animal1);
+        map.run(new MoveDirection[]{MoveDirection.MOVE});
+        assertNull(map.objectAt(new Vector2d(99, 29)));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 0))).contains(animal1));
+        map.removeAnimal(animal1);
+        map.placeAnimal(animal2);
+        map.run(new MoveDirection[]{MoveDirection.MOVE});
+        assertNull(map.objectAt(new Vector2d(50, 29)));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(51, 0))).contains(animal2));
+        map.removeAnimal(animal2);
+        map.placeAnimal(animal3);
+        map.placeAnimal(animal4);
+        map.run(new MoveDirection[]{MoveDirection.MOVE, MoveDirection.MOVE});
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal3));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal4));
+
     }
 
     @Test
