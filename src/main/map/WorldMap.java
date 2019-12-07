@@ -5,6 +5,7 @@ import elements.Grass;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class WorldMap implements IWorldMap {
 
@@ -47,7 +48,10 @@ public class WorldMap implements IWorldMap {
     }
 
     void removeDeadAnimals() {
-
+        List<Animal> animalsToRemove = animals.stream().filter(Animal::isDead).collect(Collectors.toList());
+        for (Animal animal : animalsToRemove) {
+            removeAnimal(animal);
+        }
     }
 
     public void simulate(boolean visualize) throws InterruptedException {

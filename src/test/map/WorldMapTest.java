@@ -16,7 +16,15 @@ class WorldMapTest {
 
     @Test
     void testRemoveDeadAnimals() {
-
+        Animal animal1 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(10, 3)).withEnergy(-1).build();
+        Animal animal2 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(2, 0)).withEnergy(-1).build();
+        Animal animal3 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).withEnergy(-1).build();
+        map.placeAnimal(animal1);
+        map.placeAnimal(animal2);
+        map.placeAnimal(animal3);
+        assertEquals(3, map.animals.size());
+        map.removeDeadAnimals();
+        assertEquals(0, map.animals.size());
     }
 
     @Test
