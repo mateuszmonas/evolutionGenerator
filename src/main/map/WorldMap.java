@@ -2,9 +2,7 @@ package map;
 
 import elements.Animal;
 import elements.Grass;
-import elements.IMapElement;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,7 +16,7 @@ public class WorldMap implements IWorldMap {
     private Map<Vector2d, Grass> grasses = new HashMap<>();
     private int day = 0;
     protected List<Animal> animals = new ArrayList<>();
-    protected Map<Vector2d, List<Animal>> occupiedPositions = new HashMap<>();
+    protected Map<Vector2d, Set<Animal>> occupiedPositions = new HashMap<>();
 
     MapVisualizer mapVisualizer = new MapVisualizer(this);
 
@@ -85,7 +83,14 @@ public class WorldMap implements IWorldMap {
 
     private void addAnimalToPosition(Animal animal, Vector2d position){
         if(!occupiedPositions.containsKey(position)){
-            occupiedPositions.put(position, new ArrayList<>());
+            occupiedPositions.put(position, new TreeSet<>((animal1, animal2) -> {
+                if(animal1.getEnergy()<animal2.getEnergy())
+                    return 1;
+                if (animal1 == animal2) {
+                    return 0;
+                }
+                return -1;
+            }));
         }
         occupiedPositions.get(position).add(animal);
     }
@@ -93,7 +98,7 @@ public class WorldMap implements IWorldMap {
     @Override
     public boolean canMoveTo(Vector2d position) {
         position = normalisePosition(position);
-        return !isOccupied(position);
+        return true;
     }
 
     @Override
@@ -157,8 +162,7 @@ public class WorldMap implements IWorldMap {
     }
 
     Vector2d normalisePosition(Vector2d position) {
-        int newX = 0;
-        int newY = 0;
+        int newX, newY;
         if (position.x >= 0) {
             newX = position.x % (getUpperRight().x + 1);
         } else {

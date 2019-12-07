@@ -6,6 +6,7 @@ import elements.Grass;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,41 +21,41 @@ class WorldMapTest {
 
     @Test
     void testPlaceAndRemoveAnimal() {
-        Animal animal1 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(100, 30)).build();
-        Animal animal2 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(-2, 0)).build();
-        Animal animal3 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).build();
-        Animal animal4 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(99, 29)).build();
-        Animal animal5 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(99, 29)).build();
+        Animal animal1 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(100, 30)).build();
+        Animal animal2 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(-2, 0)).build();
+        Animal animal3 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).build();
+        Animal animal4 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(99, 29)).withEnergy(10).build();
+        Animal animal5 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(99, 29)).withEnergy(12).build();
+        Animal animal6 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(99, 29)).withEnergy(10).build();
         assertThrows(IllegalArgumentException.class, () -> map.placeAnimal(animal1));
         assertThrows(IllegalArgumentException.class, () -> map.placeAnimal(animal2));
         map.placeAnimal(animal3);
         map.placeAnimal(animal4);
-        assertTrue(((ArrayList<Animal>) map.objectAt(new Vector2d(0, 0))).contains(animal3));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(0, 0))).contains(animal3));
         assertTrue(map.animals.contains(animal3));
-        assertTrue(((ArrayList<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
         assertTrue(map.animals.contains(animal4));
         map.placeAnimal(animal5);
-        assertTrue(((ArrayList<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
+        assertEquals(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).first(), animal5);
         assertTrue(map.animals.contains(animal5));
+        map.placeAnimal(animal6);
+        assertEquals(3, ((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).size());
 
         map.removeAnimal(animal3);
         assertNull(map.objectAt(new Vector2d(0, 0)));
         assertFalse(map.animals.contains(animal3));
         map.removeAnimal(animal4);
-        assertFalse(((ArrayList<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
+        assertFalse(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
         assertFalse(map.animals.contains(animal4));
-        assertTrue(((ArrayList<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
+        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
         assertTrue(map.animals.contains(animal5));
 
     }
 
     @Test
-    void testCanMoveTo() {
-    }
-
-    @Test
     void testIsOccupied() {
-        Animal animal1 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).build();
+        Animal animal1 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).build();
         map.placeAnimal(animal1);
         assertTrue(map.isOccupied(new Vector2d(0, 0)));
         assertFalse(map.isOccupied(new Vector2d(2, 0)));
@@ -67,7 +68,7 @@ class WorldMapTest {
     @Test
     void testObjectAt() {
         assertNull(map.objectAt(new Vector2d(0, 0)));
-        Animal animal1 = new Animal.AnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).build();
+        Animal animal1 = Animal.AnimalBuilder.newAnimalBuilder().onMap(map).atPosition(new Vector2d(0, 0)).build();
         map.placeGrass(new Grass(new Vector2d(0, 0)));
         map.placeAnimal(animal1);
         assertTrue(map.objectAt(new Vector2d(0, 0)) instanceof ArrayList);
@@ -94,9 +95,5 @@ class WorldMapTest {
         position = new Vector2d(-10, 8);
         assertEquals(new Vector2d(0, 8), map.normalisePosition(position));
 
-    }
-
-    @Test
-    void testRemoveAnimal() {
     }
 }
