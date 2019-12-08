@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WorldMapTest {
 
-    WorldMap map = new WorldMap(100, 30);
+    WorldMap map = WorldMap.newMapBuilder().withHeight(30).withWidth(100).build();
 
     @Test
     void testRemoveDeadAnimals() {

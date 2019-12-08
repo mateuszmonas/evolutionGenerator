@@ -9,7 +9,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class WorldMap implements IWorldMap {
 
-    private final int SURVIVAL_ENERGY_COST = 1;
+    int WIDTH;
+    int HEIGHT;
+    int MOVE_ENERGY;
+    int PLANT_ENERGY;
+    int ANIMAL_ENERGY;
+    double JUNGLE_RATIO;
     protected AnimalsContainer animals;
     MapVisualizer mapVisualizer = new MapVisualizer(this);
     private Vector2d lowerLeft;
@@ -19,13 +24,15 @@ public class WorldMap implements IWorldMap {
     protected Map<Vector2d, Grass> grasses = new HashMap<>();
     private int day = 0;
 
-    public WorldMap(int width, int height) {
-        width = width - 1;
-        height = height - 1;
+    private WorldMap() {
+
+    }
+
+    void initialize() {
         this.lowerLeft = new Vector2d(0, 0);
-        this.upperRight = new Vector2d(width, height);
-        this.jungleLowerLeft = new Vector2d((int) Math.floor(0.25 * width), (int) Math.floor(0.25 * height));
-        this.jungleUpperRight = new Vector2d((int) Math.ceil(0.25 * width), (int) Math.ceil(0.25 * height));
+        this.upperRight = new Vector2d(this.WIDTH, this.HEIGHT);
+        this.jungleLowerLeft = new Vector2d((int) Math.floor((0.5 - JUNGLE_RATIO * 0.5) * this.WIDTH), (int) Math.floor((0.5 - JUNGLE_RATIO * 0.5) * this.HEIGHT));
+        this.jungleUpperRight = new Vector2d((int) Math.ceil((0.5 + JUNGLE_RATIO * 0.5) * this.WIDTH), (int) Math.ceil((0.5 + JUNGLE_RATIO * 0.5) * this.HEIGHT));
         if (!lowerLeft.precedes(jungleLowerLeft)) {
             throw new IllegalArgumentException("Jungle lower left corner can't precede map lower left corner");
         }
@@ -122,8 +129,8 @@ public class WorldMap implements IWorldMap {
     @Override
     public Object objectAt(Vector2d position) {
         Object obj = animals.get(position);
-        if (obj instanceof Collection) {
-            obj = ((Collection) obj).stream().max(Comparator.comparingInt(Animal::getEnergy)).get();
+        if (obj != null) {
+            obj = ((Collection<Animal>) obj).stream().max(Comparator.comparingInt(Animal::getEnergy)).get();
         }
         if (obj == null) {
             obj = grasses.getOrDefault(position, null);
@@ -155,13 +162,13 @@ public class WorldMap implements IWorldMap {
             y = ThreadLocalRandom.current().nextInt(0, upperRight.y + 1);
             position = new Vector2d(x, y);
         } while ((jungleLowerLeft.precedes(position) && jungleUpperRight.follows(position)));
-        grasses.put(position, new Grass(position));
+        grasses.put(position, new Grass(position, PLANT_ENERGY));
 
         x = ThreadLocalRandom.current().nextInt(jungleLowerLeft.x, jungleUpperRight.x + 1);
         y = ThreadLocalRandom.current().nextInt(jungleLowerLeft.y, jungleUpperRight.y + 1);
         position = new Vector2d(x, y);
 
-        grasses.put(position, new Grass(position));
+        grasses.put(position, new Grass(position, PLANT_ENERGY));
     }
 
     public void placeGrass(Grass grass) {
@@ -220,5 +227,61 @@ public class WorldMap implements IWorldMap {
     @Override
     public String toString() {
         return mapVisualizer.draw(getLowerLeft(), getUpperRight());
+    }
+
+    public static MapBuilder newMapBuilder() {
+        return new MapBuilder();
+    }
+
+    public static class MapBuilder{
+        int WIDTH = 100;
+        int HEIGHT = 100;
+        int MOVE_ENERGY = 1;
+        int PLANT_ENERGY = 2;
+        int ANIMAL_ENERGY = 20;
+        double JUNGLE_RATIO = 0.5;
+
+        public MapBuilder withWidth(int width) {
+            this.WIDTH = width;
+            return this;
+        }
+
+        public MapBuilder withHeight(int height) {
+            this.HEIGHT = height;
+            return this;
+        }
+
+        public MapBuilder withMoveEnergy(int moveEnergy) {
+            this.MOVE_ENERGY = moveEnergy;
+            return this;
+        }
+
+        public MapBuilder withPlantEnergy(int plantEnergy) {
+            this.PLANT_ENERGY = plantEnergy;
+            return this;
+        }
+
+        public MapBuilder withAnimalEnergy(int animalEnergy) {
+            this.ANIMAL_ENERGY = animalEnergy;
+            return this;
+        }
+
+        public MapBuilder withJungleRatio(int jungleRatio) {
+            this.JUNGLE_RATIO = jungleRatio;
+            return this;
+        }
+
+        public WorldMap build() {
+            WorldMap map = new WorldMap();
+            map.WIDTH = WIDTH - 1;
+            map.HEIGHT = HEIGHT - 1;
+            map.JUNGLE_RATIO = JUNGLE_RATIO;
+            map.PLANT_ENERGY = PLANT_ENERGY;
+            map.MOVE_ENERGY = MOVE_ENERGY;
+            map.ANIMAL_ENERGY = ANIMAL_ENERGY;
+            map.initialize();
+            return map;
+        }
+
     }
 }

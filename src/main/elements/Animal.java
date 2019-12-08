@@ -12,7 +12,7 @@ public class Animal implements IMapElement {
     private int energy;
     private MapDirection direction;
     private Vector2d position;
-    private WorldMap map;
+    private IWorldMap map;
     private int[] genome = new int[32];
     private Set<IPositionChangeObserver> observers = new HashSet<>();
 
@@ -67,10 +67,6 @@ public class Animal implements IMapElement {
 
     public void removeObserver(IPositionChangeObserver observer) {
         observers.remove(observer);
-    }
-
-    public void clearObservers() {
-        observers.clear();
     }
 
     public Vector2d getPosition() {
