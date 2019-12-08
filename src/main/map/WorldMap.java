@@ -4,10 +4,7 @@ import elements.Animal;
 import elements.AnimalsContainer;
 import elements.Grass;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class WorldMap implements IWorldMap {
@@ -118,6 +115,13 @@ public class WorldMap implements IWorldMap {
             obj = grasses.getOrDefault(position, null);
         }
         return obj;
+    }
+
+    private void feedAnimals(){
+        for (Grass grass : grasses.values()) {
+            if (animals.containsKey(grass.getPosition())) {
+            }
+        }
     }
 
     private void generateGrasses() {

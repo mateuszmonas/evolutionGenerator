@@ -6,6 +6,7 @@ import map.Vector2d;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -116,6 +117,20 @@ class AnimalsContainerTest {
         assertEquals(new Vector2d(9, 8), animals.normalisePosition(position));
         position = new Vector2d(-10, 8);
         assertEquals(new Vector2d(0, 8), animals.normalisePosition(position));
+    }
+
+    @Test
+    void TestGetStrongestAt() {
+        Animal animal1 = Animal.newAnimalBuilder().withEnergy(0).atPosition(new Vector2d(2, 2)).build();
+        Animal animal2 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector2d(2, 2)).build();
+        Animal animal3 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector2d(2, 2)).build();
+        animals.add(animal1);
+        animals.add(animal2);
+        animals.add(animal3);
+        Set<Animal> strongest = animals.getStrongestAt(new Vector2d(2, 2));
+        assertFalse(strongest.contains(animal1));
+        assertTrue(strongest.contains(animal2));
+        assertTrue(strongest.contains(animal3));
     }
 
 }

@@ -1,12 +1,14 @@
 package map;
 
 
+import com.sun.source.tree.Tree;
 import elements.Animal;
 import elements.Grass;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
-import java.util.TreeSet;
+import java.util.Set;
+import java.util.SortedSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,19 +41,18 @@ class WorldMapTest {
         assertThrows(IllegalArgumentException.class, () -> map.placeAnimal(animal2));
         map.placeAnimal(animal3);
         map.placeAnimal(animal4);
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(0, 0))).contains(animal3));
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(0, 0))).contains(animal3));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
         map.placeAnimal(animal5);
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
-        assertEquals(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).first(), animal5);
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
         map.placeAnimal(animal6);
-        assertEquals(3, ((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).size());
+        assertEquals(3, ((Set<Animal>) map.objectAt(new Vector2d(99, 29))).size());
 
         map.removeAnimal(animal3);
         assertNull(map.objectAt(new Vector2d(0, 0)));
         map.removeAnimal(animal4);
-        assertFalse(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
+        assertFalse(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
 
     }
 
@@ -72,18 +73,18 @@ class WorldMapTest {
         map.placeAnimal(animal1);
         map.run(new MoveDirection[]{MoveDirection.MOVE});
         assertNull(map.objectAt(new Vector2d(99, 29)));
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(99, 0))).contains(animal1));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 0))).contains(animal1));
         map.removeAnimal(animal1);
         map.placeAnimal(animal2);
         map.run(new MoveDirection[]{MoveDirection.MOVE});
         assertNull(map.objectAt(new Vector2d(50, 29)));
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(51, 0))).contains(animal2));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(51, 0))).contains(animal2));
         map.removeAnimal(animal2);
         map.placeAnimal(animal3);
         map.placeAnimal(animal4);
         map.run(new MoveDirection[]{MoveDirection.MOVE, MoveDirection.MOVE});
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal3));
-        assertTrue(((TreeSet<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal4));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal3));
+        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal4));
 
     }
 
@@ -95,7 +96,6 @@ class WorldMapTest {
         map.placeGrass(grass);
         assertEquals(grass, map.objectAt(new Vector2d(0, 0)));
         map.placeAnimal(animal1);
-        Object obj = map.objectAt(new Vector2d(0, 0));
         assertTrue(map.objectAt(new Vector2d(0, 0)) instanceof Collection);
     }
 

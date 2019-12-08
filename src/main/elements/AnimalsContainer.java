@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class AnimalsContainer implements Iterable<Animal> {
     protected List<Animal> animals = new ArrayList<>();
-    protected Map<Vector2d, Set<Animal>> occupiedPositions = new HashMap<>();
+    protected Map<Vector2d, TreeSet<Animal>> occupiedPositions = new HashMap<>();
 
     private Vector2d upperRight;
 
@@ -59,14 +59,20 @@ public class AnimalsContainer implements Iterable<Animal> {
         add(animal);
     }
 
+    public Set<Animal> getStrongestAt(Vector2d position) {
+        position = normalisePosition(position);
+        int highestEnergy = occupiedPositions.get(position).first().getEnergy();
+        return occupiedPositions.get(position).headSet(Animal.newAnimalBuilder().withEnergy(highestEnergy - 1).build());
+    }
+
     public void add(Animal animal) {
         Vector2d position = normalisePosition(animal.getPosition());
         if (!occupiedPositions.containsKey(position)) {
             occupiedPositions.put(position, new TreeSet<>((animal1, animal2) -> {
                 if (animal1.getEnergy() < animal2.getEnergy())
                     return 1;
-                if (animal1 == animal2) {
-                    return 0;
+                else if (animal1.getEnergy() == animal2.getEnergy()) {
+                    return Integer.compare(animal1.hashCode(), animal2.hashCode());
                 }
                 return -1;
             }));
