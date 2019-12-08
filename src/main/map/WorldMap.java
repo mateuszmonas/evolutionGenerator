@@ -73,6 +73,10 @@ public class WorldMap implements IWorldMap {
 
         if (visualize) visualize(100);
 
+        reproduceAnimals();
+
+        if (visualize) visualize(100);
+
         generateGrasses();
 
         if (visualize) visualize(100);
@@ -118,8 +122,8 @@ public class WorldMap implements IWorldMap {
     @Override
     public Object objectAt(Vector2d position) {
         Object obj = animals.get(position);
-        if (obj instanceof TreeSet) {
-            obj = ((TreeSet) obj).first();
+        if (obj instanceof Collection) {
+            obj = ((Collection) obj).stream().max(Comparator.comparingInt(Animal::getEnergy)).get();
         }
         if (obj == null) {
             obj = grasses.getOrDefault(position, null);
@@ -188,6 +192,29 @@ public class WorldMap implements IWorldMap {
     public void removeAnimal(Animal animal) {
         animals.remove(animal);
         animal.removeObserver(this);
+    }
+
+    void reproduceAnimals() {
+        for (Vector2d position : animals.getOccupiedPositions()) {
+            Set<Animal> animalsAt = animals.get(position);
+            if (2 <= animalsAt.size()) {
+                Iterator<Animal> a = animalsAt.stream().sorted((animal1, animal2) -> {
+                    if (animal1.getEnergy() < animal2.getEnergy()) return 1;
+                    else if(animal1.getEnergy()==animal2.getEnergy()) return 0;
+                    return -1;
+                }).iterator();
+                Animal animal1 = a.next();
+                Animal animal2 = a.next();
+                if (animal1.canReproduce() && animal2.canReproduce()) {
+                    Animal child = Animal.newAnimalBuilder().atPosition(position).withEnergy(animal1.getEnergy() / 4 + animal2.getEnergy() / 4)
+                            .fromParents(animal1, animal2).build();
+                    placeAnimal(child);
+                    animal1.reduceEnergy(animal1.getEnergy() / 4);
+                    animal2.reduceEnergy(animal2.getEnergy() / 4);
+                }
+
+            }
+        }
     }
 
     @Override

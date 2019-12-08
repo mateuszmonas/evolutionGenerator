@@ -130,4 +130,23 @@ class WorldMapTest {
         assertEquals(4 + grass2.getNutritionValue(), animal3.getEnergy());
         assertEquals(3, animal4.getEnergy());
     }
+
+    @Test
+    void testReproduceAnimals() {
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 9)).withEnergy(10).build();
+        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 9)).withEnergy(8).build();
+        Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 9)).withEnergy(7).build();
+        map.placeAnimal(animal1);
+        map.placeAnimal(animal2);
+        map.placeAnimal(animal3);
+        map.reproduceAnimals();
+        assertEquals(8, animal1.getEnergy());
+        assertEquals(6, animal2.getEnergy());
+        assertEquals(7, animal3.getEnergy());
+        map.removeAnimal(animal1);
+        map.removeAnimal(animal2);
+        map.removeAnimal(animal3);
+        Animal child = (Animal) map.objectAt(new Vector2d(2, 9));
+        assertEquals(4, child.getEnergy());
+    }
 }

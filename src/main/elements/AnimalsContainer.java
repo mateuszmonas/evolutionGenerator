@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class AnimalsContainer implements Iterable<Animal> {
     protected List<Animal> animals = new ArrayList<>();
-    protected Map<Vector2d, TreeSet<Animal>> occupiedPositions = new HashMap<>();
+    protected Map<Vector2d, Set<Animal>> occupiedPositions = new HashMap<>();
 
     private Vector2d upperRight;
 
@@ -60,21 +60,14 @@ public class AnimalsContainer implements Iterable<Animal> {
 
     public Set<Animal> getStrongestAt(Vector2d position) {
         position = normalisePosition(position);
-        int highestEnergy = occupiedPositions.get(position).first().getEnergy();
+        int highestEnergy = occupiedPositions.get(position).stream().max(Comparator.comparingInt(Animal::getEnergy)).get().getEnergy();
         return occupiedPositions.get(position).stream().filter(animal -> animal.getEnergy()==highestEnergy).collect(Collectors.toSet());
     }
 
     private void addToOccupiedPositions(Animal animal) {
         Vector2d position = normalisePosition(animal.getPosition());
         if (!occupiedPositions.containsKey(position)) {
-            occupiedPositions.put(position, new TreeSet<>((animal1, animal2) -> {
-                if (animal1.getEnergy() < animal2.getEnergy())
-                    return 1;
-                else if (animal1 == animal2) {
-                    return 0;
-                }
-                return -1;
-            }));
+            occupiedPositions.put(position, new HashSet<>());
         }
         occupiedPositions.get(position).add(animal);
     }
@@ -87,6 +80,10 @@ public class AnimalsContainer implements Iterable<Animal> {
     public boolean containsKey(Vector2d position) {
         position = normalisePosition(position);
         return occupiedPositions.containsKey(position);
+    }
+
+    public Set<Vector2d> getOccupiedPositions() {
+        return occupiedPositions.keySet();
     }
 
     @Override
