@@ -16,6 +16,7 @@ public class WorldMap implements IWorldMap {
     int MOVE_ENERGY;
     int PLANT_ENERGY;
     int ANIMAL_ENERGY;
+    int INITIAL_ANIMAL_COUNT;
     double JUNGLE_RATIO;
     MapVisualizer mapVisualizer = new MapVisualizer(this);
     private Vector2d lowerLeft;
@@ -43,7 +44,23 @@ public class WorldMap implements IWorldMap {
         if (!upperRight.follows(jungleUpperRight)) {
             throw new IllegalArgumentException("Jungle upper right corner can't follow map upper right corner");
         }
-        animals = new AnimalsContainer(upperRight);
+        animals = new AnimalsContainer(lowerLeft, upperRight);
+        generateAnimals();
+    }
+
+    void generateAnimals() {
+        for (int i = 0; i < INITIAL_ANIMAL_COUNT; i++) {
+            int x = ThreadLocalRandom.current().nextInt(lowerLeft.x, upperRight.x + 1);
+            int y = ThreadLocalRandom.current().nextInt(lowerLeft.y, upperRight.y + 1);
+            Vector2d position = new Vector2d(x, y);
+            if (!animals.containsKey(position)) {
+                placeAnimal(
+                        Animal.newAnimalBuilder().withEnergy(ANIMAL_ENERGY).atPosition(position).build()
+                );
+            }else {
+                i--;
+            }
+        }
     }
 
     @Override
@@ -162,8 +179,8 @@ public class WorldMap implements IWorldMap {
         int x, y;
         Vector2d position;
         do {
-            x = ThreadLocalRandom.current().nextInt(0, upperRight.x + 1);
-            y = ThreadLocalRandom.current().nextInt(0, upperRight.y + 1);
+            x = ThreadLocalRandom.current().nextInt(lowerLeft.x, upperRight.x + 1);
+            y = ThreadLocalRandom.current().nextInt(lowerLeft.y, upperRight.y + 1);
             position = new Vector2d(x, y);
         } while ((jungleLowerLeft.precedes(position) && jungleUpperRight.follows(position)));
         grasses.put(position, new Grass(position, PLANT_ENERGY));
@@ -239,6 +256,7 @@ public class WorldMap implements IWorldMap {
         int MOVE_ENERGY = 1;
         int PLANT_ENERGY = 2;
         int ANIMAL_ENERGY = 20;
+        int INITIAL_ANIMAL_COUNT = 0;
         double JUNGLE_RATIO = 0.5;
 
         public MapBuilder withWidth(int width) {
@@ -266,7 +284,12 @@ public class WorldMap implements IWorldMap {
             return this;
         }
 
-        public MapBuilder withJungleRatio(int jungleRatio) {
+        public MapBuilder withInitialAnimalCount(int initialAnimalCount) {
+            this.INITIAL_ANIMAL_COUNT = initialAnimalCount;
+            return this;
+        }
+
+        public MapBuilder withJungleRatio(double jungleRatio) {
             this.JUNGLE_RATIO = jungleRatio;
             return this;
         }
@@ -279,6 +302,7 @@ public class WorldMap implements IWorldMap {
             map.PLANT_ENERGY = PLANT_ENERGY;
             map.MOVE_ENERGY = MOVE_ENERGY;
             map.ANIMAL_ENERGY = ANIMAL_ENERGY;
+            map.INITIAL_ANIMAL_COUNT = INITIAL_ANIMAL_COUNT;
             map.initialize();
             return map;
         }

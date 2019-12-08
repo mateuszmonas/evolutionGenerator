@@ -11,9 +11,11 @@ public class AnimalsContainer implements Iterable<Animal> {
     protected List<Animal> animals = new ArrayList<>();
     protected Map<Vector2d, Set<Animal>> occupiedPositions = new HashMap<>();
 
+    private Vector2d lowerLeft;
     private Vector2d upperRight;
 
-    public AnimalsContainer(Vector2d upperRight) {
+    public AnimalsContainer(Vector2d lowerLeft, Vector2d upperRight) {
+        this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
     }
 

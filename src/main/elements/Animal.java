@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Animal implements IMapElement {
-    private final int MIN_REPRODUCTION_ENERGY = 5;
+    private int MIN_REPRODUCTION_ENERGY = 5;
     private int energy;
     private MapDirection direction;
     private Vector2d position;
