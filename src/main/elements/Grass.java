@@ -10,6 +10,7 @@ public class Grass implements IMapElement {
     public Grass(Vector2d position, int NUTRITION_VALUE) {
         this.position = position;
     }
+
     public Grass(Vector2d position) {
         this.position = position;
     }

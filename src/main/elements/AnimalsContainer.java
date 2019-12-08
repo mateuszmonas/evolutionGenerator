@@ -61,7 +61,7 @@ public class AnimalsContainer implements Iterable<Animal> {
     public Set<Animal> getStrongestAt(Vector2d position) {
         position = normalisePosition(position);
         int highestEnergy = occupiedPositions.get(position).stream().max(Comparator.comparingInt(Animal::getEnergy)).get().getEnergy();
-        return occupiedPositions.get(position).stream().filter(animal -> animal.getEnergy()==highestEnergy).collect(Collectors.toSet());
+        return occupiedPositions.get(position).stream().filter(animal -> animal.getEnergy() == highestEnergy).collect(Collectors.toSet());
     }
 
     private void addToOccupiedPositions(Animal animal) {

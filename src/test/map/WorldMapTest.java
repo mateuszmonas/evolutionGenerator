@@ -1,14 +1,9 @@
 package map;
 
 
-import com.sun.source.tree.Tree;
 import elements.Animal;
 import elements.Grass;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.SortedSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -9,23 +9,27 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class WorldMap implements IWorldMap {
 
+    protected AnimalsContainer animals;
+    protected Map<Vector2d, Grass> grasses = new HashMap<>();
     int WIDTH;
     int HEIGHT;
     int MOVE_ENERGY;
     int PLANT_ENERGY;
     int ANIMAL_ENERGY;
     double JUNGLE_RATIO;
-    protected AnimalsContainer animals;
     MapVisualizer mapVisualizer = new MapVisualizer(this);
     private Vector2d lowerLeft;
     private Vector2d upperRight;
     private Vector2d jungleLowerLeft;
     private Vector2d jungleUpperRight;
-    protected Map<Vector2d, Grass> grasses = new HashMap<>();
     private int day = 0;
 
     private WorldMap() {
 
+    }
+
+    public static MapBuilder newMapBuilder() {
+        return new MapBuilder();
     }
 
     void initialize() {
@@ -138,13 +142,13 @@ public class WorldMap implements IWorldMap {
         return obj;
     }
 
-    public void feedAnimals(){
+    public void feedAnimals() {
         List<Grass> grassesToRemove = new ArrayList<>();
         for (Grass grass : grasses.values()) {
             if (animals.containsKey(grass.getPosition())) {
                 Set<Animal> strongestAt = animals.getStrongestAt(grass.getPosition());
                 for (Animal animal : strongestAt) {
-                    animal.increaseEnergy(grass.getNutritionValue()/strongestAt.size());
+                    animal.increaseEnergy(grass.getNutritionValue() / strongestAt.size());
                 }
                 grassesToRemove.add(grass);
             }
@@ -207,7 +211,7 @@ public class WorldMap implements IWorldMap {
             if (2 <= animalsAt.size()) {
                 Iterator<Animal> a = animalsAt.stream().sorted((animal1, animal2) -> {
                     if (animal1.getEnergy() < animal2.getEnergy()) return 1;
-                    else if(animal1.getEnergy()==animal2.getEnergy()) return 0;
+                    else if (animal1.getEnergy() == animal2.getEnergy()) return 0;
                     return -1;
                 }).iterator();
                 Animal animal1 = a.next();
@@ -229,11 +233,7 @@ public class WorldMap implements IWorldMap {
         return mapVisualizer.draw(getLowerLeft(), getUpperRight());
     }
 
-    public static MapBuilder newMapBuilder() {
-        return new MapBuilder();
-    }
-
-    public static class MapBuilder{
+    public static class MapBuilder {
         int WIDTH = 100;
         int HEIGHT = 100;
         int MOVE_ENERGY = 1;
