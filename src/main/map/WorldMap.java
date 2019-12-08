@@ -1,36 +1,26 @@
 package map;
 
 import elements.Animal;
+import elements.AnimalsContainer;
 import elements.Grass;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 public class WorldMap implements IWorldMap {
 
     private final int SURVIVAL_ENERGY_COST = 1;
+    protected AnimalsContainer animals;
+    MapVisualizer mapVisualizer = new MapVisualizer(this);
     private Vector2d lowerLeft;
     private Vector2d upperRight;
     private Vector2d jungleLowerLeft;
     private Vector2d jungleUpperRight;
     private Map<Vector2d, Grass> grasses = new HashMap<>();
     private int day = 0;
-    protected List<Animal> animals = new ArrayList<>();
-    protected Map<Vector2d, Set<Animal>> occupiedPositions = new HashMap<>();
-
-    MapVisualizer mapVisualizer = new MapVisualizer(this);
-
-    @Override
-    public void run(MoveDirection[] directions) {
-        int i = 0;
-        if (animals.isEmpty()) return;
-        for (MoveDirection direction : directions) {
-            Animal animal = animals.get(i % animals.size());
-            animal.move(direction);
-            i++;
-        }
-    }
 
     public WorldMap(int width, int height) {
         width = width - 1;
@@ -45,10 +35,22 @@ public class WorldMap implements IWorldMap {
         if (!upperRight.follows(jungleUpperRight)) {
             throw new IllegalArgumentException("Jungle upper right corner can't follow map upper right corner");
         }
+        animals = new AnimalsContainer(upperRight);
+    }
+
+    @Override
+    public void run(MoveDirection[] directions) {
+        int i = 0;
+        if (animals.isEmpty()) return;
+        for (MoveDirection direction : directions) {
+            Animal animal = animals.get(i % animals.size());
+            animal.move(direction);
+            i++;
+        }
     }
 
     void removeDeadAnimals() {
-        List<Animal> animalsToRemove = animals.stream().filter(Animal::isDead).collect(Collectors.toList());
+        List<Animal> animalsToRemove = animals.filter(Animal::isDead);
         for (Animal animal : animalsToRemove) {
             removeAnimal(animal);
         }
@@ -56,22 +58,22 @@ public class WorldMap implements IWorldMap {
 
     public void simulate(boolean visualize) throws InterruptedException {
         removeDeadAnimals();
-        if(visualize) visualise(100);
+        if (visualize) visualise(100);
 
         MoveDirection[] directions = new MoveDirection[animals.size()];
         Arrays.fill(directions, MoveDirection.TURN);
         run(directions);
 
-        if(visualize) visualise(100);
+        if (visualize) visualise(100);
 
         Arrays.fill(directions, MoveDirection.MOVE);
         run(directions);
 
-        if(visualize) visualise(100);
+        if (visualize) visualise(100);
 
         generateGrasses();
 
-        if(visualize) visualise(100);
+        if (visualize) visualise(100);
     }
 
     void visualise(int timeout) throws InterruptedException {
@@ -88,55 +90,32 @@ public class WorldMap implements IWorldMap {
             throw new IllegalArgumentException(animal.getPosition().toString() + " is out of map bounds");
         }
         animals.add(animal);
-        addAnimalToPosition(animal, normalisePosition(animal.getPosition()));
-        animal.addObserver(this);
-    }
-
-    private void addAnimalToPosition(Animal animal, Vector2d position){
-        if(!occupiedPositions.containsKey(position)){
-            occupiedPositions.put(position, new TreeSet<>((animal1, animal2) -> {
-                if(animal1.getEnergy()<animal2.getEnergy())
-                    return 1;
-                if (animal1 == animal2) {
-                    return 0;
-                }
-                return -1;
-            }));
-        }
-        occupiedPositions.get(position).add(animal);
+        animal.setMap(this);
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        position = normalisePosition(position);
         return true;
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        Vector2d normalisedPosition = normalisePosition(position);
-        return occupiedPositions.containsKey(normalisedPosition);
+        return animals.containsKey(position);
     }
 
     @Override
     public void positionChanged(Animal animal, Vector2d oldPosition) {
-        oldPosition = normalisePosition(oldPosition);
-        Vector2d newPosition = normalisePosition(animal.getPosition());
-        if (!occupiedPositions.containsKey(oldPosition)) {
+        if (!animals.containsKey(oldPosition)) {
             throw new IllegalArgumentException("no animal at position " + oldPosition.toString());
         }
-        occupiedPositions.get(oldPosition).remove(animal);
-        if(occupiedPositions.get(oldPosition).isEmpty())
-            occupiedPositions.remove(oldPosition);
-        addAnimalToPosition(animal, newPosition);
+        animals.changePosition(animal, oldPosition);
     }
 
     @Override
     public Object objectAt(Vector2d position) {
-        Vector2d normalisedPosition = normalisePosition(position);
-        Object obj = occupiedPositions.getOrDefault(normalisedPosition, null);
+        Object obj = animals.get(position);
         if (obj == null) {
-            obj = grasses.getOrDefault(normalisedPosition, null);
+            obj = grasses.getOrDefault(position, null);
         }
         return obj;
     }
@@ -172,22 +151,6 @@ public class WorldMap implements IWorldMap {
         grasses.remove(grass.getPosition());
     }
 
-    Vector2d normalisePosition(Vector2d position) {
-        int newX, newY;
-        if (position.x >= 0) {
-            newX = position.x % (getUpperRight().x + 1);
-        } else {
-            newX = (getUpperRight().x + (1 + position.x) % (getUpperRight().x + 1));
-        }
-        if (position.y >= 0) {
-            newY = position.y % (getUpperRight().y + 1);
-        } else {
-            newY = (getUpperRight().y + (1 + position.y) % (getUpperRight().y + 1));
-        }
-        return new Vector2d(newX, newY);
-    }
-
-
     @Override
     public Vector2d getLowerLeft() {
         return lowerLeft;
@@ -200,14 +163,7 @@ public class WorldMap implements IWorldMap {
 
     @Override
     public void removeAnimal(Animal animal) {
-        Vector2d position = normalisePosition(animal.getPosition());
-        if (!occupiedPositions.containsKey(position)) {
-            throw new IllegalArgumentException("No animal at position " + position.toString());
-        }
         animals.remove(animal);
-        occupiedPositions.get(position).remove(animal);
-        if(occupiedPositions.get(position).isEmpty())
-            occupiedPositions.remove(position);
         animal.removeObserver(this);
     }
 }

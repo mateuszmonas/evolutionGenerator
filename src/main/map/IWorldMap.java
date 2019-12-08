@@ -8,7 +8,7 @@ import elements.Animal;
  *
  * @author apohllo
  */
-public interface IWorldMap extends IPositionChangeObserver{
+public interface IWorldMap extends IPositionChangeObserver {
     /**
      * Indicate if any object can move to the given position.
      *

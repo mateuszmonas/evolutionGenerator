@@ -1,4 +1,5 @@
 package map;
+
 /**
  * The map visualizer converts the {@link IWorldMap} map into a string
  * representation.

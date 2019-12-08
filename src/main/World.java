@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class World {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try (InputStream input = new FileInputStream("src/resources/config.properties")) {
 
             Properties prop = new Properties();
