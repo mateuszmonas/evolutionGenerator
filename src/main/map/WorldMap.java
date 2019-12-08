@@ -15,7 +15,7 @@ public class WorldMap implements IWorldMap {
     int HEIGHT;
     int MOVE_ENERGY;
     int PLANT_ENERGY;
-    int ANIMAL_ENERGY;
+    int INITIAL_ANIMAL_ENERGY;
     int INITIAL_ANIMAL_COUNT;
     double JUNGLE_RATIO;
     MapVisualizer mapVisualizer = new MapVisualizer(this);
@@ -55,7 +55,7 @@ public class WorldMap implements IWorldMap {
             Vector2d position = new Vector2d(x, y);
             if (!animals.containsKey(position)) {
                 placeAnimal(
-                        Animal.newAnimalBuilder().withEnergy(ANIMAL_ENERGY).atPosition(position).build()
+                        Animal.newAnimalBuilder().withEnergy(INITIAL_ANIMAL_ENERGY).atPosition(position).build()
                 );
             }else {
                 i--;
@@ -233,7 +233,7 @@ public class WorldMap implements IWorldMap {
                 }).iterator();
                 Animal animal1 = a.next();
                 Animal animal2 = a.next();
-                if (animal1.canReproduce() && animal2.canReproduce()) {
+                if (animal1.getEnergy()>= INITIAL_ANIMAL_ENERGY /2 && animal2.getEnergy()>= INITIAL_ANIMAL_ENERGY /2) {
                     Animal child = Animal.newAnimalBuilder().atPosition(position).withEnergy(animal1.getEnergy() / 4 + animal2.getEnergy() / 4)
                             .fromParents(animal1, animal2).build();
                     placeAnimal(child);
@@ -255,7 +255,7 @@ public class WorldMap implements IWorldMap {
         int HEIGHT = 100;
         int MOVE_ENERGY = 1;
         int PLANT_ENERGY = 2;
-        int ANIMAL_ENERGY = 20;
+        int INITIAL_ANIMAL_ENERGY = 10;
         int INITIAL_ANIMAL_COUNT = 0;
         double JUNGLE_RATIO = 0.5;
 
@@ -280,7 +280,7 @@ public class WorldMap implements IWorldMap {
         }
 
         public MapBuilder withAnimalEnergy(int animalEnergy) {
-            this.ANIMAL_ENERGY = animalEnergy;
+            this.INITIAL_ANIMAL_ENERGY = animalEnergy;
             return this;
         }
 
@@ -301,7 +301,7 @@ public class WorldMap implements IWorldMap {
             map.JUNGLE_RATIO = JUNGLE_RATIO;
             map.PLANT_ENERGY = PLANT_ENERGY;
             map.MOVE_ENERGY = MOVE_ENERGY;
-            map.ANIMAL_ENERGY = ANIMAL_ENERGY;
+            map.INITIAL_ANIMAL_ENERGY = INITIAL_ANIMAL_ENERGY;
             map.INITIAL_ANIMAL_COUNT = INITIAL_ANIMAL_COUNT;
             map.initialize();
             return map;

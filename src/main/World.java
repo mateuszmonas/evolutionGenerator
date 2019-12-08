@@ -15,13 +15,13 @@ public class World {
         InputStream input = new FileInputStream("src/resources/config.properties");
         prop.load(input);
         WorldMap map = WorldMap.newMapBuilder()
-                .withWidth((Integer) prop.get("map.width"))
-                .withHeight((Integer) prop.get("map.height"))
-                .withAnimalEnergy((Integer) prop.get("map.animalEnergy"))
-                .withJungleRatio((Double) prop.get("map.jungleRatio"))
-                .withMoveEnergy((Integer) prop.get("map.moveEnergy"))
-                .withPlantEnergy((Integer) prop.get("map.plantEnergy"))
-                .withInitialAnimalCount((Integer) prop.get("map.initialAnimalCount"))
+                .withWidth(Integer.parseInt(prop.getProperty("map.width")))
+                .withHeight(Integer.parseInt(prop.getProperty("map.height")))
+                .withAnimalEnergy(Integer.parseInt(prop.getProperty("map.initialAnimalEnergy")))
+                .withJungleRatio(Double.parseDouble(prop.getProperty("map.jungleRatio")))
+                .withMoveEnergy(Integer.parseInt(prop.getProperty("map.moveEnergy")))
+                .withPlantEnergy(Integer.parseInt(prop.getProperty("map.plantEnergy")))
+                .withInitialAnimalCount(Integer.parseInt(prop.getProperty("map.initialAnimalCount")))
                 .build();
         for (int i = 0; i < 100; i++) {
             map.simulate(true);

@@ -4,10 +4,11 @@ import map.Vector2d;
 
 public class Grass implements IMapElement {
 
-    private final int NUTRITION_VALUE = 2;
+    private int NUTRITION_VALUE = 2;
     private Vector2d position;
 
     public Grass(Vector2d position, int NUTRITION_VALUE) {
+        this.NUTRITION_VALUE = NUTRITION_VALUE;
         this.position = position;
     }
 
