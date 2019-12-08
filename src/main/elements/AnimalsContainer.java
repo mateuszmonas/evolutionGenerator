@@ -43,7 +43,6 @@ public class AnimalsContainer implements Iterable<Animal> {
         if (!occupiedPositions.containsKey(position)) {
             throw new IllegalArgumentException("No animal at position " + position.toString());
         }
-        animals.remove(animal);
         occupiedPositions.get(position).remove(animal);
         if (occupiedPositions.get(position).isEmpty())
             occupiedPositions.remove(position);
@@ -56,28 +55,32 @@ public class AnimalsContainer implements Iterable<Animal> {
         if (occupiedPositions.get(oldPosition).isEmpty()) {
             occupiedPositions.remove(oldPosition);
         }
-        add(animal);
+        addToOccupiedPositions(animal);
     }
 
     public Set<Animal> getStrongestAt(Vector2d position) {
         position = normalisePosition(position);
         int highestEnergy = occupiedPositions.get(position).first().getEnergy();
-        return occupiedPositions.get(position).headSet(Animal.newAnimalBuilder().withEnergy(highestEnergy - 1).build());
+        return occupiedPositions.get(position).stream().filter(animal -> animal.getEnergy()==highestEnergy).collect(Collectors.toSet());
     }
 
-    public void add(Animal animal) {
+    private void addToOccupiedPositions(Animal animal) {
         Vector2d position = normalisePosition(animal.getPosition());
         if (!occupiedPositions.containsKey(position)) {
             occupiedPositions.put(position, new TreeSet<>((animal1, animal2) -> {
                 if (animal1.getEnergy() < animal2.getEnergy())
                     return 1;
-                else if (animal1.getEnergy() == animal2.getEnergy()) {
-                    return Integer.compare(animal1.hashCode(), animal2.hashCode());
+                else if (animal1 == animal2) {
+                    return 0;
                 }
                 return -1;
             }));
         }
         occupiedPositions.get(position).add(animal);
+    }
+
+    public void add(Animal animal) {
+        addToOccupiedPositions(animal);
         animals.add(animal);
     }
 

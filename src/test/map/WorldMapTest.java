@@ -36,24 +36,22 @@ class WorldMapTest {
         Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 0)).build();
         Animal animal4 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(10).build();
         Animal animal5 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(12).build();
-        Animal animal6 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(10).build();
+        Animal animal6 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(9).build();
         assertThrows(IllegalArgumentException.class, () -> map.placeAnimal(animal1));
         assertThrows(IllegalArgumentException.class, () -> map.placeAnimal(animal2));
         map.placeAnimal(animal3);
         map.placeAnimal(animal4);
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(0, 0))).contains(animal3));
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
+        assertEquals(animal3, map.objectAt(new Vector2d(0, 0)));
+        assertEquals(animal4, map.objectAt(new Vector2d(99, 29)));
         map.placeAnimal(animal5);
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
+        assertEquals(animal5, map.objectAt(new Vector2d(99, 29)));
         map.placeAnimal(animal6);
-        assertEquals(3, ((Set<Animal>) map.objectAt(new Vector2d(99, 29))).size());
+        assertEquals(animal5, map.objectAt(new Vector2d(99, 29)));
 
         map.removeAnimal(animal3);
         assertNull(map.objectAt(new Vector2d(0, 0)));
-        map.removeAnimal(animal4);
-        assertFalse(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal4));
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 29))).contains(animal5));
-
+        map.removeAnimal(animal5);
+        assertEquals(animal4, map.objectAt(new Vector2d(99, 29)));
     }
 
     @Test
@@ -68,23 +66,22 @@ class WorldMapTest {
     void testRun() {
         Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).facingDirection(MapDirection.NORTH).build();
         Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(50, 29)).facingDirection(MapDirection.NORTHEAST).build();
-        Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 3)).facingDirection(MapDirection.SOUTH).build();
-        Animal animal4 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 1)).facingDirection(MapDirection.NORTH).build();
+        Animal animal3 = Animal.newAnimalBuilder().withEnergy(1).atPosition(new Vector2d(0, 3)).facingDirection(MapDirection.SOUTH).build();
+        Animal animal4 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector2d(0, 1)).facingDirection(MapDirection.NORTH).build();
         map.placeAnimal(animal1);
         map.run(new MoveDirection[]{MoveDirection.MOVE});
         assertNull(map.objectAt(new Vector2d(99, 29)));
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(99, 0))).contains(animal1));
+        assertEquals(animal1, map.objectAt(new Vector2d(99, 0)));
         map.removeAnimal(animal1);
         map.placeAnimal(animal2);
         map.run(new MoveDirection[]{MoveDirection.MOVE});
         assertNull(map.objectAt(new Vector2d(50, 29)));
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(51, 0))).contains(animal2));
+        assertEquals(animal2, map.objectAt(new Vector2d(51, 0)));
         map.removeAnimal(animal2);
         map.placeAnimal(animal3);
         map.placeAnimal(animal4);
         map.run(new MoveDirection[]{MoveDirection.MOVE, MoveDirection.MOVE});
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal3));
-        assertTrue(((Set<Animal>) map.objectAt(new Vector2d(0, 2))).contains(animal4));
+        assertEquals(animal4, map.objectAt(new Vector2d(0, 2)));
 
     }
 
@@ -96,7 +93,7 @@ class WorldMapTest {
         map.placeGrass(grass);
         assertEquals(grass, map.objectAt(new Vector2d(0, 0)));
         map.placeAnimal(animal1);
-        assertTrue(map.objectAt(new Vector2d(0, 0)) instanceof Collection);
+        assertEquals(animal1, map.objectAt(new Vector2d(0, 0)));
     }
 
     @Test
@@ -108,5 +105,29 @@ class WorldMapTest {
         assertThrows(IllegalArgumentException.class, () -> map.placeGrass(grass2));
         map.removeGrass(grass1);
         assertNull(map.objectAt(new Vector2d(2, 9)));
+    }
+
+    @Test
+    void testFeedAnimals() {
+        Grass grass1 = new Grass(new Vector2d(2, 9));
+        Grass grass2 = new Grass(new Vector2d(2, 2));
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 9)).withEnergy(3).build();
+        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 9)).withEnergy(3).build();
+        Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).withEnergy(4).build();
+        Animal animal4 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).withEnergy(3).build();
+        map.placeGrass(grass1);
+        map.placeGrass(grass2);
+        map.placeAnimal(animal1);
+        map.placeAnimal(animal2);
+        map.placeAnimal(animal3);
+        map.placeAnimal(animal4);
+        map.feedAnimals();
+        assertFalse(map.grasses.containsKey(grass1.getPosition()));
+        assertEquals(3 + grass1.getNutritionValue() / 2, animal1.getEnergy());
+        assertEquals(3 + grass1.getNutritionValue() / 2, animal2.getEnergy());
+
+        assertFalse(map.grasses.containsKey(grass2.getPosition()));
+        assertEquals(4 + grass2.getNutritionValue(), animal3.getEnergy());
+        assertEquals(3, animal4.getEnergy());
     }
 }

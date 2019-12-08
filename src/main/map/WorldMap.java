@@ -16,7 +16,7 @@ public class WorldMap implements IWorldMap {
     private Vector2d upperRight;
     private Vector2d jungleLowerLeft;
     private Vector2d jungleUpperRight;
-    private Map<Vector2d, Grass> grasses = new HashMap<>();
+    protected Map<Vector2d, Grass> grasses = new HashMap<>();
     private int day = 0;
 
     public WorldMap(int width, int height) {
@@ -55,28 +55,35 @@ public class WorldMap implements IWorldMap {
 
     public void simulate(boolean visualize) throws InterruptedException {
         removeDeadAnimals();
-        if (visualize) visualise(100);
-
         MoveDirection[] directions = new MoveDirection[animals.size()];
+
+        if (visualize) visualize(100);
+
         Arrays.fill(directions, MoveDirection.TURN);
         run(directions);
 
-        if (visualize) visualise(100);
+        if (visualize) visualize(100);
 
         Arrays.fill(directions, MoveDirection.MOVE);
         run(directions);
 
-        if (visualize) visualise(100);
+        if (visualize) visualize(100);
+
+        feedAnimals();
+
+        if (visualize) visualize(100);
 
         generateGrasses();
 
-        if (visualize) visualise(100);
+        if (visualize) visualize(100);
+
+        day++;
     }
 
-    void visualise(int timeout) throws InterruptedException {
+    void visualize(int timeout) throws InterruptedException {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        System.out.println(day++);
+        System.out.println(day);
         System.out.println(this);
         Thread.sleep(timeout);
     }
@@ -111,16 +118,28 @@ public class WorldMap implements IWorldMap {
     @Override
     public Object objectAt(Vector2d position) {
         Object obj = animals.get(position);
+        if (obj instanceof TreeSet) {
+            obj = ((TreeSet) obj).first();
+        }
         if (obj == null) {
             obj = grasses.getOrDefault(position, null);
         }
         return obj;
     }
 
-    private void feedAnimals(){
+    public void feedAnimals(){
+        List<Grass> grassesToRemove = new ArrayList<>();
         for (Grass grass : grasses.values()) {
             if (animals.containsKey(grass.getPosition())) {
+                Set<Animal> strongestAt = animals.getStrongestAt(grass.getPosition());
+                for (Animal animal : strongestAt) {
+                    animal.increaseEnergy(grass.getNutritionValue()/strongestAt.size());
+                }
+                grassesToRemove.add(grass);
             }
+        }
+        for (Grass grass : grassesToRemove) {
+            removeGrass(grass);
         }
     }
 
@@ -169,5 +188,10 @@ public class WorldMap implements IWorldMap {
     public void removeAnimal(Animal animal) {
         animals.remove(animal);
         animal.removeObserver(this);
+    }
+
+    @Override
+    public String toString() {
+        return mapVisualizer.draw(getLowerLeft(), getUpperRight());
     }
 }
