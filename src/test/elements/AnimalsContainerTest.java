@@ -110,7 +110,7 @@ class AnimalsContainerTest {
 
     @Test
     void TestNormalisePosition() {
-        AnimalsContainer animals = new AnimalsContainer(new Vector2d(0, 0),new Vector2d(9, 9));
+        AnimalsContainer animals = new AnimalsContainer(new Vector2d(0, 0), new Vector2d(9, 9));
         Vector2d position = new Vector2d(-1, 8);
         assertEquals(new Vector2d(9, 8), animals.normalisePosition(position));
         position = new Vector2d(-11, 8);

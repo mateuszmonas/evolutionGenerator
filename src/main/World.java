@@ -1,12 +1,9 @@
-import elements.Animal;
-import map.Vector2d;
 import map.WorldMap;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 public class World {
     public static void main(String[] args) throws InterruptedException, IOException {

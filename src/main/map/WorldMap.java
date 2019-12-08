@@ -57,7 +57,7 @@ public class WorldMap implements IWorldMap {
                 placeAnimal(
                         Animal.newAnimalBuilder().withEnergy(INITIAL_ANIMAL_ENERGY).atPosition(position).build()
                 );
-            }else {
+            } else {
                 i--;
             }
         }
@@ -233,7 +233,7 @@ public class WorldMap implements IWorldMap {
                 }).iterator();
                 Animal animal1 = a.next();
                 Animal animal2 = a.next();
-                if (animal1.getEnergy()>= INITIAL_ANIMAL_ENERGY /2 && animal2.getEnergy()>= INITIAL_ANIMAL_ENERGY /2) {
+                if (animal1.getEnergy() >= INITIAL_ANIMAL_ENERGY / 2 && animal2.getEnergy() >= INITIAL_ANIMAL_ENERGY / 2) {
                     Animal child = Animal.newAnimalBuilder().atPosition(position).withEnergy(animal1.getEnergy() / 4 + animal2.getEnergy() / 4)
                             .fromParents(animal1, animal2).build();
                     placeAnimal(child);
