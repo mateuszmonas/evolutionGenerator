@@ -9,7 +9,7 @@ public class World {
     public static void main(String[] args) throws InterruptedException, IOException {
 
         Properties prop = new Properties();
-        InputStream input = new FileInputStream("src/resources/config.properties");
+        InputStream input = World.class.getResourceAsStream("config.properties");
         prop.load(input);
         WorldMap map = WorldMap.newMapBuilder()
                 .withWidth(Integer.parseInt(prop.getProperty("map.width")))
