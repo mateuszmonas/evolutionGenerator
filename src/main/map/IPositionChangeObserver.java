@@ -1,6 +1,6 @@
 package map;
 
-import elements.Animal;
+import elements.animal.Animal;
 
 public interface IPositionChangeObserver {
 

@@ -1,7 +1,7 @@
 package map;
 
-import elements.Animal;
-import elements.AnimalsContainer;
+import elements.animal.Animal;
+import elements.animal.AnimalsContainer;
 import elements.Grass;
 
 import java.util.*;

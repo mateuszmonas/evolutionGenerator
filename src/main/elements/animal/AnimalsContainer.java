@@ -1,4 +1,4 @@
-package elements;
+package elements.animal;
 
 import map.Vector2d;
 

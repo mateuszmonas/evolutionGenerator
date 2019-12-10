@@ -1,5 +1,7 @@
-package elements;
+package elements.animal;
 
+import elements.animal.Animal;
+import elements.animal.AnimalsContainer;
 import map.MapDirection;
 import map.MoveDirection;
 import map.Vector2d;

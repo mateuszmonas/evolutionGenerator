@@ -1,7 +1,7 @@
 package map;
 
 
-import elements.Animal;
+import elements.animal.Animal;
 import elements.Grass;
 import org.junit.jupiter.api.Test;
 

@@ -1,18 +1,17 @@
-package elements;
+package elements.animal;
 
+import elements.IMapElement;
 import map.*;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Animal implements IMapElement {
     private int energy;
     private MapDirection direction;
     private Vector2d position;
     private IWorldMap map;
-    private int[] genome = new int[32];
+    private Genotype genotype;
     private Set<IPositionChangeObserver> observers = new HashSet<>();
 
     public Animal() {
@@ -27,8 +26,8 @@ public class Animal implements IMapElement {
         this.map = map;
     }
 
-    public int[] getGenome() {
-        return genome;
+    public Genotype getGenotype() {
+        return genotype;
     }
 
     public int getEnergy() {
@@ -46,7 +45,7 @@ public class Animal implements IMapElement {
     public void move(MoveDirection direction) {
         switch (direction) {
             case TURN:
-                this.direction = MapDirection.values()[(this.direction.ordinal() + genome[ThreadLocalRandom.current().nextInt(genome.length)]) % MapDirection.values().length];
+                this.direction = genotype.getNewDirection(this.direction);
                 break;
             case MOVE:
                 Vector2d oldPosition = this.position;
@@ -82,7 +81,7 @@ public class Animal implements IMapElement {
         private Vector2d position = new Vector2d(0, 0);
         private int energy = 20;
         private MapDirection direction = MapDirection.NORTH;
-        private int[] genome;
+        Genotype genotype;
 
         public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;
@@ -95,7 +94,7 @@ public class Animal implements IMapElement {
         }
 
         public AnimalBuilder fromParents(Animal parent1, Animal parent2) {
-            genome = generateGenome(parent1.genome, parent2.genome);
+            genotype = new Genotype(parent1.genotype, parent2.genotype);
             return this;
         }
 
@@ -104,47 +103,16 @@ public class Animal implements IMapElement {
             return this;
         }
 
-        private int[] generateGenome(int[] genomeA, int[] genomeB) {
-            int[] genome = new int[32];
-            int div1 = ThreadLocalRandom.current().nextInt(1, 30);
-            int div2 = ThreadLocalRandom.current().nextInt(div1, 31);
-            System.arraycopy(genomeA, 0, genome, 0, div1 + 1);
-            System.arraycopy(genomeB, div1 + 1, genome, div1 + 1, div2 - div1);
-            System.arraycopy(genomeA, div2 + 1, genome, div2 + 1, genome.length - div2 - 1);
-            Arrays.sort(genome);
-            for (int i = 0; i < 7; i++) {
-                final int a = i;
-                if (Arrays.stream(genome).noneMatch(o -> o == a)) {
-                    genome[i] = a;
-                }
-            }
-            Arrays.sort(genome);
-            return genome;
-        }
-
-        private int[] generateGenome() {
-            int[] genome = new int[32];
-            for (int i = 0; i < 8; i++) {
-                genome[i] = i;
-            }
-            for (int i = 8; i < genome.length; i++) {
-                genome[i] = ThreadLocalRandom.current().nextInt(8);
-            }
-            Arrays.sort(genome);
-            return genome;
-        }
-
         public Animal build() {
             Animal animal = new Animal();
             animal.energy = energy;
             animal.position = position;
             animal.direction = direction;
-            if (genome == null) {
-                genome = generateGenome();
+            if (genotype == null) {
+                genotype = new Genotype();
             }
-            animal.genome = genome;
+            animal.genotype = genotype;
             return animal;
         }
     }
-
 }

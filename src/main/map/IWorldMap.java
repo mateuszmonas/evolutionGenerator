@@ -1,6 +1,6 @@
 package map;
 
-import elements.Animal;
+import elements.animal.Animal;
 
 /**
  * The interface responsible for interacting with the map of the world.
