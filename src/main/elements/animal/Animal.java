@@ -2,6 +2,9 @@ package elements.animal;
 
 import elements.IMapElement;
 import map.*;
+import util.MapDirection;
+import util.MoveDirection;
+import util.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +12,7 @@ import java.util.Set;
 public class Animal implements IMapElement {
     private int energy;
     private MapDirection direction;
-    private Vector2d position;
+    private Vector position;
     private IWorldMap map;
     private Genotype genotype;
     private Set<IPositionChangeObserver> observers = new HashSet<>();
@@ -42,17 +45,14 @@ public class Animal implements IMapElement {
         this.energy += energy;
     }
 
-    public void move(MoveDirection direction) {
-        switch (direction) {
-            case TURN:
-                this.direction = genotype.getNewDirection(this.direction);
-                break;
-            case MOVE:
-                Vector2d oldPosition = this.position;
-                position = position.add(this.direction.toUnitVector());
-                observers.forEach(e -> e.positionChanged(this, oldPosition));
-                break;
-        }
+    public void turn() {
+        this.direction = genotype.getNewDirection(this.direction);
+    }
+
+    public void move() {
+        Vector oldPosition = this.position;
+        position = position.add(this.direction.toUnitVector());
+        observers.forEach(e -> e.positionChanged(this, oldPosition));
     }
 
     public void addObserver(IPositionChangeObserver observer) {
@@ -63,7 +63,7 @@ public class Animal implements IMapElement {
         observers.remove(observer);
     }
 
-    public Vector2d getPosition() {
+    public Vector getPosition() {
         return position;
     }
 
@@ -78,12 +78,12 @@ public class Animal implements IMapElement {
 
     public static class AnimalBuilder {
 
-        private Vector2d position = new Vector2d(0, 0);
+        private Vector position = new Vector(0, 0);
         private int energy = 20;
         private MapDirection direction = MapDirection.NORTH;
         Genotype genotype;
 
-        public AnimalBuilder atPosition(Vector2d position) {
+        public AnimalBuilder atPosition(Vector position) {
             this.position = position;
             return this;
         }

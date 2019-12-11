@@ -1,7 +1,7 @@
 package elements;
 
-import map.Vector2d;
+import util.Vector;
 
 public interface IMapElement {
-    Vector2d getPosition();
+    Vector getPosition();
 }

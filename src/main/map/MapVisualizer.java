@@ -1,5 +1,7 @@
 package map;
 
+import util.Vector;
+
 /**
  * The map visualizer converts the {@link IWorldMap} map into a string
  * representation.
@@ -30,7 +32,7 @@ public class MapVisualizer {
      * @param upperRight The upper right corner of the region that is drawn.
      * @return String representation of the selected region of the map.
      */
-    public String draw(Vector2d lowerLeft, Vector2d upperRight) {
+    public String draw(Vector lowerLeft, Vector upperRight) {
         StringBuilder builder = new StringBuilder();
         for (int i = upperRight.y + 1; i >= lowerLeft.y - 1; i--) {
             if (i == upperRight.y + 1) {
@@ -43,7 +45,7 @@ public class MapVisualizer {
                 } else {
                     builder.append(CELL_SEGMENT);
                     if (j <= upperRight.x) {
-                        builder.append(drawObject(new Vector2d(j, i)));
+                        builder.append(drawObject(new Vector(j, i)));
                     }
                 }
             }
@@ -60,7 +62,7 @@ public class MapVisualizer {
         }
     }
 
-    private String drawHeader(Vector2d lowerLeft, Vector2d upperRight) {
+    private String drawHeader(Vector lowerLeft, Vector upperRight) {
         StringBuilder builder = new StringBuilder();
         builder.append(" y\\x ");
         for (int j = lowerLeft.x; j < upperRight.x + 1; j++) {
@@ -70,7 +72,7 @@ public class MapVisualizer {
         return builder.toString();
     }
 
-    private String drawObject(Vector2d currentPosition) {
+    private String drawObject(Vector currentPosition) {
         String result = null;
         Object object = this.map.objectAt(currentPosition);
         if (object != null) {

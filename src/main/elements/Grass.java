@@ -1,22 +1,22 @@
 package elements;
 
-import map.Vector2d;
+import util.Vector;
 
 public class Grass implements IMapElement {
 
     private int NUTRITION_VALUE = 2;
-    private Vector2d position;
+    private Vector position;
 
-    public Grass(Vector2d position, int NUTRITION_VALUE) {
+    public Grass(Vector position, int NUTRITION_VALUE) {
         this.NUTRITION_VALUE = NUTRITION_VALUE;
         this.position = position;
     }
 
-    public Grass(Vector2d position) {
+    public Grass(Vector position) {
         this.position = position;
     }
 
-    public Vector2d getPosition() {
+    public Vector getPosition() {
         return position;
     }
 

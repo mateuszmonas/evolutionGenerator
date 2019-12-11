@@ -3,6 +3,9 @@ package map;
 import elements.animal.Animal;
 import elements.animal.AnimalsContainer;
 import elements.Grass;
+import util.MoveDirection;
+import util.Rectangle;
+import util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WorldMap implements IWorldMap {
 
     protected AnimalsContainer animals;
-    protected Map<Vector2d, Grass> grasses = new HashMap<>();
+    protected Map<util.Vector, Grass> grasses = new HashMap<>();
     int WIDTH;
     int HEIGHT;
     int MOVE_ENERGY;
@@ -19,10 +22,10 @@ public class WorldMap implements IWorldMap {
     int INITIAL_ANIMAL_COUNT;
     double JUNGLE_RATIO;
     MapVisualizer mapVisualizer = new MapVisualizer(this);
-    private Vector2d lowerLeft;
-    private Vector2d upperRight;
-    private Vector2d jungleLowerLeft;
-    private Vector2d jungleUpperRight;
+    private util.Vector lowerLeft;
+    private util.Vector upperRight;
+    private util.Vector jungleLowerLeft;
+    private util.Vector jungleUpperRight;
     private int day = 0;
 
     private WorldMap() {
@@ -34,17 +37,17 @@ public class WorldMap implements IWorldMap {
     }
 
     void initialize() {
-        this.lowerLeft = new Vector2d(0, 0);
-        this.upperRight = new Vector2d(this.WIDTH, this.HEIGHT);
-        this.jungleLowerLeft = new Vector2d((int) Math.floor((0.5 - JUNGLE_RATIO * 0.5) * this.WIDTH), (int) Math.floor((0.5 - JUNGLE_RATIO * 0.5) * this.HEIGHT));
-        this.jungleUpperRight = new Vector2d((int) Math.ceil((0.5 + JUNGLE_RATIO * 0.5) * this.WIDTH), (int) Math.ceil((0.5 + JUNGLE_RATIO * 0.5) * this.HEIGHT));
+        this.lowerLeft = new util.Vector(0, 0);
+        this.upperRight = new util.Vector(this.WIDTH, this.HEIGHT);
+        this.jungleLowerLeft = new util.Vector((int) Math.floor((0.5 - JUNGLE_RATIO * 0.5) * this.WIDTH), (int) Math.floor((0.5 - JUNGLE_RATIO * 0.5) * this.HEIGHT));
+        this.jungleUpperRight = new util.Vector((int) Math.ceil((0.5 + JUNGLE_RATIO * 0.5) * this.WIDTH), (int) Math.ceil((0.5 + JUNGLE_RATIO * 0.5) * this.HEIGHT));
         if (!lowerLeft.precedes(jungleLowerLeft)) {
             throw new IllegalArgumentException("Jungle lower left corner can't precede map lower left corner");
         }
         if (!upperRight.follows(jungleUpperRight)) {
             throw new IllegalArgumentException("Jungle upper right corner can't follow map upper right corner");
         }
-        animals = new AnimalsContainer(lowerLeft, upperRight);
+        animals = new AnimalsContainer(new Rectangle(lowerLeft, upperRight));
         generateAnimals();
     }
 
@@ -52,7 +55,7 @@ public class WorldMap implements IWorldMap {
         for (int i = 0; i < INITIAL_ANIMAL_COUNT; i++) {
             int x = ThreadLocalRandom.current().nextInt(lowerLeft.x, upperRight.x + 1);
             int y = ThreadLocalRandom.current().nextInt(lowerLeft.y, upperRight.y + 1);
-            Vector2d position = new Vector2d(x, y);
+            util.Vector position = new util.Vector(x, y);
             if (!animals.containsKey(position)) {
                 placeAnimal(
                         Animal.newAnimalBuilder().withEnergy(INITIAL_ANIMAL_ENERGY).atPosition(position).build()
@@ -63,14 +66,15 @@ public class WorldMap implements IWorldMap {
         }
     }
 
-    @Override
-    public void run(MoveDirection[] directions) {
-        int i = 0;
-        if (animals.isEmpty()) return;
-        for (MoveDirection direction : directions) {
-            Animal animal = animals.get(i % animals.size());
-            animal.move(direction);
-            i++;
+    public void moveAnimals() {
+        for (Animal animal : animals) {
+            animal.move();
+        }
+    }
+
+    public void turnAnimals() {
+        for (Animal animal : animals) {
+            animal.turn();
         }
     }
 
@@ -83,17 +87,14 @@ public class WorldMap implements IWorldMap {
 
     public void simulate(boolean visualize) throws InterruptedException {
         removeDeadAnimals();
-        MoveDirection[] directions = new MoveDirection[animals.size()];
 
         if (visualize) visualize(100);
 
-        Arrays.fill(directions, MoveDirection.TURN);
-        run(directions);
+        turnAnimals();
 
         if (visualize) visualize(100);
 
-        Arrays.fill(directions, MoveDirection.MOVE);
-        run(directions);
+        moveAnimals();
 
         if (visualize) visualize(100);
 
@@ -130,17 +131,17 @@ public class WorldMap implements IWorldMap {
     }
 
     @Override
-    public boolean canMoveTo(Vector2d position) {
+    public boolean canMoveTo(util.Vector position) {
         return true;
     }
 
     @Override
-    public boolean isOccupied(Vector2d position) {
+    public boolean isOccupied(util.Vector position) {
         return animals.containsKey(position);
     }
 
     @Override
-    public void positionChanged(Animal animal, Vector2d oldPosition) {
+    public void positionChanged(Animal animal, util.Vector oldPosition) {
         if (!animals.containsKey(oldPosition)) {
             throw new IllegalArgumentException("no animal at position " + oldPosition.toString());
         }
@@ -148,7 +149,7 @@ public class WorldMap implements IWorldMap {
     }
 
     @Override
-    public Object objectAt(Vector2d position) {
+    public Object objectAt(util.Vector position) {
         Object obj = animals.get(position);
         if (obj != null) {
             obj = ((Collection<Animal>) obj).stream().max(Comparator.comparingInt(Animal::getEnergy)).get();
@@ -177,17 +178,17 @@ public class WorldMap implements IWorldMap {
 
     private void generateGrasses() {
         int x, y;
-        Vector2d position;
+        util.Vector position;
         do {
             x = ThreadLocalRandom.current().nextInt(lowerLeft.x, upperRight.x + 1);
             y = ThreadLocalRandom.current().nextInt(lowerLeft.y, upperRight.y + 1);
-            position = new Vector2d(x, y);
+            position = new util.Vector(x, y);
         } while ((jungleLowerLeft.precedes(position) && jungleUpperRight.follows(position)));
         grasses.put(position, new Grass(position, PLANT_ENERGY));
 
         x = ThreadLocalRandom.current().nextInt(jungleLowerLeft.x, jungleUpperRight.x + 1);
         y = ThreadLocalRandom.current().nextInt(jungleLowerLeft.y, jungleUpperRight.y + 1);
-        position = new Vector2d(x, y);
+        position = new util.Vector(x, y);
 
         grasses.put(position, new Grass(position, PLANT_ENERGY));
     }
@@ -207,12 +208,12 @@ public class WorldMap implements IWorldMap {
     }
 
     @Override
-    public Vector2d getLowerLeft() {
+    public util.Vector getLowerLeft() {
         return lowerLeft;
     }
 
     @Override
-    public Vector2d getUpperRight() {
+    public util.Vector getUpperRight() {
         return upperRight;
     }
 
@@ -223,7 +224,7 @@ public class WorldMap implements IWorldMap {
     }
 
     void reproduceAnimals() {
-        for (Vector2d position : animals.getOccupiedPositions()) {
+        for (Vector position : animals.getOccupiedPositions()) {
             Set<Animal> animalsAt = animals.get(position);
             if (2 <= animalsAt.size()) {
                 Iterator<Animal> a = animalsAt.stream().sorted((animal1, animal2) -> {

@@ -1,10 +1,9 @@
 package elements.animal;
 
-import elements.animal.Animal;
-import elements.animal.AnimalsContainer;
-import map.MapDirection;
-import map.MoveDirection;
-import map.Vector2d;
+import util.MapDirection;
+import util.MoveDirection;
+import util.Rectangle;
+import util.Vector;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnimalsContainerTest {
-    AnimalsContainer animals = new AnimalsContainer(new Vector2d(0, 0), new Vector2d(10, 10));
+    AnimalsContainer animals = new AnimalsContainer(new Rectangle(new Vector(0, 0), new Vector(10, 10)));
 
     @Test
     void TestIsEmpty() {
@@ -41,15 +40,15 @@ class AnimalsContainerTest {
 
     @Test
     void TestGet() {
-        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).build();
-        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).build();
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector(2, 2)).build();
+        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector(2, 2)).build();
         animals.add(animal1);
         animals.add(animal2);
-        assertEquals(animal1, animals.get(0));
-        assertTrue(animals.get(new Vector2d(2, 2)).contains(animal1));
-        assertTrue(animals.get(new Vector2d(2, 2)).contains(animal2));
+        assertTrue(animals.contains(animal1));
+        assertTrue(animals.get(new Vector(2, 2)).contains(animal1));
+        assertTrue(animals.get(new Vector(2, 2)).contains(animal2));
         animals.remove(animal1);
-        assertEquals(animal2, animals.get(0));
+        assertTrue(animals.contains(animal2));
     }
 
     @Test
@@ -68,68 +67,56 @@ class AnimalsContainerTest {
 
     @Test
     void TestRemove() {
-        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).build();
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector(2, 2)).build();
         animals.add(animal1);
         animals.remove(animal1);
-        assertNull(animals.get(new Vector2d(2, 2)));
+        assertNull(animals.get(new Vector(2, 2)));
     }
 
     @Test
     void TestChangePosition() {
-        Animal animal1 = Animal.newAnimalBuilder().facingDirection(MapDirection.NORTH).atPosition(new Vector2d(2, 2)).build();
+        Animal animal1 = Animal.newAnimalBuilder().facingDirection(MapDirection.NORTH).atPosition(new Vector(2, 2)).build();
         animals.add(animal1);
-        Vector2d oldPosition = new Vector2d(2, 2);
-        animal1.move(MoveDirection.MOVE);
+        Vector oldPosition = new Vector(2, 2);
+        animal1.move();
         animals.changePosition(animal1, oldPosition);
-        assertNull(animals.get(new Vector2d(2, 2)));
-        assertNotNull(animals.get(new Vector2d(2, 3)));
+        assertNull(animals.get(new Vector(2, 2)));
+        assertNotNull(animals.get(new Vector(2, 3)));
 
     }
 
     @Test
     void TestAdd() {
-        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).build();
-        assertNull(animals.get(new Vector2d(2, 2)));
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector(2, 2)).build();
+        assertNull(animals.get(new Vector(2, 2)));
         assertTrue(animals.isEmpty());
         animals.add(animal1);
-        assertEquals(animal1, animals.get(0));
-        assertNotNull(animals.get(new Vector2d(2, 2)));
+        assertTrue(animals.contains(animal1));
+        assertNotNull(animals.get(new Vector(2, 2)));
     }
 
     @Test
     void TestContainsKey() {
-        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).build();
-        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(2, 2)).build();
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector(2, 2)).build();
+        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector(2, 2)).build();
         animals.add(animal1);
         animals.add(animal2);
-        assertTrue(animals.containsKey(new Vector2d(2, 2)));
+        assertTrue(animals.containsKey(new Vector(2, 2)));
         animals.remove(animal1);
-        assertTrue(animals.containsKey(new Vector2d(2, 2)));
+        assertTrue(animals.containsKey(new Vector(2, 2)));
         animals.remove(animal2);
-        assertFalse(animals.containsKey(new Vector2d(2, 2)));
-    }
-
-
-    @Test
-    void TestNormalisePosition() {
-        AnimalsContainer animals = new AnimalsContainer(new Vector2d(0, 0), new Vector2d(9, 9));
-        Vector2d position = new Vector2d(-1, 8);
-        assertEquals(new Vector2d(9, 8), animals.normalisePosition(position));
-        position = new Vector2d(-11, 8);
-        assertEquals(new Vector2d(9, 8), animals.normalisePosition(position));
-        position = new Vector2d(-10, 8);
-        assertEquals(new Vector2d(0, 8), animals.normalisePosition(position));
+        assertFalse(animals.containsKey(new Vector(2, 2)));
     }
 
     @Test
     void TestGetStrongestAt() {
-        Animal animal1 = Animal.newAnimalBuilder().withEnergy(0).atPosition(new Vector2d(2, 2)).build();
-        Animal animal2 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector2d(2, 2)).build();
-        Animal animal3 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector2d(2, 2)).build();
+        Animal animal1 = Animal.newAnimalBuilder().withEnergy(0).atPosition(new Vector(2, 2)).build();
+        Animal animal2 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector(2, 2)).build();
+        Animal animal3 = Animal.newAnimalBuilder().withEnergy(2).atPosition(new Vector(2, 2)).build();
         animals.add(animal1);
         animals.add(animal2);
         animals.add(animal3);
-        Set<Animal> strongest = animals.getStrongestAt(new Vector2d(2, 2));
+        Set<Animal> strongest = animals.getStrongestAt(new Vector(2, 2));
         assertFalse(strongest.contains(animal1));
         assertTrue(strongest.contains(animal2));
         assertTrue(strongest.contains(animal3));
