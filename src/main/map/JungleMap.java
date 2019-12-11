@@ -1,7 +1,7 @@
 package map;
 
 import data.Rectangle;
-import data.Vector;
+import data.Vector2d;
 import elements.MapElement;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class JungleMap implements WorldMap {
 
-    protected Map<Vector, Set<MapElement>> elements = new HashMap<>();
+    protected Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
     private Rectangle area;
 
     public JungleMap(Rectangle area) {
@@ -30,7 +30,7 @@ public class JungleMap implements WorldMap {
     }
 
     @Override
-    public void onPositionChange(MapElement element, Vector oldPosition) {
+    public void onPositionChange(MapElement element, Vector2d oldPosition) {
         if (!elements.containsKey(oldPosition)) {
             throw new IllegalArgumentException("no element at position " + oldPosition.toString());
         }
@@ -46,13 +46,13 @@ public class JungleMap implements WorldMap {
         addElement(element);
     }
 
-    public Set<MapElement> objectsAt(Vector position) {
+    public Set<MapElement> objectsAt(Vector2d position) {
         position = area.normalisePosition(position);
         return elements.getOrDefault(position, null);
     }
 
     public void removeElement(MapElement element) {
-        Vector position = area.normalisePosition(element.getPosition());
+        Vector2d position = area.normalisePosition(element.getPosition());
         if (!elements.containsKey(position)) {
             throw new IllegalArgumentException("No animal at position " + position.toString());
         }

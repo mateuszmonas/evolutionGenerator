@@ -34,26 +34,26 @@ public enum MapDirection {
         return MapDirection.values()[(this.ordinal() + MapDirection.values().length - 1) % MapDirection.values().length];
     }
 
-    public Vector toUnitVector() {
+    public Vector2d toUnitVector() {
         switch (this) {
             case NORTH:
-                return new Vector(0, 1);
+                return new Vector2d(0, 1);
             case NORTHEAST:
-                return new Vector(1, 1);
+                return new Vector2d(1, 1);
             case EAST:
-                return new Vector(1, 0);
+                return new Vector2d(1, 0);
             case SOUTHEAST:
-                return new Vector(1, -1);
+                return new Vector2d(1, -1);
             case SOUTH:
-                return new Vector(0, -1);
+                return new Vector2d(0, -1);
             case SOUTHWEST:
-                return new Vector(-1, -1);
+                return new Vector2d(-1, -1);
             case WEST:
-                return new Vector(-1, 0);
+                return new Vector2d(-1, 0);
             case NORTHWEST:
-                return new Vector(-1, 1);
+                return new Vector2d(-1, 1);
         }
-        return new Vector(0, 0);
+        return new Vector2d(0, 0);
 
     }
 

@@ -1,7 +1,7 @@
 package elements.animal;
 
 import data.MapDirection;
-import data.Vector;
+import data.Vector2d;
 import elements.AbstractMapElement;
 import map.MapElementObserver;
 
@@ -11,7 +11,7 @@ import java.util.Set;
 public class Animal extends AbstractMapElement {
     private int energy;
     private MapDirection direction;
-    private Vector position;
+    private Vector2d position;
     private Genotype genotype;
     private Set<MapElementObserver> observers = new HashSet<>();
 
@@ -50,7 +50,7 @@ public class Animal extends AbstractMapElement {
     }
 
     public void move() {
-        Vector oldPosition = this.position;
+        Vector2d oldPosition = this.position;
         position = position.add(this.direction.toUnitVector());
         notifyPositionChange(oldPosition);
     }
@@ -67,11 +67,11 @@ public class Animal extends AbstractMapElement {
     public static class AnimalBuilder {
 
         Genotype genotype;
-        private Vector position = new Vector(0, 0);
+        private Vector2d position = new Vector2d(0, 0);
         private int energy = 20;
         private MapDirection direction = MapDirection.NORTH;
 
-        public AnimalBuilder atPosition(Vector position) {
+        public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;
             return this;
         }

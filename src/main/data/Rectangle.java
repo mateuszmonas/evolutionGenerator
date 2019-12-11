@@ -4,18 +4,18 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Rectangle {
 
-    Vector lowerLeft;
-    Vector upperRight;
+    Vector2d lowerLeft;
+    Vector2d upperRight;
 
-    public Rectangle(Vector lowerLeft, Vector upperRight) {
+    public Rectangle(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
     }
 
-    public Vector getRandomInBound() {
+    public Vector2d getRandomInBound() {
         int x = ThreadLocalRandom.current().nextInt(lowerLeft.x, upperRight.x + 1);
         int y = ThreadLocalRandom.current().nextInt(lowerLeft.y, upperRight.y + 1);
-        return new Vector(x, y);
+        return new Vector2d(x, y);
     }
 
     public int getWidth() {
@@ -26,7 +26,7 @@ public class Rectangle {
         return this.upperRight.y - this.lowerLeft.y + 1;
     }
 
-    public Vector normalisePosition(Vector position) {
+    public Vector2d normalisePosition(Vector2d position) {
         int newX, newY;
         if (position.x >= 0) {
             newX = position.x % (upperRight.x + 1);
@@ -38,11 +38,11 @@ public class Rectangle {
         } else {
             newY = (upperRight.y + (1 + position.y) % (upperRight.y + 1));
         }
-        return new Vector(newX, newY);
+        return new Vector2d(newX, newY);
     }
 
-    public boolean contains(Vector vector) {
-        return lowerLeft.precedes(vector) && upperRight.follows(vector);
+    public boolean contains(Vector2d vector2d) {
+        return lowerLeft.precedes(vector2d) && upperRight.follows(vector2d);
     }
 
 }

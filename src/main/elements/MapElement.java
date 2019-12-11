@@ -1,14 +1,14 @@
 package elements;
 
-import data.Vector;
+import data.Vector2d;
 import map.MapElementObserver;
 
 public interface MapElement {
-    Vector getPosition();
+    Vector2d getPosition();
 
     void notifyRemove();
 
-    void notifyPositionChange(Vector oldPosition);
+    void notifyPositionChange(Vector2d oldPosition);
 
     void attachObserver(MapElementObserver observer);
 
