@@ -1,7 +1,7 @@
 package elements;
 
 import data.Vector;
-import map.IMapElementObserver;
+import map.MapElementObserver;
 
 public interface MapElement {
     Vector getPosition();
@@ -10,7 +10,7 @@ public interface MapElement {
 
     void notifyPositionChange(Vector oldPosition);
 
-    void attachObserver(IMapElementObserver observer);
+    void attachObserver(MapElementObserver observer);
 
-    void removeObserver(IMapElementObserver observer);
+    void removeObserver(MapElementObserver observer);
 }

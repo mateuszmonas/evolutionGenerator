@@ -1,13 +1,13 @@
 package elements;
 
 import data.Vector;
-import map.IMapElementObserver;
+import map.MapElementObserver;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class AbstractMapElement implements MapElement {
-    private Set<IMapElementObserver> observers = new HashSet<>();
+    private Set<MapElementObserver> observers = new HashSet<>();
     private Vector position;
 
     @Override
@@ -26,12 +26,12 @@ public class AbstractMapElement implements MapElement {
     }
 
     @Override
-    public void attachObserver(IMapElementObserver observer) {
+    public void attachObserver(MapElementObserver observer) {
         observers.add(observer);
     }
 
     @Override
-    public void removeObserver(IMapElementObserver observer) {
+    public void removeObserver(MapElementObserver observer) {
         observers.remove(observer);
     }
 

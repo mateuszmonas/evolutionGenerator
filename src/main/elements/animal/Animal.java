@@ -1,10 +1,9 @@
 package elements.animal;
 
-import elements.AbstractMapElement;
-import elements.MapElement;
-import map.*;
 import data.MapDirection;
 import data.Vector;
+import elements.AbstractMapElement;
+import map.MapElementObserver;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,17 +12,16 @@ public class Animal extends AbstractMapElement {
     private int energy;
     private MapDirection direction;
     private Vector position;
-    private WorldMap map;
     private Genotype genotype;
-    private Set<IMapElementObserver> observers = new HashSet<>();
+    private Set<MapElementObserver> observers = new HashSet<>();
 
     public Animal() {
     }
 
     public static Animal reproduce(Animal parent1, Animal parent2) {
         int childEnergy = parent1.energy / 4 + parent2.energy / 4;
-        parent1.reduceEnergy(parent1.energy/4);
-        parent2.reduceEnergy(parent2.energy/4);
+        parent1.reduceEnergy(parent1.energy / 4);
+        parent2.reduceEnergy(parent2.energy / 4);
         return Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withEnergy(childEnergy).build();
     }
 
@@ -35,20 +33,12 @@ public class Animal extends AbstractMapElement {
         return true;
     }
 
-    public void setMap(JungleMap map) {
-        attachObserver(map);
-        this.map = map;
-    }
-
     public int getEnergy() {
         return energy;
     }
 
     public void reduceEnergy(int energy) {
         this.energy -= energy;
-        if (this.energy <= 0) {
-            map.onRemoval(this);
-        }
     }
 
     public void increaseEnergy(int energy) {
@@ -76,10 +66,10 @@ public class Animal extends AbstractMapElement {
 
     public static class AnimalBuilder {
 
+        Genotype genotype;
         private Vector position = new Vector(0, 0);
         private int energy = 20;
         private MapDirection direction = MapDirection.NORTH;
-        Genotype genotype;
 
         public AnimalBuilder atPosition(Vector position) {
             this.position = position;

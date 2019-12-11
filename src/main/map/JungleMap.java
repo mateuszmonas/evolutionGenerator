@@ -1,10 +1,13 @@
 package map;
 
-import elements.MapElement;
 import data.Rectangle;
 import data.Vector;
+import elements.MapElement;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class JungleMap implements WorldMap {
 
@@ -23,6 +26,7 @@ public class JungleMap implements WorldMap {
             elements.put(element.getPosition(), new HashSet<>());
         }
         elements.get(element.getPosition()).add(element);
+        element.attachObserver(this);
     }
 
     @Override
@@ -30,12 +34,15 @@ public class JungleMap implements WorldMap {
         if (!elements.containsKey(oldPosition)) {
             throw new IllegalArgumentException("no element at position " + oldPosition.toString());
         }
-
         oldPosition = area.normalisePosition(oldPosition);
         elements.get(oldPosition).remove(element);
         if (elements.get(oldPosition).isEmpty()) {
             elements.remove(oldPosition);
         }
+        if (!elements.containsKey(element.getPosition())) {
+            elements.put(element.getPosition(), new HashSet<>());
+        }
+        elements.get(element.getPosition()).add(element);
         addElement(element);
     }
 
@@ -52,7 +59,7 @@ public class JungleMap implements WorldMap {
         elements.get(position).remove(element);
         if (elements.get(position).isEmpty())
             elements.remove(position);
-
+        element.removeObserver(this);
     }
 
     @Override

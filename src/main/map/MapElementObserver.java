@@ -1,9 +1,9 @@
 package map;
 
-import elements.MapElement;
 import data.Vector;
+import elements.MapElement;
 
-public interface IMapElementObserver {
+public interface MapElementObserver {
 
     void onPositionChange(MapElement element, Vector oldPosition);
 

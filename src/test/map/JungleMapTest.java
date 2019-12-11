@@ -2,10 +2,10 @@ package map;
 
 
 import data.Rectangle;
-import elements.animal.Animal;
-import elements.Grass;
-import org.junit.jupiter.api.Test;
 import data.Vector;
+import elements.animal.Animal;
+import elements.grass.Grass;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 

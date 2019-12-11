@@ -1,10 +1,7 @@
-package elements;
+package elements.grass;
 
 import data.Vector;
-import map.IMapElementObserver;
-
-import java.util.HashSet;
-import java.util.Set;
+import elements.AbstractMapElement;
 
 public class Grass extends AbstractMapElement {
 

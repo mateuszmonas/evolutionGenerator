@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Genotype {
     protected int[] genome = new int[32];
 
-    Genotype(){
+    Genotype() {
         for (int i = 0; i < 8; i++) {
             genome[i] = i;
         }
@@ -18,7 +18,7 @@ public class Genotype {
         Arrays.sort(genome);
     }
 
-    Genotype(Genotype genotypeA, Genotype genotypeB){
+    Genotype(Genotype genotypeA, Genotype genotypeB) {
         int div1 = ThreadLocalRandom.current().nextInt(1, 30);
         int div2 = ThreadLocalRandom.current().nextInt(div1, 31);
         System.arraycopy(genotypeA.genome, 0, genome, 0, div1 + 1);
