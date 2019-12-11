@@ -1,6 +1,5 @@
-package util;
+package data;
 
-import elements.animal.AnimalsContainer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

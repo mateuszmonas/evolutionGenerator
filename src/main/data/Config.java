@@ -1,4 +1,4 @@
-package util;
+package data;
 
 public class Config {
 }

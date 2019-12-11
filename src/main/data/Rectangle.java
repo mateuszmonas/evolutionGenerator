@@ -1,4 +1,6 @@
-package util;
+package data;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Rectangle {
 
@@ -8,6 +10,20 @@ public class Rectangle {
     public Rectangle(Vector lowerLeft, Vector upperRight) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
+    }
+
+    public Vector getRandomInBound() {
+        int x = ThreadLocalRandom.current().nextInt(lowerLeft.x, upperRight.x + 1);
+        int y = ThreadLocalRandom.current().nextInt(lowerLeft.y, upperRight.y + 1);
+        return new Vector(x, y);
+    }
+
+    public int getWidth() {
+        return this.upperRight.x - this.lowerLeft.x + 1;
+    }
+
+    public int getHeight() {
+        return this.upperRight.y - this.lowerLeft.y + 1;
     }
 
     public Vector normalisePosition(Vector position) {
@@ -25,7 +41,7 @@ public class Rectangle {
         return new Vector(newX, newY);
     }
 
-    boolean contains(Vector vector) {
+    public boolean contains(Vector vector) {
         return lowerLeft.precedes(vector) && upperRight.follows(vector);
     }
 

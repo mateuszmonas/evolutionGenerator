@@ -1,6 +1,6 @@
 package elements.animal;
 
-import util.MapDirection;
+import data.MapDirection;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;

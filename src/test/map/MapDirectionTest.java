@@ -1,7 +1,7 @@
 package map;
 
 import org.junit.jupiter.api.Test;
-import util.MapDirection;
+import data.MapDirection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

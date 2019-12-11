@@ -2,9 +2,8 @@ package elements.animal;
 
 import elements.IMapElement;
 import map.*;
-import util.MapDirection;
-import util.MoveDirection;
-import util.Vector;
+import data.MapDirection;
+import data.Vector;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,24 +12,31 @@ public class Animal implements IMapElement {
     private int energy;
     private MapDirection direction;
     private Vector position;
-    private IWorldMap map;
+    private WorldMap map;
     private Genotype genotype;
-    private Set<IPositionChangeObserver> observers = new HashSet<>();
+    private Set<IMapElementObserver> observers = new HashSet<>();
 
     public Animal() {
+    }
+
+    public static Animal reproduce(Animal parent1, Animal parent2) {
+        int childEnergy = parent1.energy / 4 + parent2.energy / 4;
+        parent1.reduceEnergy(parent1.energy/4);
+        parent2.reduceEnergy(parent2.energy/4);
+        return Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withEnergy(childEnergy).build();
     }
 
     public static AnimalBuilder newAnimalBuilder() {
         return new AnimalBuilder();
     }
 
-    public void setMap(WorldMap map) {
-        addObserver(map);
-        this.map = map;
+    public boolean canReproduce() {
+        return true;
     }
 
-    public Genotype getGenotype() {
-        return genotype;
+    public void setMap(JungleMap map) {
+        addObserver(map);
+        this.map = map;
     }
 
     public int getEnergy() {
@@ -55,11 +61,11 @@ public class Animal implements IMapElement {
         observers.forEach(e -> e.positionChanged(this, oldPosition));
     }
 
-    public void addObserver(IPositionChangeObserver observer) {
+    public void addObserver(IMapElementObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(IPositionChangeObserver observer) {
+    public void removeObserver(IMapElementObserver observer) {
         observers.remove(observer);
     }
 

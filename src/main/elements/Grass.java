@@ -1,6 +1,6 @@
 package elements;
 
-import util.Vector;
+import data.Vector;
 
 public class Grass implements IMapElement {
 
