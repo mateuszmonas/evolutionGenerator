@@ -1,6 +1,7 @@
 package elements.animal;
 
-import elements.IMapElement;
+import elements.AbstractMapElement;
+import elements.MapElement;
 import map.*;
 import data.MapDirection;
 import data.Vector;
@@ -8,7 +9,7 @@ import data.Vector;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Animal implements IMapElement {
+public class Animal extends AbstractMapElement {
     private int energy;
     private MapDirection direction;
     private Vector position;
@@ -35,7 +36,7 @@ public class Animal implements IMapElement {
     }
 
     public void setMap(JungleMap map) {
-        addObserver(map);
+        attachObserver(map);
         this.map = map;
     }
 
@@ -45,6 +46,9 @@ public class Animal implements IMapElement {
 
     public void reduceEnergy(int energy) {
         this.energy -= energy;
+        if (this.energy <= 0) {
+            map.onRemoval(this);
+        }
     }
 
     public void increaseEnergy(int energy) {
@@ -58,19 +62,7 @@ public class Animal implements IMapElement {
     public void move() {
         Vector oldPosition = this.position;
         position = position.add(this.direction.toUnitVector());
-        observers.forEach(e -> e.positionChanged(this, oldPosition));
-    }
-
-    public void addObserver(IMapElementObserver observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(IMapElementObserver observer) {
-        observers.remove(observer);
-    }
-
-    public Vector getPosition() {
-        return position;
+        notifyPositionChange(oldPosition);
     }
 
     public boolean isDead() {

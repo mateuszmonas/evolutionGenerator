@@ -1,17 +1,17 @@
 package map;
 
 
+import data.Rectangle;
 import elements.animal.Animal;
 import elements.Grass;
 import org.junit.jupiter.api.Test;
-import data.MapDirection;
 import data.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JungleMapTest {
 
-    JungleMap map = JungleMap.newMapBuilder().withHeight(30).withWidth(100).build();
+    JungleMap map = new JungleMap(new Rectangle(new Vector(0, 0), new Vector(99, 29)));
 
     @Test
     void testAddAndRemoveElement() {

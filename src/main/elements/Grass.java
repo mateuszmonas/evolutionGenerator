@@ -1,8 +1,12 @@
 package elements;
 
 import data.Vector;
+import map.IMapElementObserver;
 
-public class Grass implements IMapElement {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Grass extends AbstractMapElement {
 
     private int NUTRITION_VALUE = 2;
     private Vector position;
@@ -18,10 +22,6 @@ public class Grass implements IMapElement {
 
     public Vector getPosition() {
         return position;
-    }
-
-    public int getNutritionValue() {
-        return NUTRITION_VALUE;
     }
 
     @Override

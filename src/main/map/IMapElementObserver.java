@@ -1,12 +1,12 @@
 package map;
 
-import elements.IMapElement;
+import elements.MapElement;
 import data.Vector;
 
 public interface IMapElementObserver {
 
-    void onPositionChange(IMapElement element, Vector oldPosition);
+    void onPositionChange(MapElement element, Vector oldPosition);
 
-    void onRemoval(IMapElement element);
+    void onRemoval(MapElement element);
 
 }
