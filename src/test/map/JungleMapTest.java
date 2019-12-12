@@ -6,6 +6,7 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.animal.Animal;
 import elements.grass.Grass;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,5 +72,10 @@ class JungleMapTest {
         assertTrue(map.objectsAt(new Vector2d(0, 0)).contains(grass));
         map.addElement(animal1);
         assertTrue(map.objectsAt(new Vector2d(0, 0)).contains(animal1));
+    }
+
+    @RepeatedTest(100)
+    void testGetUnoccupiedPosition() {
+        assertFalse(map.elements.containsKey(map.getUnoccupiedPosition()));
     }
 }

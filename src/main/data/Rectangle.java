@@ -1,15 +1,23 @@
 package data;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Rectangle {
 
     Vector2d lowerLeft;
     Vector2d upperRight;
+    Set<Vector2d> vectorSpace = new HashSet<>();
 
     public Rectangle(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
+        for (int i = lowerLeft.x; i < upperRight.x; i++) {
+            for (int j = lowerLeft.y; j < upperRight.y; j++) {
+                vectorSpace.add(new Vector2d(i, j));
+            }
+        }
     }
 
     public Vector2d getRandomInBound() {
@@ -24,6 +32,10 @@ public class Rectangle {
 
     public int getHeight() {
         return this.upperRight.y - this.lowerLeft.y + 1;
+    }
+
+    public Set<Vector2d> getVectorSpace() {
+        return vectorSpace;
     }
 
     public Vector2d normalisePosition(Vector2d position) {

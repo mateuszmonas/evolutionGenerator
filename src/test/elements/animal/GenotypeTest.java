@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GenotypeTest {
 
-    @RepeatedTest(1000)
+    @RepeatedTest(100)
     void testConstructor() {
         Genotype genotype = new Genotype(new Genotype(), new Genotype());
         for (int i = 0; i < genotype.geneTypeCount; i++) {

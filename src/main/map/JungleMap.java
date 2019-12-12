@@ -4,21 +4,19 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class JungleMap implements WorldMap {
 
-    protected Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
-    private Rectangle area;
+    Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
+    Rectangle area;
 
     public JungleMap(Rectangle area) {
         this.area = area;
     }
 
-    public void addElement(MapElement element) throws IllegalArgumentException {
+    public void addElement(MapElement element) {
         if (!area.contains(element.getPosition())) {
             throw new IllegalArgumentException(element.getPosition().toString() + " is out of map bounds");
         }
@@ -73,5 +71,14 @@ public class JungleMap implements WorldMap {
     @Override
     public void onRemoval(MapElement element) {
         removeElement(element);
+    }
+
+    @Override
+    public Vector2d getUnoccupiedPosition() {
+        List<Vector2d> unoccupiedPositions = new ArrayList<>();
+        for (Vector2d position : area.getVectorSpace()) {
+            if(!elements.containsKey(position)) unoccupiedPositions.add(position);
+        }
+        return unoccupiedPositions.get(ThreadLocalRandom.current().nextInt(unoccupiedPositions.size()));
     }
 }
