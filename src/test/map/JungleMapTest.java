@@ -1,6 +1,7 @@
 package map;
 
 
+import data.MapDirection;
 import data.Rectangle;
 import data.Vector2d;
 import elements.animal.Animal;
@@ -33,6 +34,32 @@ class JungleMapTest {
         assertNull(map.objectsAt(new Vector2d(0, 0)));
         map.removeElement(animal5);
         assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal4));
+
+        assertThrows(IllegalArgumentException.class, () -> map.removeElement(animal5));
+    }
+
+    @Test
+    void testOnPositionChange() {
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).facingDirection(MapDirection.NORTH).build();
+        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(50, 29)).facingDirection(MapDirection.NORTHEAST).build();
+        Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 3)).facingDirection(MapDirection.SOUTH).build();
+        Animal animal4 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 1)).facingDirection(MapDirection.NORTH).build();
+        map.addElement(animal1);
+        animal1.move();
+        assertNull(map.objectsAt(new Vector2d(99, 29)));
+        assertTrue(map.objectsAt(new Vector2d(99, 0)).contains(animal1));
+        map.removeElement(animal1);
+        map.addElement(animal2);
+        animal2.move();
+        assertNull(map.objectsAt(new Vector2d(50, 29)));
+        assertTrue(map.objectsAt(new Vector2d(51, 0)).contains(animal2));
+        map.removeElement(animal2);
+        map.addElement(animal3);
+        map.addElement(animal4);
+        animal3.move();
+        animal4.move();
+        assertTrue(map.objectsAt(new Vector2d(0, 2)).contains(animal3));
+        assertTrue(map.objectsAt(new Vector2d(0, 2)).contains(animal4));
     }
 
     @Test

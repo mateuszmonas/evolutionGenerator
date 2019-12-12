@@ -4,10 +4,7 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class JungleMap implements WorldMap {
 
@@ -35,15 +32,15 @@ public class JungleMap implements WorldMap {
             throw new IllegalArgumentException("no element at position " + oldPosition.toString());
         }
         oldPosition = area.normalisePosition(oldPosition);
+        Vector2d newPosition = area.normalisePosition(element.getPosition());
         elements.get(oldPosition).remove(element);
         if (elements.get(oldPosition).isEmpty()) {
             elements.remove(oldPosition);
         }
-        if (!elements.containsKey(element.getPosition())) {
-            elements.put(element.getPosition(), new HashSet<>());
+        if (!elements.containsKey(newPosition)) {
+            elements.put(newPosition, new HashSet<>());
         }
-        elements.get(element.getPosition()).add(element);
-        addElement(element);
+        elements.get(newPosition).add(element);
     }
 
     public Set<MapElement> objectsAt(Vector2d position) {
@@ -54,12 +51,17 @@ public class JungleMap implements WorldMap {
     public void removeElement(MapElement element) {
         Vector2d position = area.normalisePosition(element.getPosition());
         if (!elements.containsKey(position)) {
-            throw new IllegalArgumentException("No animal at position " + position.toString());
+            throw new IllegalArgumentException("element " + element.toString() + " is not on map");
         }
         elements.get(position).remove(element);
         if (elements.get(position).isEmpty())
             elements.remove(position);
         element.removeObserver(this);
+    }
+
+    @Override
+    public Map<Vector2d, Set<MapElement>> getElements() {
+        return elements;
     }
 
     @Override

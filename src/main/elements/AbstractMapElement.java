@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AbstractMapElement implements MapElement {
-    private Set<MapElementObserver> observers = new HashSet<>();
-    private Vector2d position;
+    protected Set<MapElementObserver> observers = new HashSet<>();
+    protected Vector2d position;
 
     @Override
     public Vector2d getPosition() {

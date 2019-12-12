@@ -11,7 +11,6 @@ import java.util.Set;
 public class Animal extends AbstractMapElement {
     private int energy;
     private MapDirection direction;
-    private Vector2d position;
     private Genotype genotype;
     private Set<MapElementObserver> observers = new HashSet<>();
 

@@ -13,4 +13,6 @@ public interface MapElement {
     void attachObserver(MapElementObserver observer);
 
     void removeObserver(MapElementObserver observer);
+
+    String toString();
 }

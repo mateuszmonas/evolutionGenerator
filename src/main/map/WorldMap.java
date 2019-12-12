@@ -5,6 +5,8 @@ import elements.MapElement;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public interface WorldMap extends MapElementObserver {
 
@@ -12,7 +14,7 @@ public interface WorldMap extends MapElementObserver {
 
     void removeElement(MapElement element);
 
-    HashMap<Vector2d, Collection<MapElement>> getElements();
+    Map<Vector2d, Set<MapElement>> getElements();
 
 }
 
