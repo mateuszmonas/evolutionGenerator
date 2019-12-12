@@ -74,11 +74,20 @@ public class JungleMap implements WorldMap {
     }
 
     @Override
-    public Vector2d getUnoccupiedPosition() {
+    public Optional<Vector2d> getUnoccupiedPosition() {
+        return getUnoccupiedPosition(area);
+    }
+
+    @Override
+    public Optional<Vector2d> getUnoccupiedPosition(Rectangle area) {
         List<Vector2d> unoccupiedPositions = new ArrayList<>();
         for (Vector2d position : area.getVectorSpace()) {
-            if(!elements.containsKey(position)) unoccupiedPositions.add(position);
+            if(!elements.containsKey(position) && area.contains(position)) unoccupiedPositions.add(position);
         }
-        return unoccupiedPositions.get(ThreadLocalRandom.current().nextInt(unoccupiedPositions.size()));
+        Vector2d result = null;
+        if (!unoccupiedPositions.isEmpty()) {
+            result = unoccupiedPositions.get(ThreadLocalRandom.current().nextInt(unoccupiedPositions.size()));
+        }
+        return Optional.ofNullable(result);
     }
 }

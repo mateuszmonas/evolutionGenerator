@@ -9,6 +9,8 @@ import elements.grass.Grass;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class JungleMapTest {
@@ -74,8 +76,16 @@ class JungleMapTest {
         assertTrue(map.objectsAt(new Vector2d(0, 0)).contains(animal1));
     }
 
-    @RepeatedTest(100)
+    @Test
     void testGetUnoccupiedPosition() {
-        assertFalse(map.elements.containsKey(map.getUnoccupiedPosition()));
+        JungleMap map = new JungleMap(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10)));
+        assertFalse(map.getUnoccupiedPosition(new Rectangle(new Vector2d(0, 0), new Vector2d(0, 0))).isPresent());
+        for (int i = 0; i < 10 * 10; i++) {
+            Optional<Vector2d> position = map.getUnoccupiedPosition();
+            assertTrue(position.isPresent());
+            assertFalse(map.elements.containsKey(position.get()));
+            map.addElement(Animal.newAnimalBuilder().atPosition(position.get()).build());
+        }
+        assertFalse(map.getUnoccupiedPosition().isPresent());
     }
 }
