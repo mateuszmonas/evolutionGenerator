@@ -68,7 +68,7 @@ public class Animal extends AbstractMapElement {
         Genotype genotype;
         private Vector2d position = new Vector2d(0, 0);
         private int energy = 20;
-        private MapDirection direction = MapDirection.NORTH;
+        private MapDirection direction = MapDirection.getRandom();
 
         public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;
