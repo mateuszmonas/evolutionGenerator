@@ -6,6 +6,7 @@ import elements.AbstractMapElement;
 import map.MapElementObserver;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class Animal extends AbstractMapElement {
@@ -14,14 +15,18 @@ public class Animal extends AbstractMapElement {
     private Genotype genotype;
     private Set<MapElementObserver> observers = new HashSet<>();
 
-    public Animal() {
+    private Animal() {
     }
 
-    public static Animal reproduce(Animal parent1, Animal parent2) {
-        int childEnergy = parent1.energy / 4 + parent2.energy / 4;
-        parent1.reduceEnergy(parent1.energy / 4);
-        parent2.reduceEnergy(parent2.energy / 4);
-        return Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withEnergy(childEnergy).build();
+    public static Optional<Animal> reproduce(Animal parent1, Animal parent2) {
+        Animal child = null;
+        if(parent1.energy>1 && parent2.energy>1){
+            int childEnergy = parent1.energy / 4 + parent2.energy / 4;
+            parent1.reduceEnergy(parent1.energy / 4);
+            parent2.reduceEnergy(parent2.energy / 4);
+            child = Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withEnergy(childEnergy).build();
+        }
+        return Optional.ofNullable(child);
     }
 
     public static AnimalBuilder newAnimalBuilder() {
