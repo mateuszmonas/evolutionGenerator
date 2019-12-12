@@ -3,8 +3,6 @@ package map;
 import data.Vector2d;
 import elements.MapElement;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 

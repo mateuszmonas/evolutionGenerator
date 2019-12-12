@@ -4,7 +4,10 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class JungleMap implements WorldMap {
 
@@ -51,6 +54,9 @@ public class JungleMap implements WorldMap {
     public void removeElement(MapElement element) {
         Vector2d position = area.normalisePosition(element.getPosition());
         if (!elements.containsKey(position)) {
+            throw new IllegalArgumentException("no elements at position " + position.toString());
+        }
+        if (!elements.get(position).contains(element)) {
             throw new IllegalArgumentException("element " + element.toString() + " is not on map");
         }
         elements.get(position).remove(element);
