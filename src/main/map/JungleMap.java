@@ -6,6 +6,7 @@ import elements.MapElement;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
 public class JungleMap implements WorldMap {
 
@@ -73,21 +74,30 @@ public class JungleMap implements WorldMap {
         removeElement(element);
     }
 
-    @Override
-    public Optional<Vector2d> getUnoccupiedPosition() {
-        return getUnoccupiedPosition(area);
+    public Optional<Vector2d> getUnoccupiedPosition(Predicate<Vector2d> predicate) {
+        List<Vector2d> possiblePositions = new ArrayList<>();
+        for (Vector2d position : area.getVectorSpace()) {
+            if(predicate.test(position)) possiblePositions.add(position);
+        }
+        Vector2d result = null;
+        if (!possiblePositions.isEmpty()) {
+            result = possiblePositions.get(ThreadLocalRandom.current().nextInt(possiblePositions.size()));
+        }
+        return Optional.ofNullable(result);
     }
 
     @Override
-    public Optional<Vector2d> getUnoccupiedPosition(Rectangle area) {
-        List<Vector2d> unoccupiedPositions = new ArrayList<>();
-        for (Vector2d position : area.getVectorSpace()) {
-            if(!elements.containsKey(position) && area.contains(position)) unoccupiedPositions.add(position);
-        }
-        Vector2d result = null;
-        if (!unoccupiedPositions.isEmpty()) {
-            result = unoccupiedPositions.get(ThreadLocalRandom.current().nextInt(unoccupiedPositions.size()));
-        }
-        return Optional.ofNullable(result);
+    public Optional<Vector2d> getUnoccupiedPosition() {
+        return getUnoccupiedPositionInArea(area);
+    }
+
+    @Override
+    public Optional<Vector2d> getUnoccupiedPositionInArea(Rectangle area) {
+        return getUnoccupiedPosition(vector2d -> !elements.containsKey(vector2d) && area.contains(vector2d));
+    }
+
+    @Override
+    public Optional<Vector2d> getUnoccupiedPositionNotInArea(Rectangle area) {
+        return getUnoccupiedPosition(vector2d -> !elements.containsKey(vector2d) && !area.contains(vector2d));
     }
 }

@@ -18,7 +18,9 @@ public interface WorldMap extends MapElementObserver {
 
     Optional<Vector2d> getUnoccupiedPosition();
 
-    Optional<Vector2d> getUnoccupiedPosition(Rectangle area);
+    Optional<Vector2d> getUnoccupiedPositionNotInArea(Rectangle area);
+
+    Optional<Vector2d> getUnoccupiedPositionInArea(Rectangle area);
 
 }
 
