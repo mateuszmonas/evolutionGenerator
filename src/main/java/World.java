@@ -1,7 +1,5 @@
 import map.Simulation;
 
-import java.io.IOException;
-
 public class World {
     public static void main(String[] args) {
         Simulation simulation = new Simulation();

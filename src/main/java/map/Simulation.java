@@ -36,7 +36,7 @@ public class Simulation {
         generateGrasses();
     }
 
-    void moveAnimals(){
+    void moveAnimals() {
         map.getElements().values().stream().flatMap(Set::stream).filter(element -> element instanceof Animal).map(element -> (Animal) element).collect(Collectors.toList()).forEach(Animal::move);
     }
 
