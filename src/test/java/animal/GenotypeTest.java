@@ -1,4 +1,4 @@
-package elements.animal;
+package animal;
 
 import org.junit.jupiter.api.RepeatedTest;
 

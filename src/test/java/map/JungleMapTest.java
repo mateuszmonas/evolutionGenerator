@@ -4,7 +4,7 @@ package map;
 import data.MapDirection;
 import data.Rectangle;
 import data.Vector2d;
-import elements.animal.Animal;
+import animal.Animal;
 import elements.grass.Grass;
 import org.junit.jupiter.api.Test;
 

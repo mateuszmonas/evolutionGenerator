@@ -2,12 +2,10 @@ package map;
 
 import data.Rectangle;
 import elements.MapElement;
-import elements.animal.Animal;
+import animal.Animal;
 import elements.grass.Grass;
 
-import javax.lang.model.element.Element;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Simulation {
