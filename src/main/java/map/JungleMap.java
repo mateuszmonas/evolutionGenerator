@@ -17,6 +17,7 @@ public class JungleMap implements WorldMap {
         this.area = area;
     }
 
+    @Override
     public void addElement(MapElement element) {
         Vector2d position = area.normalisePosition(element.getPosition());
         if (!elements.containsKey(position)) {
@@ -43,6 +44,7 @@ public class JungleMap implements WorldMap {
         elements.get(newPosition).add(element);
     }
 
+    @Override
     public void removeElement(MapElement element) {
         Vector2d position = area.normalisePosition(element.getPosition());
         if (!elements.containsKey(position)) {
@@ -55,6 +57,12 @@ public class JungleMap implements WorldMap {
         if (elements.get(position).isEmpty())
             elements.remove(position);
         element.removeObserver(this);
+    }
+
+    @Override
+    public Set<MapElement> objectsAt(Vector2d position) {
+        position = area.normalisePosition(position);
+        return elements.getOrDefault(position, null);
     }
 
     @Override

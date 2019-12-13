@@ -18,26 +18,22 @@ class JungleMapTest {
 
     @Test
     void testAddAndRemoveElement() {
-        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(100, 30)).build();
-        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(-2, 0)).build();
-        Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 0)).build();
-        Animal animal4 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(10).build();
-        Animal animal5 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(12).build();
-        assertThrows(IllegalArgumentException.class, () -> map.addElement(animal1));
-        assertThrows(IllegalArgumentException.class, () -> map.addElement(animal2));
+        Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 0)).build();
+        Animal animal2 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(10).build();
+        Animal animal3 = Animal.newAnimalBuilder().atPosition(new Vector2d(99, 29)).withEnergy(12).build();
+        map.addElement(animal1);
+        map.addElement(animal2);
+        assertTrue(map.objectsAt(new Vector2d(0, 0)).contains(animal1));
+        assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal2));
         map.addElement(animal3);
-        map.addElement(animal4);
-        assertTrue(map.objectsAt(new Vector2d(0, 0)).contains(animal3));
-        assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal4));
-        map.addElement(animal5);
-        assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal5));
+        assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal3));
 
-        map.removeElement(animal3);
+        map.removeElement(animal1);
         assertNull(map.objectsAt(new Vector2d(0, 0)));
-        map.removeElement(animal5);
-        assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal4));
+        map.removeElement(animal3);
+        assertTrue(map.objectsAt(new Vector2d(99, 29)).contains(animal2));
 
-        assertThrows(IllegalArgumentException.class, () -> map.removeElement(animal5));
+        assertThrows(IllegalArgumentException.class, () -> map.removeElement(animal3));
     }
 
     @Test

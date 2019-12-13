@@ -6,9 +6,11 @@ import elements.animal.Animal;
 import elements.grass.Grass;
 import view.MapView;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MapStatus {
 
@@ -30,11 +32,9 @@ public class MapStatus {
         this.view = view;
     }
 
-
-
     void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
         this.elements = elements;
-        Set<Animal> animals =                 elements.values().stream()
+        Set<Animal> animals = elements.values().stream()
                 .flatMap(Set::stream)
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)
@@ -62,5 +62,8 @@ public class MapStatus {
         averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
                 .sum() / animalCount > 0 ? animalCount : 1;
+        if (view != null) {
+            view.updateMap(this);
+        }
     }
 }

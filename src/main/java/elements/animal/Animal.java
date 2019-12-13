@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class Animal extends AbstractMapElement {
-    private int energy;
-    private MapDirection direction;
-    private Genotype genotype;
     int birthDay;
     int deathDay = 0;
     List<Animal> children = new ArrayList<>();
+    private int energy;
+    private MapDirection direction;
+    private Genotype genotype;
 
     private Animal() {
     }
@@ -81,7 +81,7 @@ public class Animal extends AbstractMapElement {
     }
 
     public int getDescendantsCount() {
-        if(children.isEmpty()) return 0;
+        if (children.isEmpty()) return 0;
         return children.stream().mapToInt(Animal::getDescendantsCount).sum();
     }
 

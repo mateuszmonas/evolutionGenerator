@@ -3,7 +3,6 @@ package map;
 import data.Config;
 import data.Rectangle;
 import data.Vector2d;
-import elements.AbstractMapElement;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
@@ -31,7 +30,7 @@ public class Simulation {
         initialize();
     }
 
-    private void initialize() {
+    void initialize() {
         day = 0;
         Config config = Config.getInstance();
         Rectangle mapArea = new Rectangle(new Vector2d(0, 0), new Vector2d(config.getWidth() - 1, config.getHeight() - 1));
@@ -68,6 +67,7 @@ public class Simulation {
                 .flatMap(Set::stream)
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)
+                .collect(Collectors.toList())
                 .forEach(Animal::move);
     }
 
@@ -77,11 +77,14 @@ public class Simulation {
 
     void feedAnimalsAt(Set<MapElement> elements) {
         List<Animal> strongestAt = getStrongestAt(elements);
-        elements.stream().filter(element -> element instanceof Grass).map(element -> (Grass) element).findAny().ifPresent(grass -> {
-            strongestAt
-                    .forEach(animal -> animal.increaseEnergy(grass.getNutritionValue() / strongestAt.size()));
-            grass.notifyRemove();
-        });
+        if(strongestAt.isEmpty()) return;
+        elements.stream()
+                .filter(element -> element instanceof Grass)
+                .map(element -> (Grass) element).findAny()
+                .ifPresent(g -> {
+                    g.notifyRemove();
+                    strongestAt.forEach(animal -> animal.increaseEnergy(g.getNutritionValue() / strongestAt.size()));
+                });
     }
 
     List<Animal> getStrongestAt(Set<MapElement> elements) {
