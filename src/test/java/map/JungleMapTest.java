@@ -54,14 +54,14 @@ class JungleMapTest {
         map.addElement(animal2);
         animal2.move();
         assertNull(map.objectsAt(new Vector2d(50, 29)));
-        assertTrue(map.objectsAt(new Vector2d(51, 0)).contains(animal2));
+        assertTrue(map.objectsAt(animal2.getPosition()).contains(animal2));
         map.removeElement(animal2);
         map.addElement(animal3);
         map.addElement(animal4);
         animal3.move();
         animal4.move();
-        assertTrue(map.objectsAt(new Vector2d(0, 2)).contains(animal3));
-        assertTrue(map.objectsAt(new Vector2d(0, 2)).contains(animal4));
+        assertTrue(map.objectsAt(animal3.getPosition()).contains(animal3));
+        assertTrue(map.objectsAt(animal4.getPosition()).contains(animal4));
     }
 
     @Test
