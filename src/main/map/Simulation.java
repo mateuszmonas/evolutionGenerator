@@ -5,6 +5,7 @@ import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
 
+import javax.lang.model.element.Element;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -14,12 +15,34 @@ public class Simulation {
     WorldMap map;
     Rectangle jungleArea;
 
+
+
+    void feedAnimals() {
+        map.getElements().values().forEach(this::feedAnimalsAt);
+    }
+
+    void feedAnimalsAt(Set<MapElement> elements) {
+        List<Animal> strongestAt = getStrongestAt(elements);
+        if(strongestAt.isEmpty()) return;
+        elements.stream().filter(element -> element instanceof Grass).map(element -> (Grass) element).findAny().ifPresent(grass -> {
+            strongestAt
+                    .forEach(animal -> animal.increaseEnergy(grass.getNutritionValue() / strongestAt.size()));
+            grass.notifyRemove();
+        });
+    }
+
     void reproduceAnimals() {
         map.getElements().values().stream().map(this::getAnimalsAt)
                 .filter(animals -> animals.size()>1)
                 .map(animals -> Animal.reproduce(animals.get(0), animals.get(1)))
                 .filter(Optional::isPresent)
                 .forEach(animal -> map.addElement(animal.get()));
+    }
+
+    List<Animal> getStrongestAt(Set<MapElement> elements) {
+        List<Animal> strongestAt = getAnimalsAt(elements);
+        int maxEnergy = strongestAt.stream().map(Animal::getEnergy).max(Integer::compare).orElse(0);
+        return strongestAt.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
     }
 
     List<Animal> getAnimalsAt(Set<MapElement> elements) {

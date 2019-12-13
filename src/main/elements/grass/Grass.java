@@ -12,6 +12,10 @@ public class Grass extends AbstractMapElement {
         this.position = position;
     }
 
+    public int getNutritionValue() {
+        return NUTRITION_VALUE;
+    }
+
     public Grass(Vector2d position) {
         this.position = position;
     }
