@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Genotype {
+    protected List<Integer> genes = new ArrayList<>(32);
     int genomeSize = 32;
     int geneTypeCount = 8;
-    protected List<Integer> genes = new ArrayList<>(32);
 
     Genotype() {
         for (int i = 0; i < geneTypeCount; i++) {
@@ -35,7 +35,7 @@ public class Genotype {
             if (geneCount[i] == 0) {
                 List<Integer> greaterThan1 = new ArrayList<>();
                 for (int j = 0; j < geneTypeCount; j++) {
-                    if(geneCount[j]>1) greaterThan1.add(j);
+                    if (geneCount[j] > 1) greaterThan1.add(j);
                 }
                 int randomIndex = greaterThan1.get(ThreadLocalRandom.current().nextInt(greaterThan1.size()));
                 geneCount[randomIndex]--;

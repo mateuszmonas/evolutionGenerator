@@ -77,7 +77,7 @@ public class JungleMap implements WorldMap {
     public Optional<Vector2d> getUnoccupiedPosition(Predicate<Vector2d> predicate) {
         List<Vector2d> possiblePositions = new ArrayList<>();
         for (Vector2d position : area.getVectorSpace()) {
-            if(predicate.test(position)) possiblePositions.add(position);
+            if (predicate.test(position)) possiblePositions.add(position);
         }
         Vector2d result = null;
         if (!possiblePositions.isEmpty()) {

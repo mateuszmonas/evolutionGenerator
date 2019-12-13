@@ -5,6 +5,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public enum MapDirection {
     NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST;
 
+    public static MapDirection getRandom() {
+        return MapDirection.values()[ThreadLocalRandom.current().nextInt(7)];
+    }
+
     @Override
     public String toString() {
         switch (this) {
@@ -34,10 +38,6 @@ public enum MapDirection {
 
     public MapDirection previous() {
         return MapDirection.values()[(this.ordinal() + MapDirection.values().length - 1) % MapDirection.values().length];
-    }
-
-    public static MapDirection getRandom() {
-        return MapDirection.values()[ThreadLocalRandom.current().nextInt(7)];
     }
 
     public Vector2d toUnitVector() {

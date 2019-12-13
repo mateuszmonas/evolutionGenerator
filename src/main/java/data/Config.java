@@ -3,7 +3,8 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class Config {
 
@@ -21,27 +22,14 @@ public class Config {
             Gson gson = new Gson();
             String path = "parameters.json";
             try {
-                File f = new File(path);
-                if (!f.exists() || f.isDirectory()) {
-                    PrintWriter writer = new PrintWriter(path, "UTF-8");
-                    writer.print("{\n" +
-                            "  \"width\": 10,\n" +
-                            "  \"height\": 10,\n" +
-                            "  \"moveEnergy\": 1,\n" +
-                            "  \"plantEnergy\": 5,\n" +
-                            "  \"initialAnimalEnergy\": 20,\n" +
-                            "  \"jungleRatio\": 0.5,\n" +
-                            "  \"initialAnimalCount\": 10\n" +
-                            "}");
-                    writer.close();
-                }
                 JsonReader reader = new JsonReader(new FileReader(path));
                 instance = gson.fromJson(reader, Config.class);
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 instance = new Config();
                 e.printStackTrace();
             }
-        } return instance;
+        }
+        return instance;
     }
 
     public int getWidth() {

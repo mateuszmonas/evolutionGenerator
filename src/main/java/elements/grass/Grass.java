@@ -1,23 +1,19 @@
 package elements.grass;
 
+import data.Config;
 import data.Vector2d;
 import elements.AbstractMapElement;
 
 public class Grass extends AbstractMapElement {
 
-    private int NUTRITION_VALUE = 2;
+    private int nutritionValue = Config.getInstance().getPlantEnergy();
 
-    public Grass(Vector2d position, int NUTRITION_VALUE) {
-        this.NUTRITION_VALUE = NUTRITION_VALUE;
+    public Grass(Vector2d position) {
         this.position = position;
     }
 
     public int getNutritionValue() {
-        return NUTRITION_VALUE;
-    }
-
-    public Grass(Vector2d position) {
-        this.position = position;
+        return nutritionValue;
     }
 
     @Override
