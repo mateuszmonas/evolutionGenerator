@@ -6,6 +6,7 @@ import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
+import view.MapView;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +17,19 @@ public class Simulation {
 
     WorldMap map;
     Rectangle jungleArea;
+    MapView view;
+    MapHistory statistics = new MapHistory();
 
     public Simulation() {
+        initialize();
+    }
+
+    public Simulation(MapView view) {
+        this.view = view;
+        initialize();
+    }
+
+    private void initialize() {
         Config config = Config.getInstance();
         Rectangle mapArea = new Rectangle(new Vector2d(0, 0), new Vector2d(config.getWidth() - 1, config.getHeight() - 1));
         Vector2d jungleLowerLeft = new Vector2d((int) Math.floor((0.5 - config.getJungleRatio() * 0.5) * config.getWidth()),
@@ -34,10 +46,33 @@ public class Simulation {
         feedAnimals();
         reproduceAnimals();
         generateGrasses();
+        statistics.updateHistory(
+                map.getElements().values().stream().flatMap(Set::stream).filter(element -> element instanceof Animal).count(),
+                map.getElements().values().stream().flatMap(Set::stream).filter(element -> element instanceof Animal).count()
+        );
+        updateView();
+    }
+
+    void updateView() {
+        if (view != null) {
+            view.updateMap(map.getElements().values().stream()
+                    .map(elements -> elements.stream()
+                            .reduce((acc, e) -> acc instanceof Animal ? acc : e))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toMap(
+                            MapElement::getPosition, e -> e
+                    )));
+            view.updateStatistics(statistics);
+        }
     }
 
     void moveAnimals() {
-        map.getElements().values().stream().flatMap(Set::stream).filter(element -> element instanceof Animal).map(element -> (Animal) element).collect(Collectors.toList()).forEach(Animal::move);
+        map.getElements().values().stream()
+                .flatMap(Set::stream)
+                .filter(element -> element instanceof Animal)
+                .map(element -> (Animal) element)
+                .forEach(Animal::move);
     }
 
     void feedAnimals() {
@@ -46,12 +81,17 @@ public class Simulation {
 
     void feedAnimalsAt(Set<MapElement> elements) {
         List<Animal> strongestAt = getStrongestAt(elements);
-        if (strongestAt.isEmpty()) return;
         elements.stream().filter(element -> element instanceof Grass).map(element -> (Grass) element).findAny().ifPresent(grass -> {
             strongestAt
                     .forEach(animal -> animal.increaseEnergy(grass.getNutritionValue() / strongestAt.size()));
             grass.notifyRemove();
         });
+    }
+
+    List<Animal> getStrongestAt(Set<MapElement> elements) {
+        List<Animal> strongestAt = getAnimalsAt(elements);
+        int maxEnergy = strongestAt.stream().map(Animal::getEnergy).max(Integer::compare).orElse(0);
+        return strongestAt.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
     }
 
     void reproduceAnimals() {
@@ -60,12 +100,6 @@ public class Simulation {
                 .map(animals -> Animal.reproduce(animals.get(0), animals.get(1)))
                 .filter(Optional::isPresent)
                 .forEach(animal -> map.addElement(animal.get()));
-    }
-
-    List<Animal> getStrongestAt(Set<MapElement> elements) {
-        List<Animal> strongestAt = getAnimalsAt(elements);
-        int maxEnergy = strongestAt.stream().map(Animal::getEnergy).max(Integer::compare).orElse(0);
-        return strongestAt.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
     }
 
     List<Animal> getAnimalsAt(Set<MapElement> elements) {
