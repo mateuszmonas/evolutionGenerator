@@ -33,34 +33,24 @@ public class Animal extends AbstractMapElement {
         return new AnimalBuilder();
     }
 
-    public boolean canReproduce() {
-        return true;
-    }
-
     public int getEnergy() {
         return energy;
     }
 
     public void reduceEnergy(int energy) {
         this.energy -= energy;
+        if(energy<=0) notifyRemove();
     }
 
     public void increaseEnergy(int energy) {
         this.energy += energy;
     }
 
-    public void turn() {
-        this.direction = genotype.getNewDirection(this.direction);
-    }
-
     public void move() {
+        this.direction = genotype.getNewDirection(this.direction);
         Vector2d oldPosition = this.position;
         position = position.add(this.direction.toUnitVector());
         notifyPositionChange(oldPosition);
-    }
-
-    public boolean isDead() {
-        return energy <= 0;
     }
 
     @Override
