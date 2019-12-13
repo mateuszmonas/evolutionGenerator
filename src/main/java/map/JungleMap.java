@@ -18,22 +18,20 @@ public class JungleMap implements WorldMap {
     }
 
     public void addElement(MapElement element) {
-        if (!area.contains(element.getPosition())) {
-            throw new IllegalArgumentException(element.getPosition().toString() + " is out of map bounds");
+        Vector2d position = area.normalisePosition(element.getPosition());
+        if (!elements.containsKey(position)) {
+            elements.put(position, new HashSet<>());
         }
-        if (!elements.containsKey(element.getPosition())) {
-            elements.put(element.getPosition(), new HashSet<>());
-        }
-        elements.get(element.getPosition()).add(element);
+        elements.get(position).add(element);
         element.attachObserver(this);
     }
 
     @Override
     public void onPositionChange(MapElement element, Vector2d oldPosition) {
+        oldPosition = area.normalisePosition(oldPosition);
         if (!elements.containsKey(oldPosition)) {
             throw new IllegalArgumentException("no element at position " + oldPosition.toString());
         }
-        oldPosition = area.normalisePosition(oldPosition);
         Vector2d newPosition = area.normalisePosition(element.getPosition());
         elements.get(oldPosition).remove(element);
         if (elements.get(oldPosition).isEmpty()) {
