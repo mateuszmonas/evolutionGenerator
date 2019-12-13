@@ -49,7 +49,7 @@ public class Genotype {
         }
     }
 
-    int[] getGeneCount() {
+    public int[] getGeneCount() {
         return geneCount;
     }
 

@@ -3,6 +3,7 @@ package map;
 import data.Config;
 import data.Rectangle;
 import data.Vector2d;
+import elements.AbstractMapElement;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
@@ -17,19 +18,21 @@ public class Simulation {
 
     WorldMap map;
     Rectangle jungleArea;
-    MapView view;
-    MapHistory statistics = new MapHistory();
+    MapStatus mapStatus;
+    int day;
 
     public Simulation() {
+        this.mapStatus = new MapStatus();
         initialize();
     }
 
     public Simulation(MapView view) {
-        this.view = view;
+        this.mapStatus = new MapStatus(view);
         initialize();
     }
 
     private void initialize() {
+        day = 0;
         Config config = Config.getInstance();
         Rectangle mapArea = new Rectangle(new Vector2d(0, 0), new Vector2d(config.getWidth() - 1, config.getHeight() - 1));
         Vector2d jungleLowerLeft = new Vector2d((int) Math.floor((0.5 - config.getJungleRatio() * 0.5) * config.getWidth()),
@@ -42,29 +45,22 @@ public class Simulation {
     }
 
     public void simulate() {
+        removeDeadAnimals();
         moveAnimals();
         feedAnimals();
         reproduceAnimals();
         generateGrasses();
-        statistics.updateHistory(
-                map.getElements().values().stream().flatMap(Set::stream).filter(element -> element instanceof Animal).count(),
-                map.getElements().values().stream().flatMap(Set::stream).filter(element -> element instanceof Animal).count()
-        );
-        updateView();
+        mapStatus.update(map.getElements(), day);
+        day++;
     }
 
-    void updateView() {
-        if (view != null) {
-            view.updateMap(map.getElements().values().stream()
-                    .map(elements -> elements.stream()
-                            .reduce((acc, e) -> acc instanceof Animal ? acc : e))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toMap(
-                            MapElement::getPosition, e -> e
-                    )));
-            view.updateStatistics(statistics);
-        }
+    void removeDeadAnimals() {
+        map.getElements().values().stream()
+                .flatMap(Set::stream)
+                .filter(element -> element instanceof Animal)
+                .map(element -> (Animal) element)
+                .filter(animal -> animal.isDead(day))
+                .forEach(Animal::notifyRemove);
     }
 
     void moveAnimals() {
@@ -97,7 +93,7 @@ public class Simulation {
     void reproduceAnimals() {
         map.getElements().values().stream().map(this::getAnimalsAt)
                 .filter(animals -> animals.size() > 1)
-                .map(animals -> Animal.reproduce(animals.get(0), animals.get(1)))
+                .map(animals -> Animal.reproduce(animals.get(0), animals.get(1), day))
                 .filter(Optional::isPresent)
                 .forEach(animal -> map.addElement(animal.get()));
     }
@@ -116,7 +112,7 @@ public class Simulation {
 
     void generateAnimals(int amount) {
         for (int i = 0; i < amount; i++) {
-            map.getUnoccupiedPosition().ifPresent(position -> map.addElement(Animal.newAnimalBuilder().atPosition(position).build()));
+            map.getUnoccupiedPosition().ifPresent(position -> map.addElement(Animal.newAnimalBuilder().withBirthDay(day).atPosition(position).build()));
         }
     }
 

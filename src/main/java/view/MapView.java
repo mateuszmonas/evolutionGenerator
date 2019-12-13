@@ -2,7 +2,7 @@ package view;
 
 import data.Vector2d;
 import elements.MapElement;
-import map.MapHistory;
+import map.MapStatus;
 
 import java.util.Map;
 
@@ -10,6 +10,6 @@ public interface MapView {
 
     void updateMap(Map<Vector2d, MapElement> elements);
 
-    void updateStatistics(MapHistory statistics);
+    void updateStatistics(MapStatus statistics);
 
 }

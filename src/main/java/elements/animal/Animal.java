@@ -5,23 +5,30 @@ import data.MapDirection;
 import data.Vector2d;
 import elements.AbstractMapElement;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Animal extends AbstractMapElement {
     private int energy;
     private MapDirection direction;
     private Genotype genotype;
+    int birthDay;
+    int deathDay = 0;
+    List<Animal> children = new ArrayList<>();
 
     private Animal() {
     }
 
-    public static Optional<Animal> reproduce(Animal parent1, Animal parent2) {
+    public static Optional<Animal> reproduce(Animal parent1, Animal parent2, int birthDay) {
         Animal child = null;
         if (parent1.energy > Config.getInstance().getInitialAnimalEnergy() / 2 && parent2.energy > Config.getInstance().getInitialAnimalEnergy() / 2) {
             int childEnergy = parent1.energy / 4 + parent2.energy / 4;
             parent1.reduceEnergy(parent1.energy / 4);
             parent2.reduceEnergy(parent2.energy / 4);
-            child = Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withEnergy(childEnergy).build();
+            child = Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withBirthDay(birthDay).withEnergy(childEnergy).build();
+            parent1.children.add(child);
+            parent2.children.add(child);
         }
         return Optional.ofNullable(child);
     }
@@ -30,13 +37,24 @@ public class Animal extends AbstractMapElement {
         return new AnimalBuilder();
     }
 
+    public Genotype getGenotype() {
+        return genotype;
+    }
+
     public int getEnergy() {
         return energy;
     }
 
     public void reduceEnergy(int energy) {
         this.energy -= energy;
-        if (energy <= 0) notifyRemove();
+    }
+
+    public boolean isDead(int day) {
+        if (energy <= 0) {
+            deathDay = day;
+            return true;
+        }
+        return false;
     }
 
     public void increaseEnergy(int energy) {
@@ -50,6 +68,23 @@ public class Animal extends AbstractMapElement {
         notifyPositionChange(oldPosition);
     }
 
+    public int getLifeSpan(int currentDay) {
+        int lifeSpan = currentDay - birthDay;
+        if (deathDay != 0) {
+            lifeSpan = deathDay - birthDay;
+        }
+        return lifeSpan;
+    }
+
+    public int getChildCount() {
+        return children.size();
+    }
+
+    public int getDescendantsCount() {
+        if(children.isEmpty()) return 0;
+        return children.stream().mapToInt(Animal::getDescendantsCount).sum();
+    }
+
     @Override
     public String toString() {
         return direction.toString();
@@ -61,6 +96,7 @@ public class Animal extends AbstractMapElement {
         private Vector2d position = new Vector2d(0, 0);
         private int energy = Config.getInstance().getInitialAnimalEnergy();
         private MapDirection direction = MapDirection.getRandom();
+        private int birthDay;
 
         public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;
@@ -79,6 +115,11 @@ public class Animal extends AbstractMapElement {
 
         public AnimalBuilder withEnergy(int energy) {
             this.energy = energy;
+            return this;
+        }
+
+        public AnimalBuilder withBirthDay(int birthDay) {
+            this.birthDay = birthDay;
             return this;
         }
 
