@@ -1,4 +1,4 @@
-package animal;
+package elements.animal;
 
 import data.MapDirection;
 

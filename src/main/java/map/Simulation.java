@@ -2,7 +2,7 @@ package map;
 
 import data.Rectangle;
 import elements.MapElement;
-import animal.Animal;
+import elements.animal.Animal;
 import elements.grass.Grass;
 
 import java.util.*;

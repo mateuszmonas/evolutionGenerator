@@ -1,4 +1,4 @@
-package animal;
+package elements.animal;
 
 import data.MapDirection;
 import data.Vector2d;
@@ -67,6 +67,11 @@ public class Animal extends AbstractMapElement {
 
         public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;
+            return this;
+        }
+
+        public AnimalBuilder withGenotype(Genotype genotype) {
+            this.genotype = genotype;
             return this;
         }
 

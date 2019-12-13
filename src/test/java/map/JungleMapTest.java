@@ -4,7 +4,7 @@ package map;
 import data.MapDirection;
 import data.Rectangle;
 import data.Vector2d;
-import animal.Animal;
+import elements.animal.Animal;
 import elements.grass.Grass;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ class JungleMapTest {
         map.addElement(animal1);
         animal1.move();
         assertNull(map.objectsAt(new Vector2d(99, 29)));
-        assertTrue(map.objectsAt(new Vector2d(99, 0)).contains(animal1));
+        assertTrue(map.objectsAt(animal1.getPosition()).contains(animal1));
         map.removeElement(animal1);
         map.addElement(animal2);
         animal2.move();
@@ -78,7 +78,6 @@ class JungleMapTest {
     @Test
     void testGetUnoccupiedPosition() {
         JungleMap map = new JungleMap(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10)));
-        assertFalse(map.getUnoccupiedPositionInArea(new Rectangle(new Vector2d(0, 0), new Vector2d(0, 0))).isPresent());
         assertFalse(map.getUnoccupiedPositionNotInArea(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10))).isPresent());
         for (int i = 0; i < 10 * 10; i++) {
             Optional<Vector2d> position = map.getUnoccupiedPosition();
