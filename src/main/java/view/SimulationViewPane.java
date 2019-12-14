@@ -1,7 +1,6 @@
 package view;
 
 import data.Rectangle;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import map.MapStatus;
 import simulation.SimulationStatus;

@@ -53,6 +53,7 @@ public class Simulation {
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)
                 .filter(animal -> animal.isDead(day))
+                .collect(Collectors.toList())
                 .forEach(Animal::notifyRemove);
     }
 
@@ -62,7 +63,10 @@ public class Simulation {
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)
                 .collect(Collectors.toList())
-                .forEach(Animal::move);
+                .forEach(animal -> {
+                    animal.move();
+                    animal.reduceEnergy(1);
+                });
     }
 
     void feedAnimals() {
