@@ -12,9 +12,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JungleMapTest {
+class JungleWorldMapTest {
 
-    JungleMap map = new JungleMap(new Rectangle(new Vector2d(0, 0), new Vector2d(99, 29)));
+    JungleWorldMap map = new JungleWorldMap(new Rectangle(new Vector2d(0, 0), new Vector2d(99, 29)));
 
     @Test
     void testAddAndRemoveElement() {
@@ -73,7 +73,7 @@ class JungleMapTest {
 
     @Test
     void testGetUnoccupiedPosition() {
-        JungleMap map = new JungleMap(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10)));
+        JungleWorldMap map = new JungleWorldMap(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10)));
         assertFalse(map.getUnoccupiedPositionNotInArea(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10))).isPresent());
         for (int i = 0; i < 10 * 10; i++) {
             Optional<Vector2d> position = map.getUnoccupiedPosition();

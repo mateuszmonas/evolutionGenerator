@@ -20,17 +20,7 @@ public class Simulation {
     MapStatus mapStatus;
     int day;
 
-    public Simulation() {
-        this.mapStatus = new MapStatus();
-        initialize();
-    }
-
     public Simulation(MapView view) {
-        this.mapStatus = new MapStatus(view);
-        initialize();
-    }
-
-    void initialize() {
         day = 0;
         Config config = Config.getInstance();
         Rectangle mapArea = new Rectangle(new Vector2d(0, 0), new Vector2d(config.getWidth() - 1, config.getHeight() - 1));
@@ -39,8 +29,9 @@ public class Simulation {
         Vector2d jungleUpperRight = new Vector2d((int) Math.ceil((0.5 + config.getJungleRatio() * 0.5) * config.getWidth()),
                 (int) Math.ceil((0.5 + config.getJungleRatio() * 0.5) * config.getHeight()));
         jungleArea = new Rectangle(jungleLowerLeft, jungleUpperRight);
-        map = new JungleMap(mapArea);
+        map = new JungleWorldMap(mapArea);
         generateAnimals(config.getInitialAnimalCount());
+        this.mapStatus = new MapStatus(mapArea, view, map.getElements());
     }
 
     public void simulate() {

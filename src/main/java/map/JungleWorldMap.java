@@ -8,12 +8,12 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-public class JungleMap implements WorldMap {
+public class JungleWorldMap implements WorldMap {
 
     Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
     Rectangle area;
 
-    public JungleMap(Rectangle area) {
+    public JungleWorldMap(Rectangle area) {
         this.area = area;
     }
 
