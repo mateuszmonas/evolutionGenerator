@@ -13,8 +13,8 @@ public class Rectangle {
     public Rectangle(Vector2d lowerLeft, Vector2d upperRight) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
-        for (int i = lowerLeft.x; i < upperRight.x; i++) {
-            for (int j = lowerLeft.y; j < upperRight.y; j++) {
+        for (int i = lowerLeft.x; i < getWidth(); i++) {
+            for (int j = lowerLeft.y; j < getWidth(); j++) {
                 vectorSpace.add(new Vector2d(i, j));
             }
         }

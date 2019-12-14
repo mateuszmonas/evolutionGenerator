@@ -28,7 +28,7 @@ public class MapPane extends GridPane implements MapView {
                 e -> e,
                 e -> new MapField()
         ));
-        positions.forEach((key, value) -> this.add(value, key.x+1, key.y+1));
+        positions.forEach((key, value) -> this.add(value, key.x+1, area.getHeight()-key.y));
     }
 
     public MapPane() {

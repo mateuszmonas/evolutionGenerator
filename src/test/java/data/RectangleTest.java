@@ -15,7 +15,10 @@ class RectangleTest {
         assertEquals(new Vector2d(9, 8), rectangle.normalisePosition(position));
         position = new Vector2d(-10, 8);
         assertEquals(new Vector2d(0, 8), rectangle.normalisePosition(position));
-
+        position = new Vector2d(4, 9);
+        assertEquals(new Vector2d(4, 9), rectangle.normalisePosition(position));
+        position = new Vector2d(4, 10);
+        assertEquals(new Vector2d(4, 0), rectangle.normalisePosition(position));
     }
 
     @Test

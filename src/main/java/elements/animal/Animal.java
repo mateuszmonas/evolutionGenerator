@@ -61,8 +61,11 @@ public class Animal extends AbstractMapElement {
         this.energy += energy;
     }
 
-    public void move() {
+    public void turn() {
         this.direction = genotype.getNewDirection(this.direction);
+    }
+
+    public void move() {
         Vector2d oldPosition = this.position;
         position = position.add(this.direction.toUnitVector());
         notifyPositionChange(oldPosition);
@@ -82,7 +85,7 @@ public class Animal extends AbstractMapElement {
 
     public int getDescendantsCount() {
         if (children.isEmpty()) return 0;
-        return children.stream().mapToInt(Animal::getDescendantsCount).sum();
+        return getChildCount() + children.stream().mapToInt(Animal::getDescendantsCount).sum();
     }
 
     @Override
@@ -129,6 +132,7 @@ public class Animal extends AbstractMapElement {
             animal.position = position;
             animal.direction = direction;
             animal.genotype = genotype;
+            animal.birthDay = birthDay;
             return animal;
         }
     }

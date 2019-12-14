@@ -1,8 +1,6 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import map.Simulation;
 import view.MapPane;
@@ -16,7 +14,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws InterruptedException {
+    public void start(Stage stage) {
         stage.setTitle("Hello World!");
 
         MapPane root = new MapPane();
@@ -26,7 +24,7 @@ public class Main extends Application {
             Runnable runnable = simulation::simulate;
             while (true) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(2000);
                 } catch (InterruptedException ignore) {}
                 Platform.runLater(runnable);
             }

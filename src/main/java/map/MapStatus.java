@@ -32,14 +32,19 @@ public class MapStatus {
 
     void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
         this.elements = elements;
-        elementsToDisplay = elements.values().stream().map(ArrayList::new).map(e -> e.stream().sorted((o1, o2) -> {
-            if (o1 instanceof Grass) return 1;
-            if (o2 instanceof Grass) return -1;
-            return -Integer.compare(((Animal) o1).getEnergy(), ((Animal) o2).getEnergy());
-        }).collect(Collectors.toList())).map(e -> e.get(0)).collect(Collectors.toMap(
-                MapElement::getPosition,
-                e -> e
+
+        elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue().stream().reduce(
+                        (acc, element) -> {
+                            if (acc instanceof Grass) return element;
+                            if (element instanceof Grass) return acc;
+                            return ((Animal) acc).getEnergy() > ((Animal) element).getEnergy() ? acc : element;
+                        }
+                ).orElse(Animal.newAnimalBuilder().build())
         ));
+
+
         Set<Animal> animals = elements.values().stream()
                 .flatMap(Set::stream)
                 .filter(element -> element instanceof Animal)
