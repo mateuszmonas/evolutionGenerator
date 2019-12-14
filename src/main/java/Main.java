@@ -2,8 +2,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import map.Simulation;
-import view.MapPane;
+import simulation.Simulation;
+import simulation.SimulationStatus;
+import view.SimulationView;
+import view.SimulationViewPane;
+import view.map.MapPane;
 
 import static view.ViewConfig.WINDOW_HEIGHT;
 import static view.ViewConfig.WINDOW_WIDTH;
@@ -17,16 +20,19 @@ public class Main extends Application {
     public void start(Stage stage) {
         stage.setTitle("Hello World!");
 
-        MapPane root = new MapPane();
+        SimulationStatus simulationStatus = new SimulationStatus();
+        SimulationViewPane root = new SimulationViewPane(simulationStatus);
         Simulation simulation = new Simulation(root);
 
         Thread thread = new Thread(() -> {
             Runnable runnable = simulation::simulate;
             while (true) {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(simulationStatus.interval);
                 } catch (InterruptedException ignore) {}
-                Platform.runLater(runnable);
+                if (simulationStatus.running) {
+                    Platform.runLater(runnable);
+                }
             }
         });
         thread.setDaemon(true);

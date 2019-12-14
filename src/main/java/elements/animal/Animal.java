@@ -61,11 +61,8 @@ public class Animal extends AbstractMapElement {
         this.energy += energy;
     }
 
-    public void turn() {
-        this.direction = genotype.getNewDirection(this.direction);
-    }
-
     public void move() {
+        this.direction = genotype.getNewDirection(this.direction);
         Vector2d oldPosition = this.position;
         position = position.add(this.direction.toUnitVector());
         notifyPositionChange(oldPosition);

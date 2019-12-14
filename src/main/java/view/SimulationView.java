@@ -3,7 +3,7 @@ package view;
 import data.Rectangle;
 import map.MapStatus;
 
-public interface MapView {
+public interface SimulationView {
 
     void updateMap(MapStatus status);
 

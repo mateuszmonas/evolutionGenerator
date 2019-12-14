@@ -1,4 +1,4 @@
-package map;
+package simulation;
 
 import data.Config;
 import data.Rectangle;
@@ -6,7 +6,10 @@ import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
-import view.MapView;
+import map.JungleWorldMap;
+import map.MapStatus;
+import map.WorldMap;
+import view.SimulationView;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +23,7 @@ public class Simulation {
     MapStatus mapStatus;
     int day;
 
-    public Simulation(MapView view) {
+    public Simulation(SimulationView view) {
         day = 0;
         Config config = Config.getInstance();
         Rectangle mapArea = new Rectangle(new Vector2d(0, 0), new Vector2d(config.getWidth() - 1, config.getHeight() - 1));

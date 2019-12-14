@@ -60,7 +60,7 @@ public class JungleWorldMap implements WorldMap {
     }
 
     @Override
-    public Set<MapElement> objectsAt(Vector2d position) {
+    public Set<MapElement> elementsAt(Vector2d position) {
         position = area.normalisePosition(position);
         return elements.getOrDefault(position, null);
     }

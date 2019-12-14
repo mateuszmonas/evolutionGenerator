@@ -5,14 +5,14 @@ import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
-import view.MapView;
+import view.SimulationView;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class MapStatus {
 
-    MapView view;
+    SimulationView view;
 
     long plantCount;
     long animalCount;
@@ -24,13 +24,13 @@ public class MapStatus {
     long averageLifeSpan;
     long averageChildCount;
 
-    public MapStatus(Rectangle area, MapView view, Map<Vector2d, Set<MapElement>> elements) {
+    public MapStatus(Rectangle area, SimulationView view, Map<Vector2d, Set<MapElement>> elements) {
         this.view = view;
         view.initialize(area);
         update(elements, 0);
     }
 
-    void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
+    public void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
         this.elements = elements;
 
         elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
@@ -58,7 +58,7 @@ public class MapStatus {
         animalCount = animals.size();
         averageEnergy = animals.stream()
                 .mapToInt(Animal::getEnergy)
-                .sum() / animalCount > 0 ? animalCount : 1;
+                .sum() / (animalCount > 0 ? animalCount : 1);
         averageGeneCount = animals.stream()
                 .map(element -> element.getGenotype().getGeneCount())
                 .reduce((acc, e) -> {
@@ -69,16 +69,16 @@ public class MapStatus {
                 }).orElse(new int[]{});
         averageLifeSpan = animals.stream()
                 .mapToInt(element -> element.getLifeSpan(currentDay))
-                .sum() / animalCount > 0 ? animalCount : 1;
+                .sum() / (animalCount > 0 ? animalCount : 1);
         averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
-                .sum() / animalCount > 0 ? animalCount : 1;
+                .sum() / (animalCount > 0 ? animalCount : 1);
         if (view != null) {
             view.updateMap(this);
         }
     }
 
-    public MapView getView() {
+    public SimulationView getView() {
         return view;
     }
 
