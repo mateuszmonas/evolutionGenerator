@@ -5,7 +5,7 @@ import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
-import view.map.MapView;
+import view.mapStatus.MapStatusView;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class MapStatus {
 
-    MapView view;
+    MapStatusView view;
 
     long plantCount;
     long animalCount;
@@ -34,7 +34,7 @@ public class MapStatus {
         update(elements, 0);
     }
 
-    public void setView(MapView view) {
+    public void setView(MapStatusView view) {
         this.view = view;
         view.initialize(area);
     }

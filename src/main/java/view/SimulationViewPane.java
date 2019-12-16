@@ -4,7 +4,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import simulation.Simulation;
 import simulation.SimulationStatus;
-import view.map.MapPane;
+import view.mapStatus.MapStatusViewPane;
 
 
 public class SimulationViewPane extends BorderPane implements SimulationView {
@@ -19,7 +19,7 @@ public class SimulationViewPane extends BorderPane implements SimulationView {
 
     @Override
     public void addSimulation(Simulation simulation) {
-        MapPane map = new MapPane();
+        MapStatusViewPane map = new MapStatusViewPane();
         simulation.getMapStatus().setView(map);
         maps.getChildren().add(map);
     }

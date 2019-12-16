@@ -1,4 +1,4 @@
-package view.map.field;
+package view.mapStatus.map.field;
 
 import elements.MapElement;
 
