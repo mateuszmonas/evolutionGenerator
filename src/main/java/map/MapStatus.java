@@ -4,7 +4,7 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
-import elements.grass.Grass;
+import elements.grass.Plant;
 import view.mapStatus.MapStatusView;
 
 import java.util.HashMap;
@@ -41,8 +41,8 @@ public class MapStatus {
                 Map.Entry::getKey,
                 e -> e.getValue().stream().reduce(
                         (acc, element) -> {
-                            if (acc instanceof Grass) return element;
-                            if (element instanceof Grass) return acc;
+                            if (acc instanceof Plant) return element;
+                            if (element instanceof Plant) return acc;
                             return ((Animal) acc).getEnergy() > ((Animal) element).getEnergy() ? acc : element;
                         }
                 ).orElse(Animal.newAnimalBuilder().build())
@@ -57,7 +57,7 @@ public class MapStatus {
         allAnimals.addAll(animals);
         details.plantCount = elements.values().stream()
                 .flatMap(Set::stream)
-                .filter(element -> element instanceof Grass)
+                .filter(element -> element instanceof Plant)
                 .count();
         details.animalCount = animals.size();
         details.averageEnergy = animals.stream()

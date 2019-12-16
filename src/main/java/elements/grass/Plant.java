@@ -4,11 +4,11 @@ import data.Config;
 import data.Vector2d;
 import elements.AbstractMapElement;
 
-public class Grass extends AbstractMapElement {
+public class Plant extends AbstractMapElement {
 
     private int nutritionValue = Config.getInstance().getPlantEnergy();
 
-    public Grass(Vector2d position) {
+    public Plant(Vector2d position) {
         this.position = position;
     }
 

@@ -5,7 +5,7 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
-import elements.grass.Grass;
+import elements.grass.Plant;
 import map.JungleWorldMap;
 import map.MapStatus;
 import map.WorldMap;
@@ -87,8 +87,8 @@ public class WorldSimulation implements Simulation {
         List<Animal> strongestAt = getStrongestAt(elements);
         if (strongestAt.isEmpty()) return;
         elements.stream()
-                .filter(element -> element instanceof Grass)
-                .map(element -> (Grass) element).findAny()
+                .filter(element -> element instanceof Plant)
+                .map(element -> (Plant) element).findAny()
                 .ifPresent(g -> {
                     g.notifyRemove();
                     strongestAt.forEach(animal -> animal.increaseEnergy(g.getNutritionValue() / strongestAt.size()));
@@ -118,8 +118,8 @@ public class WorldSimulation implements Simulation {
     }
 
     void generateGrasses() {
-        map.getUnoccupiedPositionInArea(jungleArea).ifPresent(position -> map.addElement(new Grass(position)));
-        map.getUnoccupiedPositionNotInArea(jungleArea).ifPresent(position -> map.addElement(new Grass(position)));
+        map.getUnoccupiedPositionInArea(jungleArea).ifPresent(position -> map.addElement(new Plant(position)));
+        map.getUnoccupiedPositionNotInArea(jungleArea).ifPresent(position -> map.addElement(new Plant(position)));
     }
 
     void generateAnimals(int amount) {

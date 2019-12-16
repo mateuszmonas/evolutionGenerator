@@ -5,7 +5,7 @@ import data.MapDirection;
 import data.Rectangle;
 import data.Vector2d;
 import elements.animal.Animal;
-import elements.grass.Grass;
+import elements.grass.Plant;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -63,10 +63,10 @@ class JungleWorldMapTest {
     @Test
     void testObjectsAt() {
         Animal animal1 = Animal.newAnimalBuilder().atPosition(new Vector2d(0, 0)).build();
-        Grass grass = new Grass(new Vector2d(0, 0));
+        Plant plant = new Plant(new Vector2d(0, 0));
         assertNull(map.elementsAt(new Vector2d(0, 0)));
-        map.addElement(grass);
-        assertTrue(map.elementsAt(new Vector2d(0, 0)).contains(grass));
+        map.addElement(plant);
+        assertTrue(map.elementsAt(new Vector2d(0, 0)).contains(plant));
         map.addElement(animal1);
         assertTrue(map.elementsAt(new Vector2d(0, 0)).contains(animal1));
     }

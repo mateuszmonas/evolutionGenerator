@@ -21,12 +21,16 @@ public class MapViewPane extends GridPane {
                 e -> new MapField()
         ));
         positions.forEach((key, value) -> this.add(value, key.x + 1, area.getHeight() - key.y));
+
+        this.widthProperty().addListener((observableValue, number, t1) -> {
+            positions.values().forEach(mapField -> mapField.setFitWidth(t1.doubleValue()/area.getWidth()));
+        });
+        this.heightProperty().addListener((observableValue, number, t1) -> {
+            positions.values().forEach(mapField -> mapField.setFitHeight(t1.doubleValue()/area.getHeight()));
+        });
     }
 
     public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements) {
-        if (positions == null) {
-            throw new IllegalStateException("MapStatusView has not been initialized");
-        }
         for (Map.Entry<Vector2d, MapField> entry : positions.entrySet()) {
             Vector2d key = entry.getKey();
             MapField value = entry.getValue();

@@ -21,12 +21,14 @@ public interface MapElement {
 
     enum Icon {
 
+        GROUND("ground.jpg"),
         ANIMAL("animal.jpg"),
         PLANT("plant.jpg");
 
         public Image image;
 
         Icon(String path) {
+            image = new Image(path);
         }
     }
 

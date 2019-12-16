@@ -44,8 +44,7 @@ public class Main extends Application {
         thread.start();
 
 
-        stage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
-        stage.setResizable(false);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
