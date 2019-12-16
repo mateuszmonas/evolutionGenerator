@@ -1,10 +1,12 @@
 package view.mapStatus.map;
 
+import data.Config;
 import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import javafx.scene.layout.GridPane;
 import map.MapStatus;
+import view.ViewConfig;
 import view.mapStatus.map.field.MapField;
 
 import java.util.Map;
@@ -21,12 +23,9 @@ public class MapViewPane extends GridPane {
                 e -> new MapField()
         ));
         positions.forEach((key, value) -> this.add(value, key.x + 1, area.getHeight() - key.y));
-
-        this.widthProperty().addListener((observableValue, number, t1) -> {
-            positions.values().forEach(mapField -> mapField.setFitWidth(t1.doubleValue()/area.getWidth()));
-        });
-        this.heightProperty().addListener((observableValue, number, t1) -> {
-            positions.values().forEach(mapField -> mapField.setFitHeight(t1.doubleValue()/area.getHeight()));
+        positions.values().forEach(mapField -> {
+            mapField.setFitHeight(ViewConfig.WINDOW_WIDTH / Config.getInstance().getSimulationCount() / area.getHeight());
+            mapField.setFitWidth(ViewConfig.WINDOW_WIDTH / Config.getInstance().getSimulationCount() / area.getHeight());
         });
     }
 

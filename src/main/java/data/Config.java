@@ -16,6 +16,7 @@ public class Config {
     private int initialAnimalEnergy;
     private double jungleRatio;
     private int initialAnimalCount;
+    private int simulationCount;
 
     public static Config getInstance() {
         if (instance == null) {
@@ -58,5 +59,9 @@ public class Config {
 
     public int getInitialAnimalCount() {
         return initialAnimalCount;
+    }
+
+    public int getSimulationCount() {
+        return simulationCount;
     }
 }

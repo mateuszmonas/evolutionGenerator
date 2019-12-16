@@ -1,3 +1,4 @@
+import data.Config;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import simulation.SimulationStatus;
 import simulation.WorldSimulation;
 import view.SimulationView;
 import view.SimulationViewPane;
+import view.ViewConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ public class Main extends Application {
 
         SimulationStatus simulationStatus = new SimulationStatus();
         SimulationViewPane root = new SimulationViewPane(simulationStatus);
-        createSimulations(2, root);
+        createSimulations(Config.getInstance().getSimulationCount(), root);
         Thread thread = new Thread(() -> {
             Runnable runnable = this::updateSimulations;
             while (true) {
@@ -44,7 +46,7 @@ public class Main extends Application {
         thread.start();
 
 
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         stage.show();
     }
 

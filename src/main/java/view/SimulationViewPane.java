@@ -17,14 +17,6 @@ public class SimulationViewPane extends BorderPane implements SimulationView {
         setTop(maps);
         SettingsPane settings = new SettingsPane(simulationStatus);
         setBottom(settings);
-        this.widthProperty().addListener((observableValue, number, t1) -> {
-            settings.setPrefWidth(t1.doubleValue());
-            maps.setPrefWidth(t1.doubleValue());
-        });
-        this.heightProperty().addListener((observableValue, number, t1) -> {
-            maps.setPrefHeight((t1.doubleValue()/10)*9);
-            settings.setPrefHeight(t1.doubleValue() / 10);
-        });
     }
 
 
