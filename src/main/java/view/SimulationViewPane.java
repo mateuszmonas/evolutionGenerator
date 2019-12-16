@@ -11,6 +11,10 @@ public class SimulationViewPane extends BorderPane implements SimulationView {
 
     MapPane map;
 
+    public SimulationViewPane(SimulationStatus simulationStatus) {
+        setRight(new SettingsPane(simulationStatus));
+    }
+
     @Override
     public void updateMap(MapStatus status) {
         map.updateMap(status.getElementsToDisplay(), status.getElements());
@@ -21,9 +25,5 @@ public class SimulationViewPane extends BorderPane implements SimulationView {
     public void initialize(Rectangle area) {
         map = new MapPane(area);
         setLeft(map);
-    }
-
-    public SimulationViewPane(SimulationStatus simulationStatus) {
-        setRight(new SettingsPane(simulationStatus));
     }
 }

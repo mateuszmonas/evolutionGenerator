@@ -4,9 +4,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import simulation.Simulation;
 import simulation.SimulationStatus;
-import view.SimulationView;
 import view.SimulationViewPane;
-import view.map.MapPane;
 
 import static view.ViewConfig.WINDOW_HEIGHT;
 import static view.ViewConfig.WINDOW_WIDTH;
@@ -29,7 +27,8 @@ public class Main extends Application {
             while (true) {
                 try {
                     Thread.sleep(simulationStatus.interval);
-                } catch (InterruptedException ignore) {}
+                } catch (InterruptedException ignore) {
+                }
                 if (simulationStatus.running) {
                     Platform.runLater(runnable);
                 }

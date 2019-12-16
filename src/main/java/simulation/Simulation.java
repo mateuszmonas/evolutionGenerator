@@ -75,7 +75,7 @@ public class Simulation {
 
     void feedAnimalsAt(Set<MapElement> elements) {
         List<Animal> strongestAt = getStrongestAt(elements);
-        if(strongestAt.isEmpty()) return;
+        if (strongestAt.isEmpty()) return;
         elements.stream()
                 .filter(element -> element instanceof Grass)
                 .map(element -> (Grass) element).findAny()

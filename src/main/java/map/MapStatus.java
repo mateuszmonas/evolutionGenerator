@@ -7,7 +7,10 @@ import elements.animal.Animal;
 import elements.grass.Grass;
 import view.SimulationView;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapStatus {
