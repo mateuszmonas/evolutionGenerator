@@ -1,16 +1,10 @@
 package view;
 
-import data.Rectangle;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import map.MapStatus;
 import simulation.Simulation;
 import simulation.SimulationStatus;
 import view.map.MapPane;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SimulationViewPane extends BorderPane implements SimulationView {

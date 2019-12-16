@@ -3,8 +3,8 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import simulation.Simulation;
-import simulation.WorldSimulation;
 import simulation.SimulationStatus;
+import simulation.WorldSimulation;
 import view.SimulationView;
 import view.SimulationViewPane;
 
@@ -15,11 +15,11 @@ import static view.ViewConfig.WINDOW_HEIGHT;
 import static view.ViewConfig.WINDOW_WIDTH;
 
 public class Main extends Application {
+    List<Simulation> simulations = new ArrayList<>();
+
     public static void main(String[] args) {
         launch(args);
     }
-
-    List<Simulation> simulations = new ArrayList<>();
 
     @Override
     public void start(Stage stage) {

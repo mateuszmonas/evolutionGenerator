@@ -2,17 +2,14 @@ package view.map;
 
 import data.Rectangle;
 import data.Vector2d;
-import elements.MapElement;
 import javafx.scene.layout.GridPane;
 import map.MapStatus;
 import view.map.field.MapField;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MapPane extends GridPane  implements MapView{
+public class MapPane extends GridPane implements MapView {
     Map<Vector2d, MapField> positions;
 
     @Override

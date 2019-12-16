@@ -23,11 +23,6 @@ public class WorldSimulation implements Simulation {
     MapStatus mapStatus;
     int day;
 
-    @Override
-    public MapStatus getMapStatus() {
-        return mapStatus;
-    }
-
     public WorldSimulation() {
         day = 0;
         Config config = Config.getInstance();
@@ -40,6 +35,11 @@ public class WorldSimulation implements Simulation {
         map = new JungleWorldMap(mapArea);
         generateAnimals(config.getInitialAnimalCount());
         this.mapStatus = new MapStatus(mapArea, map.getElements());
+    }
+
+    @Override
+    public MapStatus getMapStatus() {
+        return mapStatus;
     }
 
     public void simulate() {
@@ -101,6 +101,7 @@ public class WorldSimulation implements Simulation {
         return strongestAt.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
     }
 
+    // TODO: 2019-12-16 animal should spawn on adjacent position
     void reproduceAnimals() {
         map.getElements().values().stream().map(this::getAnimalsAt)
                 .filter(animals -> animals.size() > 1)

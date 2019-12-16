@@ -27,20 +27,16 @@ public class MapStatus {
     long averageLifeSpan;
     long averageChildCount;
 
-    public Rectangle getArea() {
-        return area;
-    }
-
     Rectangle area;
-
-    public void setView(MapView view) {
-        this.view = view;
-        view.initialize(area);
-    }
 
     public MapStatus(Rectangle area, Map<Vector2d, Set<MapElement>> elements) {
         this.area = area;
         update(elements, 0);
+    }
+
+    public void setView(MapView view) {
+        this.view = view;
+        view.initialize(area);
     }
 
     public void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
@@ -90,6 +86,7 @@ public class MapStatus {
             view.updateMap(this);
         }
     }
+
     public long getPlantCount() {
         return plantCount;
     }
