@@ -3,8 +3,13 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import simulation.Simulation;
+import simulation.WorldSimulation;
 import simulation.SimulationStatus;
+import view.SimulationView;
 import view.SimulationViewPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static view.ViewConfig.WINDOW_HEIGHT;
 import static view.ViewConfig.WINDOW_WIDTH;
@@ -14,16 +19,17 @@ public class Main extends Application {
         launch(args);
     }
 
+    List<Simulation> simulations = new ArrayList<>();
+
     @Override
     public void start(Stage stage) {
         stage.setTitle("Hello World!");
 
         SimulationStatus simulationStatus = new SimulationStatus();
         SimulationViewPane root = new SimulationViewPane(simulationStatus);
-        Simulation simulation = new Simulation(root);
-
+        createSimulations(2, root);
         Thread thread = new Thread(() -> {
-            Runnable runnable = simulation::simulate;
+            Runnable runnable = this::updateSimulations;
             while (true) {
                 try {
                     Thread.sleep(simulationStatus.interval);
@@ -37,9 +43,24 @@ public class Main extends Application {
         thread.setDaemon(true);
         thread.start();
 
+
         stage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         stage.setResizable(false);
         stage.show();
+    }
+
+    void updateSimulations() {
+        for (Simulation simulation : simulations) {
+            simulation.simulate();
+        }
+    }
+
+    void createSimulations(int amount, SimulationView simulationView) {
+        for (int i = 0; i < amount; i++) {
+            Simulation simulation = new WorldSimulation();
+            simulation.setView(simulationView);
+            simulations.add(simulation);
+        }
     }
 
 }

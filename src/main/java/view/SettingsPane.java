@@ -9,8 +9,11 @@ public class SettingsPane extends VBox {
 
     public SettingsPane(SimulationStatus simulationStatus) {
         Button pauseButton = new Button();
-        pauseButton.setText("pause");
-        pauseButton.setOnAction(event -> simulationStatus.running = !simulationStatus.running);
+        pauseButton.setText(simulationStatus.running ? "pause" : "start");
+        pauseButton.setOnAction(event -> {
+            simulationStatus.running = !simulationStatus.running;
+            pauseButton.setText(simulationStatus.running ? "pause" : "start");
+        });
         getChildren().add(pauseButton);
 
         Slider intervalSlider = new Slider(1, 1000, 100);

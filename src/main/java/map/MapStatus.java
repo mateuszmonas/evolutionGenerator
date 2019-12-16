@@ -5,7 +5,7 @@ import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.grass.Grass;
-import view.SimulationView;
+import view.map.MapView;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class MapStatus {
 
-    SimulationView view;
+    MapView view;
 
     long plantCount;
     long animalCount;
@@ -27,9 +27,19 @@ public class MapStatus {
     long averageLifeSpan;
     long averageChildCount;
 
-    public MapStatus(Rectangle area, SimulationView view, Map<Vector2d, Set<MapElement>> elements) {
+    public Rectangle getArea() {
+        return area;
+    }
+
+    Rectangle area;
+
+    public void setView(MapView view) {
         this.view = view;
         view.initialize(area);
+    }
+
+    public MapStatus(Rectangle area, Map<Vector2d, Set<MapElement>> elements) {
+        this.area = area;
         update(elements, 0);
     }
 
@@ -80,11 +90,6 @@ public class MapStatus {
             view.updateMap(this);
         }
     }
-
-    public SimulationView getView() {
-        return view;
-    }
-
     public long getPlantCount() {
         return plantCount;
     }
