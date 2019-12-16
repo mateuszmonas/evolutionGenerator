@@ -49,6 +49,12 @@ public class Animal extends AbstractMapElement {
         this.energy -= energy;
     }
 
+
+    @Override
+    public Icon getIcon() {
+        return Icon.ANIMAL;
+    }
+
     public boolean isDead(int day) {
         if (energy <= 0) {
             deathDay = day;

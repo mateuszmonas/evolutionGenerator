@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MapViewPane extends GridPane implements MapView {
+public class MapViewPane extends GridPane {
     Map<Vector2d, MapField> positions;
 
 
@@ -23,7 +23,6 @@ public class MapViewPane extends GridPane implements MapView {
         positions.forEach((key, value) -> this.add(value, key.x + 1, area.getHeight() - key.y));
     }
 
-    @Override
     public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements) {
         if (positions == null) {
             throw new IllegalStateException("MapStatusView has not been initialized");

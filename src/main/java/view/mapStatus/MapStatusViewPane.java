@@ -1,31 +1,32 @@
 package view.mapStatus;
 
 import data.Rectangle;
-import data.Vector2d;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import map.MapStatus;
-import view.mapStatus.map.MapView;
 import view.mapStatus.map.MapViewPane;
-import view.mapStatus.map.field.MapField;
+import view.mapStatus.status.StatusViewPane;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+public class MapStatusViewPane extends VBox implements MapStatusView {
 
-public class MapStatusViewPane extends Pane implements MapStatusView {
+    StatusViewPane statusView;
     MapViewPane mapView;
 
     @Override
     public void initialize(Rectangle area) {
+        statusView = new StatusViewPane();
+        getChildren().add(statusView);
+
         mapView = new MapViewPane(area);
         getChildren().add(mapView);
     }
 
     @Override
     public void updateMap(MapStatus status) {
-        if (mapView == null) {
+        if (mapView == null || statusView == null) {
             throw new IllegalStateException("MapStatusView has not been initialized");
         }
         mapView.updateMap(status.getElementsToDisplay(), status.getElements());
+        statusView.update(status.getDetails());
     }
 }

@@ -17,15 +17,10 @@ public class MapStatus {
 
     MapStatusView view;
 
-    long plantCount;
-    long animalCount;
     Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
     Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
     Set<Animal> allAnimals = new HashSet<>();
-    int[] averageGeneCount;
-    long averageEnergy;
-    long averageLifeSpan;
-    long averageChildCount;
+    StatusDetails details = new StatusDetails();
 
     Rectangle area;
 
@@ -60,15 +55,15 @@ public class MapStatus {
                 .map(element -> (Animal) element)
                 .collect(Collectors.toSet());
         allAnimals.addAll(animals);
-        plantCount = elements.values().stream()
+        details.plantCount = elements.values().stream()
                 .flatMap(Set::stream)
                 .filter(element -> element instanceof Grass)
                 .count();
-        animalCount = animals.size();
-        averageEnergy = animals.stream()
+        details.animalCount = animals.size();
+        details.averageEnergy = animals.stream()
                 .mapToInt(Animal::getEnergy)
-                .sum() / (animalCount > 0 ? animalCount : 1);
-        averageGeneCount = animals.stream()
+                .sum() / (details.animalCount > 0 ? details.animalCount : 1);
+        details.averageGeneCount = animals.stream()
                 .map(element -> element.getGenotype().getGeneCount())
                 .reduce((acc, e) -> {
                     for (int i = 0; i < e.length; i++) {
@@ -76,23 +71,15 @@ public class MapStatus {
                     }
                     return acc;
                 }).orElse(new int[]{});
-        averageLifeSpan = animals.stream()
+        details.averageLifeSpan = animals.stream()
                 .mapToInt(element -> element.getLifeSpan(currentDay))
-                .sum() / (animalCount > 0 ? animalCount : 1);
-        averageChildCount = animals.stream()
+                .sum() / (details.animalCount > 0 ? details.animalCount : 1);
+        details.averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
-                .sum() / (animalCount > 0 ? animalCount : 1);
+                .sum() / (details.animalCount > 0 ? details.animalCount : 1);
         if (view != null) {
             view.updateMap(this);
         }
-    }
-
-    public long getPlantCount() {
-        return plantCount;
-    }
-
-    public long getAnimalCount() {
-        return animalCount;
     }
 
     public Map<Vector2d, Set<MapElement>> getElements() {
@@ -107,19 +94,17 @@ public class MapStatus {
         return allAnimals;
     }
 
-    public int[] getAverageGeneCount() {
-        return averageGeneCount;
+    public StatusDetails getDetails() {
+        return details;
     }
 
-    public long getAverageEnergy() {
-        return averageEnergy;
+    public static class StatusDetails{
+        public long plantCount;
+        public long animalCount;
+        public int[] averageGeneCount;
+        public long averageEnergy;
+        public long averageLifeSpan;
+        public long averageChildCount;
     }
 
-    public long getAverageLifeSpan() {
-        return averageLifeSpan;
-    }
-
-    public long getAverageChildCount() {
-        return averageChildCount;
-    }
 }

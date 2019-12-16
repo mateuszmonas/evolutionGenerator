@@ -6,7 +6,7 @@ import map.MapElementObserver;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AbstractMapElement implements MapElement {
+public abstract class AbstractMapElement implements MapElement {
     protected Set<MapElementObserver> observers = new HashSet<>();
     protected Vector2d position;
 
@@ -35,5 +35,5 @@ public class AbstractMapElement implements MapElement {
         observers.remove(observer);
     }
 
-
+    abstract public Icon getIcon();
 }

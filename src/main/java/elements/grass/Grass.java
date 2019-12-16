@@ -17,6 +17,11 @@ public class Grass extends AbstractMapElement {
     }
 
     @Override
+    public Icon getIcon() {
+        return Icon.PLANT;
+    }
+
+    @Override
     public String toString() {
         return "*";
     }
