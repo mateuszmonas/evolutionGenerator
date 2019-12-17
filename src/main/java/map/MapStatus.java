@@ -4,6 +4,7 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
+import elements.animal.Genotype;
 import elements.grass.Plant;
 import view.mapStatus.MapStatusView;
 
@@ -60,15 +61,13 @@ public class MapStatus {
         details.averageEnergy = animals.stream()
                 .mapToInt(Animal::getEnergy)
                 .sum() / (details.animalCount > 0 ? details.animalCount : 1);
-        details.averageGeneCount = animals.stream()
-                .map(element -> element.getGenotype().getTempGeneCount())
-                .reduce((acc, e) -> {
-                    int[] result = new int[acc.length];
-                    for (int i = 0; i < e.length; i++) {
-                        result[i] = acc[i] + e[i];
-                    }
-                    return result;
-                }).orElse(new int[]{});
+
+        details.dominantGenome = animals.stream()
+                .collect(Collectors.groupingBy(Animal::getGenotype, Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(new AbstractMap.SimpleEntry<Genotype, Long>(Genotype.EMPTY, 0L)).getKey().getGeneCount();
+
         details.averageLifeSpan = animals.stream()
                 .mapToInt(element -> element.getLifeSpan(currentDay))
                 .sum() / (details.animalCount > 0 ? details.animalCount : 1);
@@ -99,7 +98,7 @@ public class MapStatus {
     public static class StatusDetails{
         public long plantCount;
         public long animalCount;
-        public int[] averageGeneCount;
+        public int[] dominantGenome;
         public long averageEnergy;
         public long averageLifeSpan;
         public long averageChildCount;
@@ -108,7 +107,7 @@ public class MapStatus {
         public String toString() {
             return "plantCount=" + plantCount +
                     ", animalCount=" + animalCount +
-                    ", averageGeneCount=" + Arrays.toString(averageGeneCount) +
+                    ", dominantGenome=" + Arrays.toString(dominantGenome) +
                     ", averageEnergy=" + averageEnergy +
                     ", averageLifeSpan=" + averageLifeSpan +
                     ", averageChildCount=" + averageChildCount;

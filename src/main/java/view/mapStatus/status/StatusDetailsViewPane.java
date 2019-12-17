@@ -1,7 +1,6 @@
 package view.mapStatus.status;
 
 import data.Config;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import map.MapStatus;

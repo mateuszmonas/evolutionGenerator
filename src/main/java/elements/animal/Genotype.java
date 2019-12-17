@@ -9,9 +9,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Genotype {
     protected List<Integer> genes = new ArrayList<>(32);
-    int genomeSize = 32;
-    int geneTypeCount = 8;
+    public static int genomeSize = 32;
+    public static int geneTypeCount = 8;
+    public static Genotype EMPTY = new Genotype(new ArrayList<>());
     int[] geneCount = new int[geneTypeCount];
+
+    private Genotype(List<Integer> genes) {
+        this.genes = genes;
+        for (Integer gene : genes) {
+            geneCount[gene]++;
+        }
+    }
 
     Genotype() {
         for (int i = 0; i < geneTypeCount; i++) {
@@ -54,11 +62,24 @@ public class Genotype {
         }
     }
 
-    public int[] getTempGeneCount() {
+    public int[] getGeneCount() {
         return geneCount;
     }
 
     MapDirection getNewDirection(MapDirection direction) {
         return MapDirection.values()[(direction.ordinal() + genes.get(ThreadLocalRandom.current().nextInt(genomeSize))) % MapDirection.values().length];
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Genotype)) return false;
+        Genotype genotype = (Genotype) o;
+        return Arrays.equals(geneCount, genotype.geneCount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(geneCount);
     }
 }
