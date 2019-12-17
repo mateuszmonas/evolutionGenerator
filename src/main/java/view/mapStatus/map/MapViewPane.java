@@ -5,8 +5,6 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import javafx.scene.layout.GridPane;
-import map.MapStatus;
-import view.ViewConfig;
 import view.mapStatus.map.field.MapField;
 
 import java.util.Map;
@@ -16,16 +14,15 @@ import java.util.stream.Collectors;
 public class MapViewPane extends GridPane {
     Map<Vector2d, MapField> positions;
 
-
-    public MapViewPane(Rectangle area) {
+    public void initialize(Rectangle area) {
         positions = area.getVectorSpace().stream().collect(Collectors.toMap(
                 e -> e,
                 e -> new MapField()
         ));
         positions.forEach((key, value) -> this.add(value, key.x + 1, area.getHeight() - key.y));
         positions.values().forEach(mapField -> {
-            mapField.setFitHeight(ViewConfig.WINDOW_WIDTH / Config.getInstance().getSimulationCount() / area.getHeight());
-            mapField.setFitWidth(ViewConfig.WINDOW_WIDTH / Config.getInstance().getSimulationCount() / area.getHeight());
+            mapField.setFitHeight(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
+            mapField.setFitWidth(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
         });
     }
 

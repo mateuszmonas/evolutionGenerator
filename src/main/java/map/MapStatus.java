@@ -7,10 +7,7 @@ import elements.animal.Animal;
 import elements.grass.Plant;
 import view.mapStatus.MapStatusView;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MapStatus {
@@ -105,6 +102,16 @@ public class MapStatus {
         public long averageEnergy;
         public long averageLifeSpan;
         public long averageChildCount;
+
+        @Override
+        public String toString() {
+            return "plantCount=" + plantCount +
+                    ", animalCount=" + animalCount +
+                    ", averageGeneCount=" + Arrays.toString(averageGeneCount) +
+                    ", averageEnergy=" + averageEnergy +
+                    ", averageLifeSpan=" + averageLifeSpan +
+                    ", averageChildCount=" + averageChildCount;
+        }
     }
 
 }

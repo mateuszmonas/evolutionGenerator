@@ -1,8 +1,10 @@
 package view.mapStatus;
 
+import data.Config;
 import data.Rectangle;
 import javafx.scene.layout.VBox;
 import map.MapStatus;
+import view.ViewConfig;
 import view.mapStatus.map.MapViewPane;
 import view.mapStatus.status.StatusDetailsViewPane;
 
@@ -11,14 +13,19 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
     StatusDetailsViewPane statusView;
     MapViewPane mapView;
 
-    @Override
-    public void initialize(Rectangle area) {
-        statusView = new StatusDetailsViewPane();
-        getChildren().add(statusView);
-
-        mapView = new MapViewPane(area);
+    public MapStatusViewPane() {
+        mapView = new MapViewPane();
         getChildren().add(mapView);
 
+        statusView = new StatusDetailsViewPane();
+        getChildren().add(statusView);
+    }
+
+    @Override
+    public void initialize(Rectangle area) {
+        mapView.setPrefWidth(this.getPrefWidth());
+        mapView.setPrefHeight(this.getPrefHeight());
+        mapView.initialize(area);
     }
 
     @Override
