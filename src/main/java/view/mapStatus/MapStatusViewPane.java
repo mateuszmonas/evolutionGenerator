@@ -19,13 +19,25 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
         statusView = new StatusDetailsViewPane();
         getChildren().add(statusView);
 
+        mapView.prefWidthProperty().bind(this.widthProperty());
+        mapView.prefHeightProperty().bind(this.heightProperty().divide(10).multiply(9));
+        mapView.minWidthProperty().bind(this.widthProperty());
+        mapView.minHeightProperty().bind(this.heightProperty().divide(10).multiply(9));
+        mapView.maxWidthProperty().bind(this.widthProperty());
+        mapView.maxHeightProperty().bind(this.heightProperty().divide(10).multiply(9));
+
+        statusView.prefWidthProperty().bind(this.widthProperty());
+        statusView.prefHeightProperty().bind(this.heightProperty().divide(10));
+        statusView.minWidthProperty().bind(this.widthProperty());
+        statusView.minHeightProperty().bind(this.heightProperty().divide(10));
+        statusView.maxWidthProperty().bind(this.widthProperty());
+        statusView.maxHeightProperty().bind(this.heightProperty().divide(10));
+
         setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
     }
 
     @Override
     public void initialize(Rectangle area) {
-        mapView.setPrefWidth(this.getPrefWidth());
-        mapView.setPrefHeight(this.getPrefHeight());
         mapView.initialize(area);
     }
 

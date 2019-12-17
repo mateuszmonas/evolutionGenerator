@@ -18,8 +18,8 @@ public class MapViewPane extends GridPane {
         for (int i = 0; i < area.getWidth(); i++) {
             for (int j = 0; j < area.getHeight(); j++) {
                 this.add(positions[i][j], i + 1, j + 1);
-                positions[i][j].setFitHeight(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
-                positions[i][j].setFitWidth(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
+                positions[i][j].fitWidthProperty().bind(this.widthProperty().divide(area.getWidth()));
+                positions[i][j].fitHeightProperty().bind(this.heightProperty().divide(area.getHeight()));
             }
         }
     }

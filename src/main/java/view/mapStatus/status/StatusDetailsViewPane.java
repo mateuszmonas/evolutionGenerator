@@ -1,18 +1,16 @@
 package view.mapStatus.status;
 
-import data.Config;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import map.MapStatus;
-import view.ViewConfig;
 
-public class StatusDetailsViewPane extends VBox {
+public class StatusDetailsViewPane extends StackPane {
 
     Text detailsText;
 
     public StatusDetailsViewPane() {
         detailsText = new Text();
-        detailsText.setWrappingWidth((double) ViewConfig.WINDOW_WIDTH / Config.getInstance().getSimulationCount());
+        detailsText.wrappingWidthProperty().bind(this.widthProperty());
         getChildren().add(detailsText);
     }
 

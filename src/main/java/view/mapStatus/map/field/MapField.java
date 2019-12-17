@@ -12,24 +12,23 @@ public class MapField extends ImageView implements Field {
     MapElement elementToDisplay;
     Tooltip tooltip;
 
+    public MapField() {
+        tooltip = new Tooltip();
+        tooltip.setShowDelay(Duration.millis(5));
+        tooltip.setShowDelay(Duration.millis(5));
+        Tooltip.install(this, tooltip);
+    }
+
     @Override
     public void update(MapElement elementToDisplay, Set<MapElement> elements) {
         this.elementToDisplay = elementToDisplay;
         if (elementToDisplay != null) {
             setImage(elementToDisplay.getIcon().image);
             tooltip.setText(elementToDisplay.toString());
-        }
-        else{
+        } else {
             setImage(MapElement.Icon.GROUND.image);
             tooltip.setText("ground");
         }
 
-    }
-
-    public MapField() {
-        tooltip = new Tooltip();
-        tooltip.setShowDelay(Duration.millis(5));
-        tooltip.setShowDelay(Duration.millis(5));
-        Tooltip.install(this, tooltip);
     }
 }

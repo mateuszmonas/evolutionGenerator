@@ -24,7 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Hello World!");
+        stage.setTitle("Generator Ewolucyjny");
 
         SimulationStatus simulationStatus = new SimulationStatus();
         SimulationViewPane root = new SimulationViewPane(simulationStatus);
