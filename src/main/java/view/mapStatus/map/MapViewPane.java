@@ -8,30 +8,29 @@ import view.mapStatus.map.field.MapField;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class MapViewPane extends GridPane {
-    Map<Vector2d, MapField> positions;
+    MapField[][] positions;
 
     public void initialize(Rectangle area) {
-        positions = area.getVectorSpace().stream().collect(Collectors.toMap(
-                e -> e,
-                e -> new MapField()
-        ));
-        positions.forEach((key, value) -> this.add(value, key.x + 1, area.getHeight() - key.y));
-        positions.values().forEach(mapField -> {
-            mapField.setFitHeight(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
-            mapField.setFitWidth(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
-        });
-    }
-
-    public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements) {
-        for (Map.Entry<Vector2d, MapField> entry : positions.entrySet()) {
-            Vector2d key = entry.getKey();
-            MapField value = entry.getValue();
-            value.update(elementsToDisplay.getOrDefault(key, null),
-                    elements.getOrDefault(key, null));
+        positions = new MapField[area.getWidth()][area.getHeight()];
+        area.getVectorSpace().forEach(vector2d -> positions[vector2d.x][vector2d.y] = new MapField());
+        for (int i = 0; i < area.getWidth(); i++) {
+            for (int j = 0; j < area.getHeight(); j++) {
+                this.add(positions[i][j], i + 1, j + 1);
+                positions[i][j].setFitHeight(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
+                positions[i][j].setFitWidth(Math.min(getPrefWidth() / area.getWidth(), getPrefHeight() / area.getHeight()));
+            }
         }
     }
 
+    public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements) {
+        for (int i = 0; i < positions.length; i++) {
+            for (int j = 0; j < positions[i].length; j++) {
+                Vector2d position = new Vector2d(i, j);
+                positions[i][j].update(elementsToDisplay.getOrDefault(position, null),
+                        elements.getOrDefault(position, null));
+            }
+        }
+    }
 }
