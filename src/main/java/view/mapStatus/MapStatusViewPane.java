@@ -1,6 +1,7 @@
 package view.mapStatus;
 
 import data.Rectangle;
+import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import map.MapStatus;
@@ -33,7 +34,11 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
         statusView.maxWidthProperty().bind(this.widthProperty());
         statusView.maxHeightProperty().bind(this.heightProperty().divide(10));
 
-        setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
+        mapView.setPadding(new Insets(10));
+
+        setBorder(new Border(new BorderStroke(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
+                BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY, BorderStroke.THIN, Insets.EMPTY)));
     }
 
     @Override

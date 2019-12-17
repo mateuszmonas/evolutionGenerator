@@ -6,5 +6,5 @@
   "initialAnimalEnergy": 10,
   "jungleRatio": 0.1,
   "initialAnimalCount": 10,
-  "simulationCount": 2
+  "simulationCount": 3
 }
