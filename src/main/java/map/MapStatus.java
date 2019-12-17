@@ -61,12 +61,13 @@ public class MapStatus {
                 .mapToInt(Animal::getEnergy)
                 .sum() / (details.animalCount > 0 ? details.animalCount : 1);
         details.averageGeneCount = animals.stream()
-                .map(element -> element.getGenotype().getGeneCount())
+                .map(element -> element.getGenotype().getTempGeneCount())
                 .reduce((acc, e) -> {
+                    int[] result = new int[acc.length];
                     for (int i = 0; i < e.length; i++) {
-                        acc[i] += e[i];
+                        result[i] = acc[i] + e[i];
                     }
-                    return acc;
+                    return result;
                 }).orElse(new int[]{});
         details.averageLifeSpan = animals.stream()
                 .mapToInt(element -> element.getLifeSpan(currentDay))
