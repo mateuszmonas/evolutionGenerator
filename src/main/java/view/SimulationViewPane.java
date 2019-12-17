@@ -1,16 +1,11 @@
 package view;
 
 import data.Config;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import simulation.Simulation;
 import simulation.SimulationStatus;
 import view.mapStatus.MapStatusViewPane;
-
-import java.awt.*;
 
 
 public class SimulationViewPane extends BorderPane implements SimulationView {

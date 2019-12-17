@@ -1,6 +1,5 @@
 package view.mapStatus.map;
 
-import data.Config;
 import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;

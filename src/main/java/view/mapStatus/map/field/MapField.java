@@ -1,11 +1,7 @@
 package view.mapStatus.map.field;
 
-import data.Config;
 import elements.MapElement;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import view.ViewConfig;
 
 import java.util.Set;
 

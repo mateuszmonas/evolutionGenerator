@@ -17,7 +17,6 @@ public class MapStatus {
 
     Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
     Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
-    Set<Animal> allAnimals = new HashSet<>();
     StatusDetails details = new StatusDetails();
 
     Rectangle area;
@@ -52,7 +51,6 @@ public class MapStatus {
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)
                 .collect(Collectors.toSet());
-        allAnimals.addAll(animals);
         details.plantCount = elements.values().stream()
                 .flatMap(Set::stream)
                 .filter(element -> element instanceof Plant)
@@ -87,15 +85,12 @@ public class MapStatus {
         return elementsToDisplay;
     }
 
-    public Set<Animal> getAllAnimals() {
-        return allAnimals;
-    }
 
     public StatusDetails getDetails() {
         return details;
     }
 
-    public static class StatusDetails{
+    public static class StatusDetails {
         public long plantCount;
         public long animalCount;
         public int[] dominantGenome;

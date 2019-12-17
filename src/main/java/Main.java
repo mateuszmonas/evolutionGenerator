@@ -8,7 +8,6 @@ import simulation.SimulationStatus;
 import simulation.WorldSimulation;
 import view.SimulationView;
 import view.SimulationViewPane;
-import view.ViewConfig;
 
 import java.util.ArrayList;
 import java.util.List;

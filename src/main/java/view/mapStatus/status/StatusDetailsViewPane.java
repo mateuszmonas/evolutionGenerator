@@ -10,13 +10,13 @@ public class StatusDetailsViewPane extends VBox {
 
     Text detailsText;
 
-    public void update(MapStatus.StatusDetails details) {
-        detailsText.setText(details.toString());
-    }
-
     public StatusDetailsViewPane() {
         detailsText = new Text();
         detailsText.setWrappingWidth((double) ViewConfig.WINDOW_WIDTH / Config.getInstance().getSimulationCount());
         getChildren().add(detailsText);
+    }
+
+    public void update(MapStatus.StatusDetails details) {
+        detailsText.setText(details.toString());
     }
 }

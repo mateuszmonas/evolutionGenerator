@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Genotype {
-    protected List<Integer> genes = new ArrayList<>(32);
     public static int genomeSize = 32;
     public static int geneTypeCount = 8;
     public static Genotype EMPTY = new Genotype(new ArrayList<>());
+    protected List<Integer> genes = new ArrayList<>(32);
     int[] geneCount = new int[geneTypeCount];
 
     private Genotype(List<Integer> genes) {

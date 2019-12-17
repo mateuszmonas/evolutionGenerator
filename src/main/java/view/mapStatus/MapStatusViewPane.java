@@ -1,11 +1,9 @@
 package view.mapStatus;
 
-import data.Config;
 import data.Rectangle;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import map.MapStatus;
-import view.ViewConfig;
 import view.mapStatus.map.MapViewPane;
 import view.mapStatus.status.StatusDetailsViewPane;
 
