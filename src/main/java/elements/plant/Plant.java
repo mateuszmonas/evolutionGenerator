@@ -1,4 +1,4 @@
-package elements.grass;
+package elements.plant;
 
 import data.Config;
 import data.Vector2d;
@@ -23,6 +23,6 @@ public class Plant extends AbstractMapElement {
 
     @Override
     public String toString() {
-        return "*";
+        return "grass";
     }
 }

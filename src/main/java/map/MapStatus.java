@@ -5,7 +5,7 @@ import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
 import elements.animal.Genotype;
-import elements.grass.Plant;
+import elements.plant.Plant;
 import view.mapStatus.MapStatusView;
 
 import java.util.*;

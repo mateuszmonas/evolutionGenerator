@@ -66,6 +66,11 @@ public class Genotype {
         return geneCount;
     }
 
+    @Override
+    public String toString() {
+        return Arrays.toString(geneCount);
+    }
+
     MapDirection getNewDirection(MapDirection direction) {
         return MapDirection.values()[(direction.ordinal() + genes.get(ThreadLocalRandom.current().nextInt(genomeSize))) % MapDirection.values().length];
     }

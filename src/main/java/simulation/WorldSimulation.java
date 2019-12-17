@@ -5,7 +5,7 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import elements.animal.Animal;
-import elements.grass.Plant;
+import elements.plant.Plant;
 import map.JungleWorldMap;
 import map.MapStatus;
 import map.WorldMap;

@@ -93,7 +93,7 @@ public class Animal extends AbstractMapElement {
 
     @Override
     public String toString() {
-        return direction.toString();
+        return genotype.toString();
     }
 
     public static class AnimalBuilder {

@@ -5,7 +5,7 @@ import data.MapDirection;
 import data.Rectangle;
 import data.Vector2d;
 import elements.animal.Animal;
-import elements.grass.Plant;
+import elements.plant.Plant;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
