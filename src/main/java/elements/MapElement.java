@@ -22,8 +22,8 @@ public interface MapElement {
     enum Icon {
 
         GROUND("ground.jpg"),
-        ANIMAL("animal.jpg"),
-        PLANT("plant.jpg");
+        ANIMAL("animal.png"),
+        PLANT("plant.png");
 
         public Image image;
 

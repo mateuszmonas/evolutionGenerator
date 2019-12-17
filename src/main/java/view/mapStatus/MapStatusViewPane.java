@@ -2,7 +2,8 @@ package view.mapStatus;
 
 import data.Config;
 import data.Rectangle;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import map.MapStatus;
 import view.ViewConfig;
 import view.mapStatus.map.MapViewPane;
@@ -19,6 +20,8 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
 
         statusView = new StatusDetailsViewPane();
         getChildren().add(statusView);
+
+        setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.MEDIUM)));
     }
 
     @Override
