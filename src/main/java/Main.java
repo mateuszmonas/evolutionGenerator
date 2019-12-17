@@ -2,6 +2,7 @@ import data.Config;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import simulation.Simulation;
 import simulation.SimulationStatus;
@@ -11,9 +12,6 @@ import view.SimulationViewPane;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static view.ViewConfig.WINDOW_HEIGHT;
-import static view.ViewConfig.WINDOW_WIDTH;
 
 public class Main extends Application {
     List<Simulation> simulations = new ArrayList<>();
@@ -45,8 +43,7 @@ public class Main extends Application {
         thread.start();
 
 
-        stage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
-//        stage.setResizable(false);
+        stage.setScene(new Scene(root, Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight()));
         stage.show();
     }
 
