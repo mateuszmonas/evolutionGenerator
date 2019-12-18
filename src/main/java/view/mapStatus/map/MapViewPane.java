@@ -5,6 +5,7 @@ import data.Vector2d;
 import elements.MapElement;
 import javafx.geometry.Pos;
 import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Glow;
 import javafx.scene.layout.GridPane;
 
 import java.util.Arrays;
@@ -24,18 +25,18 @@ public class MapViewPane extends GridPane {
         }
     }
 
-    public void trackedElementChange(MapElement element) {
+    public void trackedElementChange(MapElement trackedElement) {
         if (highlightedField != null) {
-            highlightedField.setEffect(null);
+            highlightedField.removeTrackingEffect();
         }
-        if (element != null) {
+        if (trackedElement != null) {
             highlightedField = Arrays.stream(positions)
                     .flatMap(Arrays::stream)
-                    .filter(mapField -> mapField.getDisplayedElement() == element)
+                    .filter(mapField -> mapField.elements!=null && mapField.elements.stream().anyMatch(element -> element==trackedElement))
                     .findAny()
                     .orElse(null);
             if (highlightedField != null) {
-                highlightedField.setEffect(new Bloom());
+                highlightedField.setTrackingEffect();
             }
         }
     }
@@ -57,15 +58,17 @@ public class MapViewPane extends GridPane {
         }
     }
 
-    public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements, MapElement trackedElement) {
+    public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements, MapElement trackedElement, Set<Vector2d> dominatingGenomeElementsPositions) {
         for (int i = 0; i < positions.length; i++) {
             for (int j = 0; j < positions[i].length; j++) {
                 Vector2d position = new Vector2d(i, j);
                 MapElement elementToDisplay = elementsToDisplay.getOrDefault(position, null);
                 positions[i][j].update(elementToDisplay,
                         elements.getOrDefault(position, null));
-                if (trackedElement != null && elementToDisplay == trackedElement) {
-                    positions[i][j].setEffect(new Bloom());
+                if (trackedElement != null && elements.containsKey(position) && elements.get(position).stream().anyMatch(element -> element == trackedElement)) {
+                    positions[i][j].setTrackingEffect();
+                }else if (dominatingGenomeElementsPositions.contains(position)) {
+                    positions[i][j].setDominatingGenomeEffect();
                 }
             }
         }

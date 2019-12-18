@@ -17,6 +17,7 @@ public class MapStatus {
 
     Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
     Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
+    Set<Vector2d> dominatingGenomeElementsPositions = new HashSet<>();
     StatusDetails details = new StatusDetails();
     MapElement trackedElement= Animal.newAnimalBuilder().build();
 
@@ -24,7 +25,7 @@ public class MapStatus {
 
     public MapStatus(Rectangle area, Map<Vector2d, Set<MapElement>> elements) {
         this.area = area;
-        update(elements, 0);
+        update(elements);
     }
 
     public Rectangle getArea() {
@@ -36,7 +37,7 @@ public class MapStatus {
         view.initialize(this);
     }
 
-    public void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
+    public void update(Map<Vector2d, Set<MapElement>> elements) {
         this.elements = elements;
 
         elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
@@ -69,6 +70,13 @@ public class MapStatus {
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .orElse(new AbstractMap.SimpleEntry<>(Genotype.EMPTY, 0L)).getKey().getGeneCount();
+
+        dominatingGenomeElementsPositions = animals.stream()
+                .filter(animal -> Arrays.equals(animal.getGenotype()
+                .getGeneCount(), details.dominantGenome))
+                .map(animal -> area.normalisePosition(animal.getPosition()))
+                .collect(Collectors.toSet());
+
         details.averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
                 .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
@@ -101,6 +109,10 @@ public class MapStatus {
 
     public StatusDetails getDetails() {
         return details;
+    }
+
+    public Set<Vector2d> getDominatingGenomeElementsPositions() {
+        return dominatingGenomeElementsPositions;
     }
 
     public static class StatusDetails {
