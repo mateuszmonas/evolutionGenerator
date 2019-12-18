@@ -1,12 +1,14 @@
 package view.mapStatus;
 
 import data.Rectangle;
+import elements.MapElement;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import map.MapStatus;
 import view.mapStatus.map.MapViewPane;
+import view.mapStatus.map.TrackElementListener;
 import view.mapStatus.status.StatusDetailsViewPane;
 
 public class MapStatusViewPane extends VBox implements MapStatusView {
@@ -29,8 +31,9 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
     }
 
     @Override
-    public void initialize(Rectangle area) {
-        mapView.initialize(area);
+    public void initialize(MapStatus mapStatus) {
+        mapView.initialize(mapStatus.getArea());
+        mapView.addOnFieldClickListener(mapStatus::setTrackedElement);
     }
 
     @Override

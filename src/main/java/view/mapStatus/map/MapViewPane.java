@@ -7,13 +7,27 @@ import javafx.geometry.Pos;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.GridPane;
+import view.mapStatus.map.field.Field;
 import view.mapStatus.map.field.MapField;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class MapViewPane extends GridPane {
     MapField[][] positions;
+
+    Set<TrackElementListener> listeners = new HashSet<>();
+
+    private void onFieldClick(Field field) {
+        for (TrackElementListener listener : listeners) {
+            listener.setTrackedElement(field.getDisplayedElement());
+        }
+    }
+
+    public void addOnFieldClickListener(TrackElementListener listener) {
+        listeners.add(listener);
+    }
 
     public void initialize(Rectangle area) {
         positions = new MapField[area.getWidth()][area.getHeight()];
@@ -23,6 +37,7 @@ public class MapViewPane extends GridPane {
                 this.add(positions[i][j], i + 1, j + 1);
                 positions[i][j].setFitHeight(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
                 positions[i][j].setFitWidth(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
+                positions[i][j].setOnMouseClicked(mouseEvent -> onFieldClick((Field) mouseEvent.getSource()));
             }
         }
     }

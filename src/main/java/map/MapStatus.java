@@ -27,9 +27,13 @@ public class MapStatus {
         update(elements, 0);
     }
 
+    public Rectangle getArea() {
+        return area;
+    }
+
     public void setView(MapStatusView view) {
         this.view = view;
-        view.initialize(area);
+        view.initialize(this);
     }
 
     public void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {

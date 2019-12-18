@@ -5,7 +5,7 @@ import map.MapStatus;
 
 public interface MapStatusView {
 
-    void initialize(Rectangle area);
+    void initialize(MapStatus status);
 
     void updateMap(MapStatus status);
 

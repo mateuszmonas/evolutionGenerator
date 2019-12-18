@@ -20,6 +20,11 @@ public class MapField extends ImageView implements Field {
     }
 
     @Override
+    public MapElement getDisplayedElement() {
+        return elementToDisplay;
+    }
+
+    @Override
     public void update(MapElement elementToDisplay, Set<MapElement> elements) {
         this.setEffect(null);
         this.elementToDisplay = elementToDisplay;

@@ -8,4 +8,6 @@ public interface Field {
 
     void update(MapElement elementToDisplay, Set<MapElement> elements);
 
+    MapElement getDisplayedElement();
+
 }
