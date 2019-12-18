@@ -25,4 +25,9 @@ public class Plant extends AbstractMapElement {
     public String toString() {
         return "grass";
     }
+
+    @Override
+    public String toDetails() {
+        return toString();
+    }
 }

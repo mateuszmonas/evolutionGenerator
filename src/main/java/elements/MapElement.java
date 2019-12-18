@@ -19,6 +19,8 @@ public interface MapElement {
 
     Icon getIcon();
 
+    String toDetails();
+
     enum Icon {
 
         GROUND("ground.png"),

@@ -18,8 +18,8 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
         setPrefWidth(prefWidth);
         setPrefHeight(prefHeight);
 
-        mapView = new MapViewPane(prefWidth, prefHeight/10*9);
-        statusView = new StatusDetailsViewPane(prefWidth, prefHeight/10);
+        mapView = new MapViewPane(prefWidth, prefHeight/5*4);
+        statusView = new StatusDetailsViewPane(prefWidth, prefHeight/5);
         getChildren().add(mapView);
         getChildren().add(statusView);
 

@@ -92,6 +92,13 @@ public class Animal extends AbstractMapElement {
     }
 
     @Override
+    public String toDetails() {
+        return "birthDay=" + getChildCount() +
+                "childCount=" + getDescendantsCount() +
+                ", descendantsCount=" + deathDay;
+    }
+
+    @Override
     public String toString() {
         return genotype.toString();
     }

@@ -2,7 +2,7 @@ package simulation;
 
 public class SimulationStatus {
 
-    public boolean running = false;
-    public long interval = 500;
+    public boolean running = true;
+    public long interval = 100;
 
 }
