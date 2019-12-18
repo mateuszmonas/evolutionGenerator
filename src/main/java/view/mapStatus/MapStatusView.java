@@ -1,6 +1,7 @@
 package view.mapStatus;
 
 import data.Rectangle;
+import data.Vector2d;
 import elements.MapElement;
 import map.MapStatus;
 
@@ -10,6 +11,6 @@ public interface MapStatusView {
 
     void updateMap(MapStatus status);
 
-    void trackedElementChange(MapElement element);
+    void trackedElementChange(MapElement trackedElement, Vector2d trackedElementPosition);
 
 }

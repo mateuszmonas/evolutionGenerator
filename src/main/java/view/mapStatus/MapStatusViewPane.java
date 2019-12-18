@@ -1,5 +1,6 @@
 package view.mapStatus;
 
+import data.Vector2d;
 import elements.MapElement;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
@@ -34,9 +35,9 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
     }
 
     @Override
-    public void trackedElementChange(MapElement element) {
-        statusView.updateTrackedElementDetails(element);
-        mapView.trackedElementChange(element);
+    public void trackedElementChange(MapElement trackedElement, Vector2d trackedElementPosition) {
+        statusView.updateTrackedElementDetails(trackedElement);
+        mapView.trackedElementChange(trackedElementPosition);
     }
 
     public void showDominantGenome(boolean show) {
@@ -48,7 +49,7 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
         if (mapView == null || statusView == null) {
             throw new IllegalStateException("MapStatusView has not been initialized");
         }
-        mapView.updateMap(status.getElementsToDisplay(), status.getElements(), status.getTrackedElement(), status.getDominatingGenomeElementsPositions());
-        statusView.update(status.getDetails(), status.getTrackedElement());
+        mapView.updateMap(status.getElementsPositions());
+        statusView.update(status.getDetails(), status.getElementsPositions().trackedElement);
     }
 }

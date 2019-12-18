@@ -15,11 +15,8 @@ public class MapStatus {
 
     MapStatusView view;
 
-    Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
-    Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
-    Set<Vector2d> dominatingGenomeElementsPositions = new HashSet<>();
+    ElementsPositions elementsPositions = new ElementsPositions();
     StatusDetails details = new StatusDetails();
-    MapElement trackedElement= Animal.newAnimalBuilder().build();
 
     Rectangle area;
 
@@ -38,9 +35,9 @@ public class MapStatus {
     }
 
     public void update(Map<Vector2d, Set<MapElement>> elements) {
-        this.elements = elements;
+        elementsPositions.elements = elements;
 
-        elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
+        elementsPositions.elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 e -> e.getValue().stream().reduce(
                         (acc, element) -> {
@@ -71,7 +68,7 @@ public class MapStatus {
                 .max(Map.Entry.comparingByValue())
                 .orElse(new AbstractMap.SimpleEntry<>(Genotype.EMPTY, 0L)).getKey().getGeneCount();
 
-        dominatingGenomeElementsPositions = animals.stream()
+        elementsPositions.dominatingGenomeElementsPositions = animals.stream()
                 .filter(animal -> Arrays.equals(animal.getGenotype()
                 .getGeneCount(), details.dominantGenome))
                 .map(animal -> area.normalisePosition(animal.getPosition()))
@@ -80,22 +77,23 @@ public class MapStatus {
         details.averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
                 .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
-        if (view != null) {
+
+        if(elementsPositions.trackedElement!=null)
+            elementsPositions.trackedElementPosition = area.normalisePosition(elementsPositions.trackedElement.getPosition());
+
+        if (view != null)
             view.updateMap(this);
-        }
+
     }
 
-    public Map<Vector2d, Set<MapElement>> getElements() {
-        return elements;
-    }
-
-    public Map<Vector2d, MapElement> getElementsToDisplay() {
-        return elementsToDisplay;
+    public ElementsPositions getElementsPositions() {
+        return elementsPositions;
     }
 
     public void setTrackedElement(MapElement element) {
-        this.trackedElement = element;
-        view.trackedElementChange(trackedElement);
+        elementsPositions.trackedElement = element;
+        elementsPositions.trackedElementPosition = area.normalisePosition(element.getPosition());
+        view.trackedElementChange(elementsPositions.trackedElement, elementsPositions.trackedElementPosition);
     }
 
     public void updateAverageLifeSpan(int lifeSpan) {
@@ -103,16 +101,16 @@ public class MapStatus {
         details.averageLifeSpan = (double) details.lifeSpanSum / ++details.deadAnimalCount;
     }
 
-    public MapElement getTrackedElement() {
-        return trackedElement;
-    }
-
     public StatusDetails getDetails() {
         return details;
     }
 
-    public Set<Vector2d> getDominatingGenomeElementsPositions() {
-        return dominatingGenomeElementsPositions;
+    public static class ElementsPositions{
+        public Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
+        public Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
+        public Set<Vector2d> dominatingGenomeElementsPositions = new HashSet<>();
+        public MapElement trackedElement = null;
+        public Vector2d trackedElementPosition = null;
     }
 
     public static class StatusDetails {
