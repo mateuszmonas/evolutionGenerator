@@ -41,15 +41,7 @@ public class WorldSimulation implements Simulation {
     }
 
     public void simulate() {
-        Map<Vector2d, Set<Animal>> animals = map.getElements().entrySet().stream().map(
-                entry -> new AbstractMap.SimpleEntry<>(
-                        entry.getKey(),
-                        entry.getValue().stream().filter(element -> element instanceof Animal).map(element -> (Animal) element).collect(Collectors.toSet())
-                )
-        ).filter(entry -> !entry.getValue().isEmpty()).collect(Collectors.toMap(
-                AbstractMap.SimpleEntry::getKey,
-                AbstractMap.SimpleEntry::getValue
-        ));
+        Map<Vector2d, Set<Animal>> animals = getAnimals();
         Map<Vector2d, Plant> plants = map.getElements().entrySet().stream()
                 .map(entry -> new AbstractMap.SimpleEntry<>(
                         entry.getKey(),
@@ -67,11 +59,25 @@ public class WorldSimulation implements Simulation {
 
         removeDeadAnimals(animals);
         moveAnimals(animals);
+        animals = getAnimals();
         feedAnimals(animals, plants);
         reproduceAnimals(animals);
         generateGrasses();
         mapStatus.update(map.getElements(), day);
         day++;
+    }
+
+    private Map<Vector2d, Set<Animal>> getAnimals() {
+        return map.getElements().entrySet().stream().map(
+                entry -> new AbstractMap.SimpleEntry<>(
+                        entry.getKey(),
+                        entry.getValue().stream().filter(element -> element instanceof Animal).map(element -> (Animal) element).collect(Collectors.toSet())
+                )
+        ).filter(entry -> !entry.getValue().isEmpty()).collect(Collectors.toMap(
+                AbstractMap.SimpleEntry::getKey,
+                AbstractMap.SimpleEntry::getValue
+        ));
+
     }
 
     @Override
@@ -101,8 +107,8 @@ public class WorldSimulation implements Simulation {
                 .filter(entry -> plants.containsKey(entry.getKey()))
                 .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), getStrongestAnimals(entry.getValue())))
                 .forEach(entry -> {
-                    entry.getValue().forEach(animal -> animal.increaseEnergy(plants.get(entry.getKey()).getNutritionValue()));
-                    plants.remove(entry.getKey());
+                    entry.getValue().forEach(animal -> animal.increaseEnergy(plants.get(entry.getKey()).getNutritionValue()/entry.getValue().size()));
+                    plants.get(entry.getKey()).notifyRemove();
                 });
     }
 
@@ -119,13 +125,6 @@ public class WorldSimulation implements Simulation {
                 .map(animalsSet -> Animal.reproduce(animalsSet.next(), animalsSet.next(), day))
                 .filter(Optional::isPresent)
                 .forEach(animal -> map.addElement(animal.get()));
-    }
-
-    List<Animal> getAnimalsAt(Set<MapElement> elements) {
-        return elements.stream().filter(element -> element instanceof Animal)
-                .map(element -> (Animal) element)
-                .sorted((a1, a2) -> -Integer.compare(a1.getEnergy(), a2.getEnergy()))
-                .collect(Collectors.toList());
     }
 
     void generateGrasses() {

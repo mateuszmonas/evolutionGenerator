@@ -34,6 +34,13 @@ public class MapStatus {
     public void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
         this.elements = elements;
 
+
+        elements.entrySet().stream()
+                .filter(e -> e.getValue().stream().anyMatch(element -> element instanceof Animal) && e.getValue().stream().anyMatch(element -> element instanceof Plant))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
         elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 e -> e.getValue().stream().reduce(
@@ -44,7 +51,6 @@ public class MapStatus {
                         }
                 ).orElse(Animal.newAnimalBuilder().build())
         ));
-
 
         Set<Animal> animals = elements.values().stream()
                 .flatMap(Set::stream)
