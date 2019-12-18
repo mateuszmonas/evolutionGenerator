@@ -37,6 +37,12 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
     }
 
     @Override
+    public void trackedElementChange(MapElement element) {
+        statusView.updateTrackedElementDetails(element);
+        mapView.trackedElementChange(element);
+    }
+
+    @Override
     public void updateMap(MapStatus status) {
         if (mapView == null || statusView == null) {
             throw new IllegalStateException("MapStatusView has not been initialized");

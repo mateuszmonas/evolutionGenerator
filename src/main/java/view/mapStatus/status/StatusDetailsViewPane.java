@@ -32,8 +32,14 @@ public class StatusDetailsViewPane extends StackPane {
         details.getChildren().add(trackedElementDetailsText);
     }
 
+    public void updateTrackedElementDetails(MapElement element) {
+        if (element != null) {
+            trackedElementDetailsText.setText(element.toDetails());
+        }
+    }
+
     public void update(MapStatus.StatusDetails details, MapElement trackedElement) {
         mapDetailsText.setText(details.toString());
-        trackedElementDetailsText.setText(trackedElement.toDetails());
+        updateTrackedElementDetails(trackedElement);
     }
 }

@@ -91,6 +91,7 @@ public class MapStatus {
 
     public void setTrackedElement(MapElement element) {
         this.trackedElement = element;
+        view.trackedElementChange(trackedElement);
     }
 
     public MapElement getTrackedElement() {

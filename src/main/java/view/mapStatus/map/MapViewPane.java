@@ -5,11 +5,9 @@ import data.Vector2d;
 import elements.MapElement;
 import javafx.geometry.Pos;
 import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Effect;
 import javafx.scene.layout.GridPane;
-import view.mapStatus.map.field.Field;
-import view.mapStatus.map.field.MapField;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,10 +16,27 @@ public class MapViewPane extends GridPane {
     MapField[][] positions;
 
     Set<TrackElementListener> listeners = new HashSet<>();
+    MapField highlightedField = null;
 
-    private void onFieldClick(Field field) {
+    private void onFieldClick(MapField field) {
         for (TrackElementListener listener : listeners) {
             listener.setTrackedElement(field.getDisplayedElement());
+        }
+    }
+
+    public void trackedElementChange(MapElement element) {
+        if (highlightedField != null) {
+            highlightedField.setEffect(null);
+        }
+        if (element != null) {
+            highlightedField = Arrays.stream(positions)
+                    .flatMap(Arrays::stream)
+                    .filter(mapField -> mapField.getDisplayedElement() == element)
+                    .findAny()
+                    .orElse(null);
+            if (highlightedField != null) {
+                highlightedField.setEffect(new Bloom());
+            }
         }
     }
 
@@ -37,7 +52,7 @@ public class MapViewPane extends GridPane {
                 this.add(positions[i][j], i + 1, j + 1);
                 positions[i][j].setFitHeight(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
                 positions[i][j].setFitWidth(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
-                positions[i][j].setOnMouseClicked(mouseEvent -> onFieldClick((Field) mouseEvent.getSource()));
+                positions[i][j].setOnMouseClicked(mouseEvent -> onFieldClick((MapField) mouseEvent.getSource()));
             }
         }
     }
@@ -49,7 +64,7 @@ public class MapViewPane extends GridPane {
                 MapElement elementToDisplay = elementsToDisplay.getOrDefault(position, null);
                 positions[i][j].update(elementToDisplay,
                         elements.getOrDefault(position, null));
-                if (elementsToDisplay == trackedElement) {
+                if (trackedElement != null && elementToDisplay == trackedElement) {
                     positions[i][j].setEffect(new Bloom());
                 }
             }

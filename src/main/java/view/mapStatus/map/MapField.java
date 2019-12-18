@@ -1,4 +1,4 @@
-package view.mapStatus.map.field;
+package view.mapStatus.map;
 
 import elements.MapElement;
 import javafx.scene.control.Tooltip;
@@ -7,7 +7,7 @@ import javafx.util.Duration;
 
 import java.util.Set;
 
-public class MapField extends ImageView implements Field {
+public class MapField extends ImageView {
 
     MapElement elementToDisplay;
     Tooltip tooltip;
@@ -19,12 +19,10 @@ public class MapField extends ImageView implements Field {
         Tooltip.install(this, tooltip);
     }
 
-    @Override
     public MapElement getDisplayedElement() {
         return elementToDisplay;
     }
 
-    @Override
     public void update(MapElement elementToDisplay, Set<MapElement> elements) {
         this.setEffect(null);
         this.elementToDisplay = elementToDisplay;
