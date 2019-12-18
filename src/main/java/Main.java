@@ -25,7 +25,7 @@ public class Main extends Application {
         stage.setTitle("Generator Ewolucyjny");
 
         SimulationStatus simulationStatus = new SimulationStatus();
-        SimulationViewPane root = new SimulationViewPane(simulationStatus);
+        SimulationViewPane root = new SimulationViewPane(simulationStatus, Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight());
         createSimulations(Config.getInstance().getSimulationCount(), root);
         Thread thread = new Thread(() -> {
             Runnable runnable = this::updateSimulations;
@@ -42,8 +42,8 @@ public class Main extends Application {
         thread.setDaemon(true);
         thread.start();
 
-
-        stage.setScene(new Scene(root, Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()));
+        stage.setScene(new Scene(root, root.getPrefWidth(), root.getPrefHeight()));
+        stage.setResizable(false);
         stage.show();
     }
 

@@ -23,7 +23,7 @@ public interface MapElement {
 
         GROUND("ground.png"),
         ANIMAL("animal.png"),
-        PLANT("plant.png");
+        PLANT("grass.png");
 
         public Image image;
 

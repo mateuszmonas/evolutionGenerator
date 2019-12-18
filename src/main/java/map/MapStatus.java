@@ -34,13 +34,6 @@ public class MapStatus {
     public void update(Map<Vector2d, Set<MapElement>> elements, int currentDay) {
         this.elements = elements;
 
-
-        elements.entrySet().stream()
-                .filter(e -> e.getValue().stream().anyMatch(element -> element instanceof Animal) && e.getValue().stream().anyMatch(element -> element instanceof Plant))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue
-                ));
         elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 e -> e.getValue().stream().reduce(
@@ -64,7 +57,7 @@ public class MapStatus {
         details.animalCount = animals.size();
         details.averageEnergy = animals.stream()
                 .mapToInt(Animal::getEnergy)
-                .sum() / (details.animalCount > 0 ? details.animalCount : 1);
+                .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
 
         details.dominantGenome = animals.stream()
                 .collect(Collectors.groupingBy(Animal::getGenotype, Collectors.counting()))
@@ -74,10 +67,10 @@ public class MapStatus {
 
         details.averageLifeSpan = animals.stream()
                 .mapToInt(element -> element.getLifeSpan(currentDay))
-                .sum() / (details.animalCount > 0 ? details.animalCount : 1);
+                .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
         details.averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
-                .sum() / (details.animalCount > 0 ? details.animalCount : 1);
+                .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
         if (view != null) {
             view.updateMap(this);
         }
@@ -100,18 +93,18 @@ public class MapStatus {
         public long plantCount;
         public long animalCount;
         public int[] dominantGenome;
-        public long averageEnergy;
-        public long averageLifeSpan;
-        public long averageChildCount;
+        public double averageEnergy;
+        public double averageLifeSpan;
+        public double averageChildCount;
 
         @Override
         public String toString() {
             return "plantCount=" + plantCount +
-                    ", animalCount=" + animalCount +
-                    ", dominantGenome=" + Arrays.toString(dominantGenome) +
-                    ", averageEnergy=" + averageEnergy +
-                    ", averageLifeSpan=" + averageLifeSpan +
-                    ", averageChildCount=" + averageChildCount;
+                    "\nanimalCount=" + animalCount +
+                    "\ndominantGenome=" + Arrays.toString(dominantGenome) +
+                    "\naverageEnergy=" + averageEnergy +
+                    "\naverageLifeSpan=" + averageLifeSpan +
+                    "\naverageChildCount=" + averageChildCount;
         }
     }
 

@@ -8,7 +8,12 @@ import simulation.SimulationStatus;
 
 public class SettingsPane extends VBox {
 
-    public SettingsPane(SimulationStatus simulationStatus) {
+
+
+    public SettingsPane(SimulationStatus simulationStatus, double prefWidth, double prefHeight) {
+        setPrefWidth(prefWidth);
+        setPrefHeight(prefHeight);
+
         this.setAlignment(Pos.CENTER);
         Button pauseButton = new Button();
         pauseButton.setText(simulationStatus.running ? "pause" : "start");
@@ -20,7 +25,7 @@ public class SettingsPane extends VBox {
 
         Slider intervalSlider = new Slider(100, 1000, simulationStatus.interval);
         intervalSlider.setBlockIncrement(1);
-        intervalSlider.valueProperty().addListener((observableValue, number, t1) -> simulationStatus.interval = 1100-t1.longValue());
+        intervalSlider.valueProperty().addListener((observableValue, number, t1) -> simulationStatus.interval = 1100 - t1.longValue());
         getChildren().add(intervalSlider);
     }
 }

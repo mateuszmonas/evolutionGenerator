@@ -3,6 +3,7 @@ package view.mapStatus.map;
 import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
+import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import view.mapStatus.map.field.MapField;
 
@@ -18,8 +19,8 @@ public class MapViewPane extends GridPane {
         for (int i = 0; i < area.getWidth(); i++) {
             for (int j = 0; j < area.getHeight(); j++) {
                 this.add(positions[i][j], i + 1, j + 1);
-                positions[i][j].fitWidthProperty().bind(this.widthProperty().divide(area.getWidth()));
-                positions[i][j].fitHeightProperty().bind(this.heightProperty().divide(area.getHeight()));
+                positions[i][j].setFitHeight(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
+                positions[i][j].setFitWidth(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
             }
         }
     }
@@ -33,4 +34,11 @@ public class MapViewPane extends GridPane {
             }
         }
     }
+
+    public MapViewPane(double prefWidth, double prefHeight) {
+        setPrefWidth(prefWidth);
+        setPrefHeight(prefHeight);
+        setAlignment(Pos.CENTER);
+    }
+
 }

@@ -14,17 +14,20 @@ public class StatusDetailsViewPane extends StackPane {
 
 
 
-    public StatusDetailsViewPane() {
+    public StatusDetailsViewPane(double prefWidth, double prefHeight) {
+        setPrefWidth(prefWidth);
+        setPrefHeight(prefHeight);
+
         setAlignment(Pos.BOTTOM_CENTER);
 
         getChildren().add(details);
 
         mapDetailsText = new Text();
-        mapDetailsText.wrappingWidthProperty().bind(this.widthProperty().divide(2));
+        mapDetailsText.setWrappingWidth(getPrefWidth()/2);
         details.getChildren().add(mapDetailsText);
 
         trackedElementDetailsText = new Text();
-        trackedElementDetailsText.wrappingWidthProperty().bind(this.widthProperty().divide(2));
+        trackedElementDetailsText.setWrappingWidth(getPrefWidth()/2);
         details.getChildren().add(trackedElementDetailsText);
     }
 
