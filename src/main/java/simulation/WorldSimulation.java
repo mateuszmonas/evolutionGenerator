@@ -90,7 +90,10 @@ public class WorldSimulation implements Simulation {
                 .flatMap(Set::stream)
                 .filter(animal -> animal.isDead(day))
                 .collect(Collectors.toList())
-                .forEach(Animal::notifyRemove);
+                .forEach(animal -> {
+                    mapStatus.updateAverageLifeSpan(animal.getLifeSpan(day));
+                    animal.notifyRemove();
+                });
     }
 
     void moveAnimals(Map<Vector2d, Set<Animal>> animals) {

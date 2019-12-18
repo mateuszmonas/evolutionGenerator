@@ -69,10 +69,6 @@ public class MapStatus {
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .orElse(new AbstractMap.SimpleEntry<>(Genotype.EMPTY, 0L)).getKey().getGeneCount();
-
-        details.averageLifeSpan = animals.stream()
-                .mapToInt(element -> element.getLifeSpan(currentDay))
-                .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
         details.averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
                 .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
@@ -94,6 +90,11 @@ public class MapStatus {
         view.trackedElementChange(trackedElement);
     }
 
+    public void updateAverageLifeSpan(int lifeSpan) {
+        details.lifeSpanSum += lifeSpan;
+        details.averageLifeSpan = (double) details.lifeSpanSum / ++details.deadAnimalCount;
+    }
+
     public MapElement getTrackedElement() {
         return trackedElement;
     }
@@ -103,6 +104,8 @@ public class MapStatus {
     }
 
     public static class StatusDetails {
+        public int deadAnimalCount = 0;
+        public long lifeSpanSum;
         public long plantCount;
         public long animalCount;
         public int[] dominantGenome;
