@@ -20,7 +20,7 @@ public class SettingsPane extends VBox {
 
         Slider intervalSlider = new Slider(100, 1000, simulationStatus.interval);
         intervalSlider.setBlockIncrement(1);
-        intervalSlider.valueProperty().addListener((observableValue, number, t1) -> simulationStatus.interval = t1.longValue());
+        intervalSlider.valueProperty().addListener((observableValue, number, t1) -> simulationStatus.interval = 1100-t1.longValue());
         getChildren().add(intervalSlider);
     }
 }

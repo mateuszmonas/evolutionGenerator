@@ -43,7 +43,7 @@ public class Main extends Application {
         thread.start();
 
 
-        stage.setScene(new Scene(root, Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight()));
+        stage.setScene(new Scene(root, Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()));
         stage.show();
     }
 

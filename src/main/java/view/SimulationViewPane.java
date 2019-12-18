@@ -10,7 +10,7 @@ import view.mapStatus.MapStatusViewPane;
 
 public class SimulationViewPane extends VBox implements SimulationView {
 
-    HBox maps = new HBox();
+    HBox maps = new HBox(10);
 
     public SimulationViewPane(SimulationStatus simulationStatus) {
         SettingsPane settings = new SettingsPane(simulationStatus);
@@ -39,11 +39,11 @@ public class SimulationViewPane extends VBox implements SimulationView {
         MapStatusViewPane map = new MapStatusViewPane();
 
 
-        map.prefWidthProperty().bind(maps.widthProperty().divide(Config.getInstance().getSimulationCount()));
+        map.prefWidthProperty().bind(maps.widthProperty().subtract(maps.getSpacing()).divide(Config.getInstance().getSimulationCount()));
         map.prefHeightProperty().bind(maps.heightProperty());
-        map.minWidthProperty().bind(maps.widthProperty().divide(Config.getInstance().getSimulationCount()));
+        map.minWidthProperty().bind(maps.widthProperty().subtract(maps.getSpacing()).divide(Config.getInstance().getSimulationCount()));
         map.minHeightProperty().bind(maps.heightProperty());
-        map.maxWidthProperty().bind(maps.widthProperty().divide(Config.getInstance().getSimulationCount()));
+        map.maxWidthProperty().bind(maps.widthProperty().subtract(maps.getSpacing()).divide(Config.getInstance().getSimulationCount()));
         map.maxHeightProperty().bind(maps.heightProperty());
 
         simulation.getMapStatus().setView(map);
