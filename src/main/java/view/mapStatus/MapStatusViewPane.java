@@ -1,14 +1,11 @@
 package view.mapStatus;
 
-import data.Rectangle;
 import elements.MapElement;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import map.MapStatus;
 import view.mapStatus.map.MapViewPane;
-import view.mapStatus.map.TrackElementListener;
 import view.mapStatus.status.StatusDetailsViewPane;
 
 public class MapStatusViewPane extends VBox implements MapStatusView {
@@ -40,6 +37,10 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
     public void trackedElementChange(MapElement element) {
         statusView.updateTrackedElementDetails(element);
         mapView.trackedElementChange(element);
+    }
+
+    public void showDominantGenome(boolean show) {
+        mapView.setShowingDominantAnimals(show);
     }
 
     @Override

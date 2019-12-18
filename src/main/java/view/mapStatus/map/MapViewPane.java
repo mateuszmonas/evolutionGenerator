@@ -4,8 +4,6 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import javafx.geometry.Pos;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Glow;
 import javafx.scene.layout.GridPane;
 
 import java.util.Arrays;
@@ -16,32 +14,37 @@ import java.util.Set;
 public class MapViewPane extends GridPane {
     MapField[][] positions;
 
-    Set<TrackElementListener> listeners = new HashSet<>();
+    Set<MapElementClickListener> listeners = new HashSet<>();
     MapField highlightedField = null;
+    boolean showingDominantAnimals = false;
+
+    public void setShowingDominantAnimals(boolean showingDominantAnimals) {
+        this.showingDominantAnimals = showingDominantAnimals;
+    }
 
     private void onFieldClick(MapField field) {
-        for (TrackElementListener listener : listeners) {
-            listener.setTrackedElement(field.getDisplayedElement());
+        for (MapElementClickListener listener : listeners) {
+            listener.mapElementClicked(field.getDisplayedElement());
         }
     }
 
     public void trackedElementChange(MapElement trackedElement) {
         if (highlightedField != null) {
-            highlightedField.removeTrackingEffect();
+            highlightedField.setTrackingEffect(false);
         }
         if (trackedElement != null) {
-            highlightedField = Arrays.stream(positions)
+            Arrays.stream(positions)
                     .flatMap(Arrays::stream)
                     .filter(mapField -> mapField.elements!=null && mapField.elements.stream().anyMatch(element -> element==trackedElement))
                     .findAny()
-                    .orElse(null);
-            if (highlightedField != null) {
-                highlightedField.setTrackingEffect();
-            }
+                    .ifPresent(mapField -> {
+                        highlightedField = mapField;
+                        mapField.setTrackingEffect(true);
+                    });
         }
     }
 
-    public void addOnFieldClickListener(TrackElementListener listener) {
+    public void addOnFieldClickListener(MapElementClickListener listener) {
         listeners.add(listener);
     }
 
@@ -66,9 +69,9 @@ public class MapViewPane extends GridPane {
                 positions[i][j].update(elementToDisplay,
                         elements.getOrDefault(position, null));
                 if (trackedElement != null && elements.containsKey(position) && elements.get(position).stream().anyMatch(element -> element == trackedElement)) {
-                    positions[i][j].setTrackingEffect();
-                }else if (dominatingGenomeElementsPositions.contains(position)) {
-                    positions[i][j].setDominatingGenomeEffect();
+                    positions[i][j].setTrackingEffect(true);
+                }else if (showingDominantAnimals && dominatingGenomeElementsPositions.contains(position)) {
+                    positions[i][j].setDominatingGenomeEffect(true);
                 }
             }
         }

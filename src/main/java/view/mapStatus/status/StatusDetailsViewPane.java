@@ -13,8 +13,6 @@ public class StatusDetailsViewPane extends StackPane {
     Text mapDetailsText;
     Text trackedElementDetailsText;
 
-
-
     public StatusDetailsViewPane(double prefWidth, double prefHeight) {
         setPrefWidth(prefWidth);
         setPrefHeight(prefHeight);

@@ -71,13 +71,16 @@ public class WorldSimulation implements Simulation {
         return map.getElements().entrySet().stream().map(
                 entry -> new AbstractMap.SimpleEntry<>(
                         entry.getKey(),
-                        entry.getValue().stream().filter(element -> element instanceof Animal).map(element -> (Animal) element).collect(Collectors.toSet())
-                )
-        ).filter(entry -> !entry.getValue().isEmpty()).collect(Collectors.toMap(
-                AbstractMap.SimpleEntry::getKey,
-                AbstractMap.SimpleEntry::getValue
-        ));
-
+                        entry.getValue().stream()
+                                .filter(element -> element instanceof Animal)
+                                .map(element -> (Animal) element)
+                                .collect(Collectors.toSet())
+                ))
+                .filter(entry -> !entry.getValue().isEmpty())
+                .collect(Collectors.toMap(
+                        AbstractMap.SimpleEntry::getKey,
+                        AbstractMap.SimpleEntry::getValue
+                ));
     }
 
     @Override
