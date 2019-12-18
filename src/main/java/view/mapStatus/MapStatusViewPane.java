@@ -38,7 +38,7 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
         if (mapView == null || statusView == null) {
             throw new IllegalStateException("MapStatusView has not been initialized");
         }
-        mapView.updateMap(status.getElementsToDisplay(), status.getElements());
-        statusView.update(status.getDetails());
+        mapView.updateMap(status.getElementsToDisplay(), status.getElements(), status.getTrackedElement());
+        statusView.update(status.getDetails(), status.getTrackedElement());
     }
 }

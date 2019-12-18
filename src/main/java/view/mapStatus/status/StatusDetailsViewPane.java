@@ -1,5 +1,6 @@
 package view.mapStatus.status;
 
+import elements.MapElement;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -31,8 +32,8 @@ public class StatusDetailsViewPane extends StackPane {
         details.getChildren().add(trackedElementDetailsText);
     }
 
-    public void update(MapStatus.StatusDetails details) {
+    public void update(MapStatus.StatusDetails details, MapElement trackedElement) {
         mapDetailsText.setText(details.toString());
-        trackedElementDetailsText.setText(details.toString());
+        trackedElementDetailsText.setText(trackedElement.toDetails());
     }
 }

@@ -18,6 +18,7 @@ public class MapStatus {
     Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
     Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
     StatusDetails details = new StatusDetails();
+    MapElement trackedElement= Animal.newAnimalBuilder().build();
 
     Rectangle area;
 
@@ -84,6 +85,13 @@ public class MapStatus {
         return elementsToDisplay;
     }
 
+    public void setTrackedElement(MapElement element) {
+        this.trackedElement = element;
+    }
+
+    public MapElement getTrackedElement() {
+        return trackedElement;
+    }
 
     public StatusDetails getDetails() {
         return details;

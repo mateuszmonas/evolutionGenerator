@@ -94,8 +94,8 @@ public class Animal extends AbstractMapElement {
     @Override
     public String toDetails() {
         return "birthDay=" + getChildCount() +
-                "childCount=" + getDescendantsCount() +
-                ", descendantsCount=" + deathDay;
+                "\nchildCount=" + getDescendantsCount() +
+                "\ndescendantsCount=" + deathDay;
     }
 
     @Override

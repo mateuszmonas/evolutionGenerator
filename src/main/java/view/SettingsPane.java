@@ -23,7 +23,7 @@ public class SettingsPane extends VBox {
         });
         getChildren().add(pauseButton);
 
-        Slider intervalSlider = new Slider(100, 1000, simulationStatus.interval);
+        Slider intervalSlider = new Slider(100, 1000, 1100 - simulationStatus.interval);
         intervalSlider.setBlockIncrement(1);
         intervalSlider.valueProperty().addListener((observableValue, number, t1) -> simulationStatus.interval = 1100 - t1.longValue());
         getChildren().add(intervalSlider);

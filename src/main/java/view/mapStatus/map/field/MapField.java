@@ -21,6 +21,7 @@ public class MapField extends ImageView implements Field {
 
     @Override
     public void update(MapElement elementToDisplay, Set<MapElement> elements) {
+        this.setEffect(null);
         this.elementToDisplay = elementToDisplay;
         if (elementToDisplay != null) {
             setImage(elementToDisplay.getIcon().image);

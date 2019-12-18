@@ -4,6 +4,8 @@ import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import javafx.geometry.Pos;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.GridPane;
 import view.mapStatus.map.field.MapField;
 
@@ -25,12 +27,16 @@ public class MapViewPane extends GridPane {
         }
     }
 
-    public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements) {
+    public void updateMap(Map<Vector2d, MapElement> elementsToDisplay, Map<Vector2d, Set<MapElement>> elements, MapElement trackedElement) {
         for (int i = 0; i < positions.length; i++) {
             for (int j = 0; j < positions[i].length; j++) {
                 Vector2d position = new Vector2d(i, j);
-                positions[i][j].update(elementsToDisplay.getOrDefault(position, null),
+                MapElement elementToDisplay = elementsToDisplay.getOrDefault(position, null);
+                positions[i][j].update(elementToDisplay,
                         elements.getOrDefault(position, null));
+                if (elementsToDisplay == trackedElement) {
+                    positions[i][j].setEffect(new Bloom());
+                }
             }
         }
     }
