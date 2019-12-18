@@ -11,9 +11,7 @@ import map.MapStatus;
 import map.WorldMap;
 import view.SimulationView;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WorldSimulation implements Simulation {
@@ -43,10 +41,34 @@ public class WorldSimulation implements Simulation {
     }
 
     public void simulate() {
-        removeDeadAnimals();
-        moveAnimals();
-        feedAnimals();
-        reproduceAnimals();
+        Map<Vector2d, Set<Animal>> animals = map.getElements().entrySet().stream().map(
+                entry -> new AbstractMap.SimpleEntry<>(
+                        entry.getKey(),
+                        entry.getValue().stream().filter(element -> element instanceof Animal).map(element -> (Animal) element).collect(Collectors.toSet())
+                )
+        ).filter(entry -> !entry.getValue().isEmpty()).collect(Collectors.toMap(
+                AbstractMap.SimpleEntry::getKey,
+                AbstractMap.SimpleEntry::getValue
+        ));
+        Map<Vector2d, Plant> plants = map.getElements().entrySet().stream()
+                .map(entry -> new AbstractMap.SimpleEntry<>(
+                        entry.getKey(),
+                        entry.getValue().stream()
+                                .filter(element -> element instanceof Plant)
+                                .map(element -> (Plant) element)
+                                .findAny()
+                                .orElse(null)))
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(
+                        AbstractMap.SimpleEntry::getKey,
+                        AbstractMap.SimpleEntry::getValue
+                ));
+
+
+        removeDeadAnimals(animals);
+        moveAnimals(animals);
+        feedAnimals(animals, plants);
+        reproduceAnimals(animals);
         generateGrasses();
         mapStatus.update(map.getElements(), day);
         day++;
@@ -57,55 +79,44 @@ public class WorldSimulation implements Simulation {
         view.addSimulation(this);
     }
 
-    void removeDeadAnimals() {
-        map.getElements().values().stream()
+    void removeDeadAnimals(Map<Vector2d, Set<Animal>> animals) {
+        animals.values().stream()
                 .flatMap(Set::stream)
-                .filter(element -> element instanceof Animal)
-                .map(element -> (Animal) element)
                 .filter(animal -> animal.isDead(day))
                 .collect(Collectors.toList())
                 .forEach(Animal::notifyRemove);
     }
 
-    void moveAnimals() {
-        map.getElements().values().stream()
+    void moveAnimals(Map<Vector2d, Set<Animal>> animals) {
+        animals.values().stream()
                 .flatMap(Set::stream)
-                .filter(element -> element instanceof Animal)
-                .map(element -> (Animal) element)
-                .collect(Collectors.toList())
                 .forEach(animal -> {
                     animal.move();
                     animal.reduceEnergy(1);
                 });
     }
 
-    void feedAnimals() {
-        map.getElements().values().forEach(this::feedAnimalsAt);
-    }
-
-    void feedAnimalsAt(Set<MapElement> elements) {
-        List<Animal> strongestAt = getStrongestAt(elements);
-        if (strongestAt.isEmpty()) return;
-        elements.stream()
-                .filter(element -> element instanceof Plant)
-                .map(element -> (Plant) element).findAny()
-                .ifPresent(g -> {
-                    g.notifyRemove();
-                    strongestAt.forEach(animal -> animal.increaseEnergy(g.getNutritionValue() / strongestAt.size()));
+    void feedAnimals(Map<Vector2d, Set<Animal>> animals, Map<Vector2d, Plant> plants) {
+        animals.entrySet().stream()
+                .filter(entry -> plants.containsKey(entry.getKey()))
+                .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), getStrongestAnimals(entry.getValue())))
+                .forEach(entry -> {
+                    entry.getValue().forEach(animal -> animal.increaseEnergy(plants.get(entry.getKey()).getNutritionValue()));
+                    plants.remove(entry.getKey());
                 });
     }
 
-    List<Animal> getStrongestAt(Set<MapElement> elements) {
-        List<Animal> strongestAt = getAnimalsAt(elements);
-        int maxEnergy = strongestAt.stream().map(Animal::getEnergy).max(Integer::compare).orElse(0);
-        return strongestAt.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
+    List<Animal> getStrongestAnimals(Set<Animal> animals) {
+        int maxEnergy = animals.stream().map(Animal::getEnergy).max(Integer::compare).orElse(0);
+        return animals.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
     }
 
     // TODO: 2019-12-16 animal should spawn on adjacent position
-    void reproduceAnimals() {
-        map.getElements().values().stream().map(this::getAnimalsAt)
-                .filter(animals -> animals.size() > 1)
-                .map(animals -> Animal.reproduce(animals.get(0), animals.get(1), day))
+    void reproduceAnimals(Map<Vector2d, Set<Animal>> animals) {
+        animals.values().stream()
+                .filter(animalsSet -> animalsSet.size() > 1)
+                .map(animalsSet -> animalsSet.stream().sorted((a1, a2) -> -Integer.compare(a1.getEnergy(), a2.getEnergy())).iterator())
+                .map(animalsSet -> Animal.reproduce(animalsSet.next(), animalsSet.next(), day))
                 .filter(Optional::isPresent)
                 .forEach(animal -> map.addElement(animal.get()));
     }

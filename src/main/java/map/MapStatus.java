@@ -64,7 +64,7 @@ public class MapStatus {
                 .collect(Collectors.groupingBy(Animal::getGenotype, Collectors.counting()))
                 .entrySet().stream()
                 .max(Map.Entry.comparingByValue())
-                .orElse(new AbstractMap.SimpleEntry<Genotype, Long>(Genotype.EMPTY, 0L)).getKey().getGeneCount();
+                .orElse(new AbstractMap.SimpleEntry<>(Genotype.EMPTY, 0L)).getKey().getGeneCount();
 
         details.averageLifeSpan = animals.stream()
                 .mapToInt(element -> element.getLifeSpan(currentDay))
