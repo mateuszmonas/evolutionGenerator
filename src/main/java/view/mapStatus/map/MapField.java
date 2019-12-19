@@ -15,22 +15,17 @@ import javafx.util.Duration;
 
 import java.util.Set;
 
-public class MapField extends Region {
+public class MapField extends ImageView {
 
     private static Effect trackingEffect = new ColorAdjust(1, 0, 0, 0);
     private static Effect genomeEffect = new SepiaTone(1);
-    private static Border border = new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY, BorderStroke.THIN, Insets.EMPTY));
     MapElement elementToDisplay;
     Tooltip tooltip;
     MapFieldContextMenu elementsMenu;
-    ImageView image;
 
     public MapField(TrackingEventListener listener, double prefSideLength) {
-        image = new ImageView();
-        image.setFitWidth(prefSideLength);
-        image.setFitHeight(prefSideLength);
-        getChildren().add(image);
+        setFitHeight(prefSideLength);
+        setFitWidth(prefSideLength);
         setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) listener.trackedMapElementSelection(elementToDisplay);
         });
@@ -58,10 +53,10 @@ public class MapField extends Region {
 
         this.elementToDisplay = elementToDisplay;
         if (elementToDisplay != null) {
-            image.setImage(elementToDisplay.getIcon().image);
+            setImage(elementToDisplay.getIcon().image);
             tooltip.setText(elementToDisplay.toString());
         } else {
-            image.setImage(MapElement.Icon.GROUND.image);
+            setImage(MapElement.Icon.GROUND.image);
             tooltip.setText("ground");
         }
 

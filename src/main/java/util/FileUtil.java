@@ -8,9 +8,9 @@ public final class FileUtil {
 
     public static void clearFile(String path) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\Test\test.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path));
             writer.write("");
-            writer.close();  //        } catch (IOException e) {
+            writer.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

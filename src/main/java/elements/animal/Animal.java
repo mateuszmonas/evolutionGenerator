@@ -73,7 +73,7 @@ public class Animal extends AbstractMapElement {
     }
 
     public void increaseEnergy(int energy) {
-        this.energy = Math.min(this.energy + energy, Config.getInstance().getInitialAnimalEnergy());
+        this.energy += energy;
     }
 
     public void move() {
