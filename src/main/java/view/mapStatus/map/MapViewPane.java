@@ -38,7 +38,8 @@ public class MapViewPane extends GridPane {
             trackedField.setTrackingEffect(false);
         }
         if (trackedElementPosition != null) {
-            positions[trackedElementPosition.x][trackedElementPosition.y].setTrackingEffect(true);
+            trackedField = positions[trackedElementPosition.x][trackedElementPosition.y];
+            trackedField.setTrackingEffect(true);
         }
     }
 
@@ -65,12 +66,15 @@ public class MapViewPane extends GridPane {
             for (int j = 0; j < positions[i].length; j++) {
                 Vector2d position = new Vector2d(i, j);
                 MapElement elementToDisplay = elementsPositions.elementsToDisplay.getOrDefault(position, null);
+
                 positions[i][j].update(elementToDisplay,
                         elementsPositions.elements.getOrDefault(position, null));
+
                 if (position.equals(elementsPositions.trackedElementPosition)) {
                     trackedField = positions[i][j];
                     positions[i][j].setTrackingEffect(true);
-                } else if (elementsPositions.dominatingGenomeElementsPositions.contains(position)) {
+                }
+                if (elementsPositions.dominatingGenomeElementsPositions.contains(position)) {
                     dominantGenomeFields.add(positions[i][j]);
                 }
             }

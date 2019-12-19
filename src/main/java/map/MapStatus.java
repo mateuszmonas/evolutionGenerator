@@ -91,8 +91,9 @@ public class MapStatus {
     }
 
     public void setTrackedElement(MapElement element) {
-        elementsPositions.trackedElement = element;
-        elementsPositions.trackedElementPosition = area.normalisePosition(element.getPosition());
+        elementsPositions.trackedElement = elementsPositions.trackedElement != element ? element : null;
+        if (elementsPositions.trackedElement != null) elementsPositions.trackedElementPosition = area.normalisePosition(element.getPosition());
+        else elementsPositions.trackedElementPosition = null;
         view.trackedElementChange(elementsPositions.trackedElement, elementsPositions.trackedElementPosition);
     }
 
