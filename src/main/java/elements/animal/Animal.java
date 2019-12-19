@@ -12,7 +12,10 @@ import java.util.Optional;
 public class Animal extends AbstractMapElement {
     int birthDay;
     int deathDay = 0;
-    List<Animal> children = new ArrayList<>();
+    Animal parent1;
+    Animal parent2;
+    int descendantsCount = 0;
+    int childrenCount = 0;
     private int energy;
     private MapDirection direction;
     private Genotype genotype;
@@ -27,8 +30,8 @@ public class Animal extends AbstractMapElement {
             parent1.reduceEnergy(parent1.energy / 4);
             parent2.reduceEnergy(parent2.energy / 4);
             child = Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withBirthDay(birthDay).withEnergy(childEnergy).build();
-            parent1.children.add(child);
-            parent2.children.add(child);
+            parent1.increaseChildrenCount();
+            parent2.increaseChildrenCount();
         }
         return Optional.ofNullable(child);
     }
@@ -88,12 +91,24 @@ public class Animal extends AbstractMapElement {
     }
 
     public int getChildCount() {
-        return children.size();
+        return childrenCount;
     }
 
     public int getDescendantsCount() {
-        if (children.isEmpty()) return 0;
-        return getChildCount() + children.stream().mapToInt(Animal::getDescendantsCount).sum();
+        return descendantsCount;
+    }
+
+    public void increaseChildrenCount() {
+        childrenCount++;
+        increaseDescendantsCount();
+    }
+
+    public void increaseDescendantsCount() {
+        descendantsCount++;
+        if (parent1 != null && parent2 != null) {
+            parent1.increaseDescendantsCount();
+            parent2.increaseDescendantsCount();
+        }
     }
 
     @Override
@@ -101,7 +116,9 @@ public class Animal extends AbstractMapElement {
         return "birthDay=" + birthDay +
                 "\ndeathDay=" + (deathDay==0?"NaN":deathDay) +
                 "\nchildCount=" + getChildCount() +
-                "\ndescendantsCount=" + getDescendantsCount();
+                "\ndescendantsCount=" + getDescendantsCount() +
+                "\ngenome=" + genotype +
+                "\nenergy=" + energy;
     }
 
     @Override
@@ -116,6 +133,8 @@ public class Animal extends AbstractMapElement {
         private int energy = Config.getInstance().getInitialAnimalEnergy();
         private MapDirection direction = MapDirection.getRandom();
         private int birthDay;
+        Animal parent1;
+        Animal parent2;
 
         public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;
@@ -128,6 +147,8 @@ public class Animal extends AbstractMapElement {
         }
 
         public AnimalBuilder fromParents(Animal parent1, Animal parent2) {
+            this.parent1 = parent1;
+            this.parent2 = parent2;
             genotype = new Genotype(parent1.genotype, parent2.genotype);
             return this;
         }
@@ -149,6 +170,8 @@ public class Animal extends AbstractMapElement {
             animal.direction = direction;
             animal.genotype = genotype;
             animal.birthDay = birthDay;
+            animal.parent1 = parent1;
+            animal.parent2 = parent2;
             return animal;
         }
     }

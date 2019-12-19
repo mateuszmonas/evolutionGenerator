@@ -2,9 +2,9 @@
   "width": 10,
   "height": 10,
   "moveEnergy": 1,
-  "plantEnergy": 2,
-  "initialAnimalEnergy": 5,
+  "plantEnergy": 50,
+  "initialAnimalEnergy": 50,
   "jungleRatio": 0.1,
-  "initialAnimalCount": 1,
+  "initialAnimalCount": 10,
   "simulationCount": 2
 }
