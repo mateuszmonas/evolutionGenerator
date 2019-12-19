@@ -1,6 +1,7 @@
 package view.mapStatus.map;
 
 import elements.MapElement;
+import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
@@ -8,19 +9,28 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.Set;
 
-public class MapField extends ImageView {
+public class MapField extends Region {
 
     private static Effect trackingEffect = new ColorAdjust(1, 0, 0, 0);
     private static Effect genomeEffect = new SepiaTone(1);
+    private static Border border = new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY, BorderStroke.THIN, Insets.EMPTY));
     MapElement elementToDisplay;
     Tooltip tooltip;
     MapFieldContextMenu elementsMenu;
+    ImageView image;
 
-    public MapField(TrackingEventListener listener) {
+    public MapField(TrackingEventListener listener, double prefSideLength) {
+        image = new ImageView();
+        image.setFitWidth(prefSideLength);
+        image.setFitHeight(prefSideLength);
+        getChildren().add(image);
         setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) listener.trackedMapElementSelection(elementToDisplay);
         });
@@ -48,10 +58,10 @@ public class MapField extends ImageView {
 
         this.elementToDisplay = elementToDisplay;
         if (elementToDisplay != null) {
-            setImage(elementToDisplay.getIcon().image);
+            image.setImage(elementToDisplay.getIcon().image);
             tooltip.setText(elementToDisplay.toString());
         } else {
-            setImage(MapElement.Icon.GROUND.image);
+            image.setImage(MapElement.Icon.GROUND.image);
             tooltip.setText("ground");
         }
 

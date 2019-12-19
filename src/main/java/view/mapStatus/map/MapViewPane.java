@@ -17,12 +17,6 @@ public class MapViewPane extends GridPane {
     Set<MapField> dominantGenomeFields = new HashSet<>();
     boolean showingDominantAnimals = false;
 
-    public MapViewPane(double prefWidth, double prefHeight) {
-        setPrefWidth(prefWidth);
-        setPrefHeight(prefHeight);
-        setAlignment(Pos.CENTER);
-    }
-
     public void setShowingDominantAnimals(boolean showingDominantAnimals) {
         this.showingDominantAnimals = showingDominantAnimals;
         applyDominantGenomeEffect();
@@ -44,14 +38,10 @@ public class MapViewPane extends GridPane {
 
     public void initialize(TrackingEventListener listener, Rectangle area) {
         positions = new MapField[area.getWidth()][area.getHeight()];
-        area.getVectorSpace().forEach(vector2d -> positions[vector2d.x][vector2d.y] = new MapField(listener));
-        for (int i = 0; i < area.getWidth(); i++) {
-            for (int j = 0; j < area.getHeight(); j++) {
-                this.add(positions[i][j], i + 1, j + 1);
-                positions[i][j].setFitHeight(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
-                positions[i][j].setFitWidth(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
-            }
-        }
+        area.getVectorSpace().forEach(vector2d -> {
+            positions[vector2d.x][vector2d.y] = new MapField(listener, Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
+            add(positions[vector2d.x][vector2d.y], vector2d.x + 1, vector2d.y + 1);
+        });
     }
 
     public void updateMap(MapStatus.ElementsPositions elementsPositions) {
@@ -74,6 +64,12 @@ public class MapViewPane extends GridPane {
             }
         }
         applyDominantGenomeEffect();
+    }
+
+    public MapViewPane(double prefWidth, double prefHeight) {
+        setPrefWidth(prefWidth);
+        setPrefHeight(prefHeight);
+        setAlignment(Pos.CENTER);
     }
 
 }
