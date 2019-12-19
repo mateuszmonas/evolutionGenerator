@@ -6,13 +6,15 @@ import elements.AbstractMapElement;
 import javafx.util.Pair;
 import util.Config;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class Animal extends AbstractMapElement {
     int birthDay;
     int deathDay = 0;
-    Animal parent1;
-    Animal parent2;
+    Set<Animal> parents;
+    Set<Animal> children = new HashSet<>();
     int descendantsCount = 0;
     int childrenCount = 0;
     private int energy;
@@ -33,6 +35,8 @@ public class Animal extends AbstractMapElement {
             child = Animal.newAnimalBuilder().atPosition(position).fromParents(parent1, parent2).withBirthDay(birthDay).withEnergy(childEnergy).build();
             parent1.increaseChildrenCount();
             parent2.increaseChildrenCount();
+            parent1.children.add(child);
+            parent2.children.add(child);
         }
         return Optional.ofNullable(child);
     }
@@ -106,10 +110,15 @@ public class Animal extends AbstractMapElement {
 
     public void increaseDescendantsCount() {
         descendantsCount++;
-        if (parent1 != null && parent2 != null) {
-            parent1.increaseDescendantsCount();
-            parent2.increaseDescendantsCount();
+        for (Animal parent : parents) {
+            parent.increaseDescendantsCount();
         }
+    }
+
+    @Override
+    public void notifyRemove() {
+        children.forEach(animal -> animal.parents.remove(this));
+        super.notifyRemove();
     }
 
     @Override
@@ -130,8 +139,7 @@ public class Animal extends AbstractMapElement {
     public static class AnimalBuilder {
 
         Genotype genotype = new Genotype();
-        Animal parent1;
-        Animal parent2;
+        Set<Animal> parents = new HashSet<>(2);
         private Vector2d position;
         private int energy = Config.getInstance().getInitialAnimalEnergy();
         private MapDirection direction = MapDirection.getRandom();
@@ -148,8 +156,8 @@ public class Animal extends AbstractMapElement {
         }
 
         public AnimalBuilder fromParents(Animal parent1, Animal parent2) {
-            this.parent1 = parent1;
-            this.parent2 = parent2;
+            parents.add(parent1);
+            parents.add(parent2);
             genotype = new Genotype(parent1.genotype, parent2.genotype);
             return this;
         }
@@ -171,8 +179,7 @@ public class Animal extends AbstractMapElement {
             animal.direction = direction;
             animal.genotype = genotype;
             animal.birthDay = birthDay;
-            animal.parent1 = parent1;
-            animal.parent2 = parent2;
+            animal.parents = parents;
             return animal;
         }
     }
