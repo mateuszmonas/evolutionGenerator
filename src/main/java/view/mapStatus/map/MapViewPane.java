@@ -17,6 +17,12 @@ public class MapViewPane extends GridPane {
     Set<MapField> dominantGenomeFields = new HashSet<>();
     boolean showingDominantAnimals = false;
 
+    public MapViewPane(double prefWidth, double prefHeight) {
+        setPrefWidth(prefWidth);
+        setPrefHeight(prefHeight);
+        setAlignment(Pos.CENTER);
+    }
+
     public void setShowingDominantAnimals(boolean showingDominantAnimals) {
         this.showingDominantAnimals = showingDominantAnimals;
         applyDominantGenomeEffect();
@@ -64,12 +70,6 @@ public class MapViewPane extends GridPane {
             }
         }
         applyDominantGenomeEffect();
-    }
-
-    public MapViewPane(double prefWidth, double prefHeight) {
-        setPrefWidth(prefWidth);
-        setPrefHeight(prefHeight);
-        setAlignment(Pos.CENTER);
     }
 
 }
