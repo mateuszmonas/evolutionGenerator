@@ -9,14 +9,12 @@ import util.Config;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class Animal extends AbstractMapElement {
     int birthDay;
     int deathDay = 0;
-    Set<Animal> parents;
     Set<Animal> children = new HashSet<>();
-    int descendantsCount = 0;
-    int childrenCount = 0;
     private int energy;
     private MapDirection direction;
     private Genotype genotype;
@@ -33,8 +31,6 @@ public class Animal extends AbstractMapElement {
             parent1.reduceEnergy(parent1.energy / 4);
             parent2.reduceEnergy(parent2.energy / 4);
             child = Animal.newAnimalBuilder().atPosition(position).fromParents(parent1, parent2).withBirthDay(birthDay).withEnergy(childEnergy).build();
-            parent1.increaseChildrenCount();
-            parent2.increaseChildrenCount();
             parent1.children.add(child);
             parent2.children.add(child);
         }
@@ -96,28 +92,23 @@ public class Animal extends AbstractMapElement {
     }
 
     public int getChildCount() {
-        return childrenCount;
+        return children.size();
     }
 
-    public int getDescendantsCount() {
-        return descendantsCount;
+    public long getDescendantsCount() {
+        return getChildrenStream().count();
     }
 
-    public void increaseChildrenCount() {
-        childrenCount++;
-        increaseDescendantsCount();
-    }
-
-    public void increaseDescendantsCount() {
-        descendantsCount++;
-        for (Animal parent : parents) {
-            parent.increaseDescendantsCount();
-        }
+    Stream<Animal> getChildrenStream() {
+        if(children.isEmpty()) return Stream.of(this);
+        return children.stream()
+                .map(Animal::getChildrenStream)
+                .flatMap(animalStream -> animalStream)
+                .distinct();
     }
 
     @Override
     public void notifyRemove() {
-        children.forEach(animal -> animal.parents.remove(this));
         super.notifyRemove();
     }
 
@@ -139,7 +130,6 @@ public class Animal extends AbstractMapElement {
     public static class AnimalBuilder {
 
         Genotype genotype = new Genotype();
-        Set<Animal> parents = new HashSet<>(2);
         private Vector2d position;
         private int energy = Config.getInstance().getInitialAnimalEnergy();
         private MapDirection direction = MapDirection.getRandom();
@@ -156,8 +146,6 @@ public class Animal extends AbstractMapElement {
         }
 
         public AnimalBuilder fromParents(Animal parent1, Animal parent2) {
-            parents.add(parent1);
-            parents.add(parent2);
             genotype = new Genotype(parent1.genotype, parent2.genotype);
             return this;
         }
@@ -179,7 +167,6 @@ public class Animal extends AbstractMapElement {
             animal.direction = direction;
             animal.genotype = genotype;
             animal.birthDay = birthDay;
-            animal.parents = parents;
             return animal;
         }
     }
