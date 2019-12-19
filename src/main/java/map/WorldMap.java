@@ -24,5 +24,7 @@ public interface WorldMap extends MapElementObserver {
 
     Optional<Vector2d> getUnoccupiedPositionInArea(Rectangle area);
 
+    Vector2d getRandomSurrounding(Vector2d position);
+
 }
 

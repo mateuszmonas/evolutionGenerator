@@ -1,5 +1,6 @@
 package map;
 
+import data.MapDirection;
 import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
@@ -100,5 +101,14 @@ public class JungleWorldMap implements WorldMap {
     @Override
     public Optional<Vector2d> getUnoccupiedPositionNotInArea(Rectangle area) {
         return getUnoccupiedPosition(vector2d -> !elements.containsKey(vector2d) && !area.contains(vector2d));
+    }
+
+    @Override
+    public Vector2d getRandomSurrounding(Vector2d position) {
+        for (MapDirection direction : MapDirection.values()) {
+            if(elements.containsKey(position.add(direction.toUnitVector())))
+                return position.add(direction.toUnitVector());
+        }
+        return position.add(MapDirection.getRandom().toUnitVector());
     }
 }

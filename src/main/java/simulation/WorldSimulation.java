@@ -1,5 +1,6 @@
 package simulation;
 
+import javafx.util.Pair;
 import util.Config;
 import data.Rectangle;
 import data.Vector2d;
@@ -122,12 +123,12 @@ public class WorldSimulation implements Simulation {
         return animals.stream().filter(animal -> animal.getEnergy() == maxEnergy).collect(Collectors.toList());
     }
 
-    // TODO: 2019-12-16 animal should spawn on adjacent position
     void reproduceAnimals(Map<Vector2d, Set<Animal>> animals) {
         animals.values().stream()
                 .filter(animalsSet -> animalsSet.size() > 1)
                 .map(animalsSet -> animalsSet.stream().sorted((a1, a2) -> -Integer.compare(a1.getEnergy(), a2.getEnergy())).iterator())
-                .map(animalsSet -> Animal.reproduce(animalsSet.next(), animalsSet.next(), day))
+                .map(animalIterator -> new Pair<>(animalIterator.next(), animalIterator.next()))
+                .map(animalPair -> Animal.reproduce(animalPair, map.getRandomSurrounding(animalPair.getKey().getPosition()), day))
                 .filter(Optional::isPresent)
                 .forEach(animal -> map.addElement(animal.get()));
     }

@@ -1,5 +1,6 @@
 package elements.animal;
 
+import javafx.util.Pair;
 import util.Config;
 import data.MapDirection;
 import data.Vector2d;
@@ -21,13 +22,15 @@ public class Animal extends AbstractMapElement {
     private Animal() {
     }
 
-    public static Optional<Animal> reproduce(Animal parent1, Animal parent2, int birthDay) {
+    public static Optional<Animal> reproduce(Pair<Animal, Animal> parents, Vector2d position, int birthDay) {
+        Animal parent1 = parents.getKey();
+        Animal parent2 = parents.getValue();
         Animal child = null;
         if (parent1.energy > Config.getInstance().getInitialAnimalEnergy() / 2 && parent2.energy > Config.getInstance().getInitialAnimalEnergy() / 2) {
             int childEnergy = parent1.energy / 4 + parent2.energy / 4;
             parent1.reduceEnergy(parent1.energy / 4);
             parent2.reduceEnergy(parent2.energy / 4);
-            child = Animal.newAnimalBuilder().atPosition(parent1.position).fromParents(parent1, parent2).withBirthDay(birthDay).withEnergy(childEnergy).build();
+            child = Animal.newAnimalBuilder().atPosition(position).fromParents(parent1, parent2).withBirthDay(birthDay).withEnergy(childEnergy).build();
             parent1.increaseChildrenCount();
             parent2.increaseChildrenCount();
         }
