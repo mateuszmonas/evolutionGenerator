@@ -35,11 +35,7 @@ public class StatusDetailsViewPane extends StackPane {
     }
 
     public void printStatusToFile() {
-        try {
-            FileUtil.writeToFile(Config.getInstance().getStatusDetailsFilePath(), mapDetailsText.getText());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        FileUtil.writeToFile(Config.getInstance().getStatusDetailsFilePath(), mapDetailsText.getText());
     }
 
     public void updateTrackedElementDetails(MapElement element) {
