@@ -1,10 +1,10 @@
 package elements.animal;
 
-import javafx.util.Pair;
-import util.Config;
 import data.MapDirection;
 import data.Vector2d;
 import elements.AbstractMapElement;
+import javafx.util.Pair;
+import util.Config;
 
 import java.util.Optional;
 
@@ -58,8 +58,8 @@ public class Animal extends AbstractMapElement {
     public Icon getIcon() {
         int initialAnimalEnergy = Config.getInstance().getInitialAnimalEnergy();
         Icon icon;
-        if(initialAnimalEnergy/3*2<energy) icon = Icon.ANIMAL_HIGH_ENERGY;
-        else if(initialAnimalEnergy/3<energy) icon = Icon.ANIMAL_MEDIUM_ENERGY;
+        if (initialAnimalEnergy / 3 * 2 < energy) icon = Icon.ANIMAL_HIGH_ENERGY;
+        else if (initialAnimalEnergy / 3 < energy) icon = Icon.ANIMAL_MEDIUM_ENERGY;
         else icon = Icon.ANIMAL_LOW_ENERGY;
         return icon;
     }
@@ -115,7 +115,7 @@ public class Animal extends AbstractMapElement {
     @Override
     public String toDetails() {
         return "birthDay=" + birthDay +
-                "\ndeathDay=" + (deathDay==0?"NaN":deathDay) +
+                "\ndeathDay=" + (deathDay == 0 ? "NaN" : deathDay) +
                 "\nchildCount=" + getChildCount() +
                 "\ndescendantsCount=" + getDescendantsCount() +
                 "\ngenome=" + genotype +
@@ -130,12 +130,12 @@ public class Animal extends AbstractMapElement {
     public static class AnimalBuilder {
 
         Genotype genotype = new Genotype();
+        Animal parent1;
+        Animal parent2;
         private Vector2d position;
         private int energy = Config.getInstance().getInitialAnimalEnergy();
         private MapDirection direction = MapDirection.getRandom();
         private int birthDay;
-        Animal parent1;
-        Animal parent2;
 
         public AnimalBuilder atPosition(Vector2d position) {
             this.position = position;

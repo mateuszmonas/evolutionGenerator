@@ -13,7 +13,7 @@ public final class FileUtil {
             writer.append('\n');
             writer.close();
         } catch (IOException e) {
-            System.err.println(e.getMessage());;
+            System.err.println(e.getMessage());
         }
     }
 

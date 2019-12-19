@@ -9,8 +9,6 @@ import map.MapStatus;
 import util.Config;
 import util.FileUtil;
 
-import java.io.IOException;
-
 public class StatusDetailsViewPane extends StackPane {
 
     HBox details = new HBox();
@@ -26,11 +24,11 @@ public class StatusDetailsViewPane extends StackPane {
         getChildren().add(details);
 
         mapDetailsText = new Text();
-        mapDetailsText.setWrappingWidth(getPrefWidth()/2);
+        mapDetailsText.setWrappingWidth(getPrefWidth() / 2);
         details.getChildren().add(mapDetailsText);
 
         trackedElementDetailsText = new Text();
-        trackedElementDetailsText.setWrappingWidth(getPrefWidth()/2);
+        trackedElementDetailsText.setWrappingWidth(getPrefWidth() / 2);
         details.getChildren().add(trackedElementDetailsText);
     }
 

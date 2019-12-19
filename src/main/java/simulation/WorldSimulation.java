@@ -1,14 +1,14 @@
 package simulation;
 
-import javafx.util.Pair;
-import util.Config;
 import data.Rectangle;
 import data.Vector2d;
 import elements.animal.Animal;
 import elements.plant.Plant;
+import javafx.util.Pair;
 import map.JungleWorldMap;
 import map.MapStatus;
 import map.WorldMap;
+import util.Config;
 import view.SimulationView;
 
 import java.util.*;
@@ -113,7 +113,7 @@ public class WorldSimulation implements Simulation {
                 .filter(entry -> plants.containsKey(entry.getKey()))
                 .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), getStrongestAnimals(entry.getValue())))
                 .forEach(entry -> {
-                    entry.getValue().forEach(animal -> animal.increaseEnergy(plants.get(entry.getKey()).getNutritionValue()/entry.getValue().size()));
+                    entry.getValue().forEach(animal -> animal.increaseEnergy(plants.get(entry.getKey()).getNutritionValue() / entry.getValue().size()));
                     plants.get(entry.getKey()).notifyRemove();
                 });
     }

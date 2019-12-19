@@ -106,7 +106,7 @@ public class JungleWorldMap implements WorldMap {
     @Override
     public Vector2d getRandomSurrounding(Vector2d position) {
         for (MapDirection direction : MapDirection.values()) {
-            if(elements.containsKey(position.add(direction.toUnitVector())))
+            if (elements.containsKey(position.add(direction.toUnitVector())))
                 return position.add(direction.toUnitVector());
         }
         return position.add(MapDirection.getRandom().toUnitVector());

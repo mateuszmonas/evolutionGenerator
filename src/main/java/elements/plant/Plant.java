@@ -1,8 +1,8 @@
 package elements.plant;
 
-import util.Config;
 import data.Vector2d;
 import elements.AbstractMapElement;
+import util.Config;
 
 public class Plant extends AbstractMapElement {
 

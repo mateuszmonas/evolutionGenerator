@@ -1,6 +1,5 @@
 package view.mapStatus;
 
-import data.Rectangle;
 import data.Vector2d;
 import elements.MapElement;
 import map.MapStatus;

@@ -12,16 +12,10 @@ public class SettingsPane extends HBox {
 
     boolean showDominantGenome = false;
 
-    ShowDominantGenomeClickListener showDominantGenomeClickListener = value -> {};
-    PrintMapStatusToFileListener printMapStatusToFileListener = () -> {};
-
-    public void setOnShowDominantGenomeClick(ShowDominantGenomeClickListener listener) {
-        this.showDominantGenomeClickListener = listener;
-    }
-
-    public void setPrintMapStatusToFileListener(PrintMapStatusToFileListener printMapStatusToFileListener) {
-        this.printMapStatusToFileListener = printMapStatusToFileListener;
-    }
+    ShowDominantGenomeClickListener showDominantGenomeClickListener = value -> {
+    };
+    PrintMapStatusToFileListener printMapStatusToFileListener = () -> {
+    };
 
     public SettingsPane(SimulationStatus simulationStatus, double prefWidth, double prefHeight) {
         setPrefWidth(prefWidth);
@@ -60,5 +54,13 @@ public class SettingsPane extends HBox {
         getChildren().add(dominantGenomeButton);
         getChildren().add(printMapStatusToFileButton);
         getChildren().add(intervalSlider);
+    }
+
+    public void setOnShowDominantGenomeClick(ShowDominantGenomeClickListener listener) {
+        this.showDominantGenomeClickListener = listener;
+    }
+
+    public void setPrintMapStatusToFileListener(PrintMapStatusToFileListener printMapStatusToFileListener) {
+        this.printMapStatusToFileListener = printMapStatusToFileListener;
     }
 }

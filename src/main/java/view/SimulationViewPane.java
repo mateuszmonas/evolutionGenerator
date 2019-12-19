@@ -1,10 +1,10 @@
 package view;
 
-import util.Config;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import simulation.Simulation;
 import simulation.SimulationStatus;
+import util.Config;
 import view.mapStatus.MapStatusViewPane;
 
 import java.util.HashSet;
@@ -25,7 +25,7 @@ public class SimulationViewPane extends VBox implements SimulationView {
         settings.setPrintMapStatusToFileListener(() -> new Thread(() -> mapStatusesViewPanes.forEach(MapStatusViewPane::printStatusToFile)).start());
 
         maps.setPrefWidth(prefWidth);
-        maps.setPrefHeight(prefHeight/10*9);
+        maps.setPrefHeight(prefHeight / 10 * 9);
 
         this.getChildren().add(maps);
         this.getChildren().add(settings);

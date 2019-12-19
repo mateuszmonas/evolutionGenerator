@@ -1,4 +1,3 @@
-import util.Config;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -7,6 +6,7 @@ import javafx.stage.Stage;
 import simulation.Simulation;
 import simulation.SimulationStatus;
 import simulation.WorldSimulation;
+import util.Config;
 import view.SimulationView;
 import view.SimulationViewPane;
 

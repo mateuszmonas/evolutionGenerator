@@ -61,7 +61,7 @@ public class MapStatus {
         details.animalCount = animals.size();
         details.averageEnergy = animals.stream()
                 .mapToInt(Animal::getEnergy)
-                .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
+                .sum() / (double) (details.animalCount > 0 ? details.animalCount : 1);
 
         details.dominantGenome = animals.stream()
                 .collect(Collectors.groupingBy(Animal::getGenotype, Collectors.counting()))
@@ -71,15 +71,15 @@ public class MapStatus {
 
         elementsPositions.dominatingGenomeElementsPositions = animals.stream()
                 .filter(animal -> Arrays.equals(animal.getGenotype()
-                .getGeneCount(), details.dominantGenome))
+                        .getGeneCount(), details.dominantGenome))
                 .map(animal -> area.normalisePosition(animal.getPosition()))
                 .collect(Collectors.toSet());
 
         details.averageChildCount = animals.stream()
                 .mapToInt(Animal::getChildCount)
-                .sum() / (double)(details.animalCount > 0 ? details.animalCount : 1);
+                .sum() / (double) (details.animalCount > 0 ? details.animalCount : 1);
 
-        if(elementsPositions.trackedElement!=null)
+        if (elementsPositions.trackedElement != null)
             elementsPositions.trackedElementPosition = area.normalisePosition(elementsPositions.trackedElement.getPosition());
 
         if (view != null)
@@ -93,7 +93,8 @@ public class MapStatus {
 
     public void setTrackedElement(MapElement element) {
         elementsPositions.trackedElement = elementsPositions.trackedElement != element ? element : null;
-        if (elementsPositions.trackedElement != null) elementsPositions.trackedElementPosition = area.normalisePosition(element.getPosition());
+        if (elementsPositions.trackedElement != null)
+            elementsPositions.trackedElementPosition = area.normalisePosition(element.getPosition());
         else elementsPositions.trackedElementPosition = null;
         view.trackedElementChange(elementsPositions.trackedElement, elementsPositions.trackedElementPosition);
     }
@@ -107,7 +108,7 @@ public class MapStatus {
         return details;
     }
 
-    public static class ElementsPositions{
+    public static class ElementsPositions {
         public Map<Vector2d, Set<MapElement>> elements = new HashMap<>();
         public Map<Vector2d, MapElement> elementsToDisplay = new HashMap<>();
         public Set<Vector2d> dominatingGenomeElementsPositions = new HashSet<>();
