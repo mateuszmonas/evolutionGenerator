@@ -7,20 +7,24 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import map.MapStatus;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class MapViewPane extends GridPane {
     MapField[][] positions;
 
     Set<MapElementClickListener> listeners = new HashSet<>();
-    MapField highlightedField = null;
+    MapField trackedField = null;
+    Set<MapField> dominantGenomeFields = new HashSet<>();
     boolean showingDominantAnimals = false;
 
     public void setShowingDominantAnimals(boolean showingDominantAnimals) {
         this.showingDominantAnimals = showingDominantAnimals;
+        applyDominantGenomeEffect();
+    }
+
+    private void applyDominantGenomeEffect() {
+        dominantGenomeFields.forEach(mapField -> mapField.setDominatingGenomeEffect(showingDominantAnimals));
     }
 
     private void onFieldClick(MapField field) {
@@ -30,8 +34,8 @@ public class MapViewPane extends GridPane {
     }
 
     public void trackedElementChange(Vector2d trackedElementPosition) {
-        if (highlightedField != null) {
-            highlightedField.setTrackingEffect(false);
+        if (trackedField != null) {
+            trackedField.setTrackingEffect(false);
         }
         if (trackedElementPosition != null) {
             positions[trackedElementPosition.x][trackedElementPosition.y].setTrackingEffect(true);
@@ -56,6 +60,7 @@ public class MapViewPane extends GridPane {
     }
 
     public void updateMap(MapStatus.ElementsPositions elementsPositions) {
+        dominantGenomeFields.clear();
         for (int i = 0; i < positions.length; i++) {
             for (int j = 0; j < positions[i].length; j++) {
                 Vector2d position = new Vector2d(i, j);
@@ -63,12 +68,14 @@ public class MapViewPane extends GridPane {
                 positions[i][j].update(elementToDisplay,
                         elementsPositions.elements.getOrDefault(position, null));
                 if (position.equals(elementsPositions.trackedElementPosition)) {
+                    trackedField = positions[i][j];
                     positions[i][j].setTrackingEffect(true);
-                } else if (showingDominantAnimals && elementsPositions.dominatingGenomeElementsPositions.contains(position)) {
-                    positions[i][j].setDominatingGenomeEffect(true);
+                } else if (elementsPositions.dominatingGenomeElementsPositions.contains(position)) {
+                    dominantGenomeFields.add(positions[i][j]);
                 }
             }
         }
+        applyDominantGenomeEffect();
     }
 
     public MapViewPane(double prefWidth, double prefHeight) {
