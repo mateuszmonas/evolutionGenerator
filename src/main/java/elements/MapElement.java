@@ -24,7 +24,9 @@ public interface MapElement {
     enum Icon {
 
         GROUND("ground.png"),
-        ANIMAL("animal.png"),
+        ANIMAL_LOW_ENERGY("animal_low_energy.png"),
+        ANIMAL_MEDIUM_ENERGY("animal_medium_energy.png"),
+        ANIMAL_HIGH_ENERGY("animal_high_energy.png"),
         PLANT("grass.png");
 
         public Image image;

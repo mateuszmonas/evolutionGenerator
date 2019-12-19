@@ -1,8 +1,6 @@
 package view.mapStatus.map;
 
 import elements.MapElement;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 
 

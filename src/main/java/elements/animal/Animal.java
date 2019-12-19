@@ -52,7 +52,12 @@ public class Animal extends AbstractMapElement {
 
     @Override
     public Icon getIcon() {
-        return Icon.ANIMAL;
+        int initialAnimalEnergy = Config.getInstance().getInitialAnimalEnergy();
+        Icon icon;
+        if(initialAnimalEnergy/3*2<energy) icon = Icon.ANIMAL_HIGH_ENERGY;
+        else if(initialAnimalEnergy/3<energy) icon = Icon.ANIMAL_MEDIUM_ENERGY;
+        else icon = Icon.ANIMAL_LOW_ENERGY;
+        return icon;
     }
 
     public boolean isDead(int day) {
@@ -64,7 +69,7 @@ public class Animal extends AbstractMapElement {
     }
 
     public void increaseEnergy(int energy) {
-        this.energy += energy;
+        this.energy = Math.min(this.energy + energy, Config.getInstance().getInitialAnimalEnergy());
     }
 
     public void move() {
