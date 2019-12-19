@@ -30,6 +30,10 @@ public class StatusDetailsViewPane extends StackPane {
         details.getChildren().add(trackedElementDetailsText);
     }
 
+    public void printStatusToFile() {
+        System.out.println("print");
+    }
+
     public void updateTrackedElementDetails(MapElement element) {
         if (element != null) {
             trackedElementDetailsText.setText(element.toDetails());

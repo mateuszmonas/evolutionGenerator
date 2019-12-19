@@ -63,7 +63,7 @@ public class WorldSimulation implements Simulation {
         feedAnimals(animals, plants);
         reproduceAnimals(animals);
         generateGrasses();
-        mapStatus.update(map.getElements());
+        mapStatus.update(map.getElements(), day);
         day++;
     }
 

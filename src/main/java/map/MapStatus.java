@@ -22,7 +22,7 @@ public class MapStatus {
 
     public MapStatus(Rectangle area, Map<Vector2d, Set<MapElement>> elements) {
         this.area = area;
-        update(elements);
+        update(elements, 0);
     }
 
     public Rectangle getArea() {
@@ -34,7 +34,8 @@ public class MapStatus {
         view.initialize(this);
     }
 
-    public void update(Map<Vector2d, Set<MapElement>> elements) {
+    public void update(Map<Vector2d, Set<MapElement>> elements, int day) {
+        details.day = day;
         elementsPositions.elements = elements;
 
         elementsPositions.elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
@@ -115,6 +116,7 @@ public class MapStatus {
     }
 
     public static class StatusDetails {
+        public int day;
         public int deadAnimalCount = 0;
         public long lifeSpanSum;
         public long plantCount;
@@ -126,7 +128,8 @@ public class MapStatus {
 
         @Override
         public String toString() {
-            return "plantCount=" + plantCount +
+            return "day=" + day +
+                    "\nplantCount=" + plantCount +
                     "\nanimalCount=" + animalCount +
                     "\ndominantGenome=" + Arrays.toString(dominantGenome) +
                     "\naverageEnergy=" + averageEnergy +

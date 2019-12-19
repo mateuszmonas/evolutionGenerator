@@ -43,6 +43,10 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
         mapView.setShowingDominantAnimals(show);
     }
 
+    public void printStatusToFile() {
+        statusView.printStatusToFile();
+    }
+
     @Override
     public void updateMap(MapStatus status) {
         if (mapView == null || statusView == null) {
