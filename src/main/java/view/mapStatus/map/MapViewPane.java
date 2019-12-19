@@ -13,7 +13,6 @@ import java.util.Set;
 public class MapViewPane extends GridPane {
     MapField[][] positions;
 
-    Set<MapElementClickListener> listeners = new HashSet<>();
     MapField trackedField = null;
     Set<MapField> dominantGenomeFields = new HashSet<>();
     boolean showingDominantAnimals = false;
@@ -27,12 +26,6 @@ public class MapViewPane extends GridPane {
         dominantGenomeFields.forEach(mapField -> mapField.setDominatingGenomeEffect(showingDominantAnimals));
     }
 
-    private void onFieldClick(MapField field) {
-        for (MapElementClickListener listener : listeners) {
-            listener.mapElementClicked(field.getDisplayedElement());
-        }
-    }
-
     public void trackedElementChange(Vector2d trackedElementPosition) {
         if (trackedField != null) {
             trackedField.setTrackingEffect(false);
@@ -43,19 +36,14 @@ public class MapViewPane extends GridPane {
         }
     }
 
-    public void addOnFieldClickListener(MapElementClickListener listener) {
-        listeners.add(listener);
-    }
-
-    public void initialize(Rectangle area) {
+    public void initialize(TrackingEventListener listener, Rectangle area) {
         positions = new MapField[area.getWidth()][area.getHeight()];
-        area.getVectorSpace().forEach(vector2d -> positions[vector2d.x][vector2d.y] = new MapField());
+        area.getVectorSpace().forEach(vector2d -> positions[vector2d.x][vector2d.y] = new MapField(listener));
         for (int i = 0; i < area.getWidth(); i++) {
             for (int j = 0; j < area.getHeight(); j++) {
                 this.add(positions[i][j], i + 1, j + 1);
                 positions[i][j].setFitHeight(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
                 positions[i][j].setFitWidth(Math.min(this.getPrefWidth() / area.getWidth(), this.getPrefHeight() / area.getHeight()));
-                positions[i][j].setOnMouseClicked(mouseEvent -> onFieldClick((MapField) mouseEvent.getSource()));
             }
         }
     }

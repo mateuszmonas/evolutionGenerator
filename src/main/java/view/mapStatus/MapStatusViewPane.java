@@ -30,8 +30,7 @@ public class MapStatusViewPane extends VBox implements MapStatusView {
 
     @Override
     public void initialize(MapStatus mapStatus) {
-        mapView.initialize(mapStatus.getArea());
-        mapView.addOnFieldClickListener(mapStatus::setTrackedElement);
+        mapView.initialize(mapStatus::setTrackedElement, mapStatus.getArea());
     }
 
     @Override
