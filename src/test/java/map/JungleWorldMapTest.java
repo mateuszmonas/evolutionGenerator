@@ -73,7 +73,7 @@ class JungleWorldMapTest {
 
     @Test
     void testGetUnoccupiedPosition() {
-        JungleWorldMap map = new JungleWorldMap(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10)));
+        JungleWorldMap map = new JungleWorldMap(new Rectangle(new Vector2d(0, 0), new Vector2d(9, 9)));
         assertFalse(map.getUnoccupiedPositionNotInArea(new Rectangle(new Vector2d(0, 0), new Vector2d(10, 10))).isPresent());
         for (int i = 0; i < 10 * 10; i++) {
             Optional<Vector2d> position = map.getUnoccupiedPosition();
