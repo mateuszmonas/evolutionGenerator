@@ -7,9 +7,11 @@ import simulation.Simulation;
 import simulation.SimulationStatus;
 import simulation.WorldSimulation;
 import util.Config;
+import util.FileUtil;
 import view.SimulationView;
 import view.SimulationViewPane;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         stage.setTitle("Generator Ewolucyjny");
 
+        FileUtil.clearFile(Config.getInstance().getStatusDetailsFilePath());
         SimulationStatus simulationStatus = new SimulationStatus();
         SimulationViewPane root = new SimulationViewPane(simulationStatus, Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight());
         createSimulations(Config.getInstance().getSimulationCount(), root);

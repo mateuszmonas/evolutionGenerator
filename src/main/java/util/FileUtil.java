@@ -6,7 +6,17 @@ import java.io.IOException;
 
 public final class FileUtil {
 
-    public static void writeToFile(String path, String text) {
+    public static void clearFile(String path) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\Test\test.txt"));
+            writer.write("");
+            writer.close();  //        } catch (IOException e) {
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static void appendToFile(String path, String text) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path, true));
             writer.append(text);
