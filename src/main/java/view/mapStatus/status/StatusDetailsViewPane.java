@@ -6,6 +6,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import map.MapStatus;
+import util.Config;
+import util.FileUtil;
+
+import java.io.IOException;
 
 public class StatusDetailsViewPane extends StackPane {
 
@@ -31,7 +35,11 @@ public class StatusDetailsViewPane extends StackPane {
     }
 
     public void printStatusToFile() {
-        System.out.println("print");
+        try {
+            FileUtil.writeToFile(Config.getInstance().getStatusDetailsFilePath(), mapDetailsText.getText());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public void updateTrackedElementDetails(MapElement element) {

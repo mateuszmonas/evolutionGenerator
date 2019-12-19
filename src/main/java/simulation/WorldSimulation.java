@@ -1,9 +1,8 @@
 package simulation;
 
-import data.Config;
+import util.Config;
 import data.Rectangle;
 import data.Vector2d;
-import elements.MapElement;
 import elements.animal.Animal;
 import elements.plant.Plant;
 import map.JungleWorldMap;
@@ -104,7 +103,7 @@ public class WorldSimulation implements Simulation {
                 .flatMap(Set::stream)
                 .forEach(animal -> {
                     animal.move();
-                    animal.reduceEnergy(1);
+                    animal.reduceEnergy(Config.getInstance().getMoveEnergy());
                 });
     }
 

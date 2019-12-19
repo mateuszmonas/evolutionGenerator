@@ -1,12 +1,10 @@
 package elements.animal;
 
-import data.Config;
+import util.Config;
 import data.MapDirection;
 import data.Vector2d;
 import elements.AbstractMapElement;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class Animal extends AbstractMapElement {

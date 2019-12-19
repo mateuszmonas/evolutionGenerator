@@ -1,6 +1,6 @@
 package elements.plant;
 
-import data.Config;
+import util.Config;
 import data.Vector2d;
 import elements.AbstractMapElement;
 

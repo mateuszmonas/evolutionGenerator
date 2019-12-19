@@ -1,4 +1,4 @@
-package data;
+package util;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -17,6 +17,7 @@ public class Config {
     private double jungleRatio;
     private int initialAnimalCount;
     private int simulationCount;
+    private String statusDetailsFilePath;
 
     public static Config getInstance() {
         if (instance == null) {
@@ -63,5 +64,9 @@ public class Config {
 
     public int getSimulationCount() {
         return simulationCount;
+    }
+
+    public String getStatusDetailsFilePath() {
+        return statusDetailsFilePath;
     }
 }

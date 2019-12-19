@@ -1,6 +1,6 @@
 package view;
 
-import data.Config;
+import util.Config;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import simulation.Simulation;
