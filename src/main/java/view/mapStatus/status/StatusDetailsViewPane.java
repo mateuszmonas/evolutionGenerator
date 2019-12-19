@@ -37,9 +37,9 @@ public class StatusDetailsViewPane extends StackPane {
     }
 
     public void updateTrackedElementDetails(MapElement element) {
-        if (element != null) {
+        if (element != null)
             trackedElementDetailsText.setText(element.toDetails());
-        }
+        else trackedElementDetailsText.setText(null);
     }
 
     public void update(MapStatus.StatusDetails details, MapElement trackedElement) {

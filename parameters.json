@@ -1,11 +1,11 @@
 {
-  "width": 10,
-  "height": 10,
+  "width": 50,
+  "height": 50,
   "moveEnergy": 1,
-  "plantEnergy": 1000,
-  "initialAnimalEnergy": 1000,
-  "jungleRatio": 0.1,
-  "initialAnimalCount": 10,
+  "plantEnergy": 10,
+  "initialAnimalEnergy": 100,
+  "jungleRatio": 0.25,
+  "initialAnimalCount": 25,
   "simulationCount": 2,
   "statusDetailsFilePath": "details.txt"
 }
