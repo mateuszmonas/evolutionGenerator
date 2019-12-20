@@ -52,21 +52,18 @@ public class MapViewPane extends GridPane {
 
     public void updateMap(MapStatus.ElementsPositions elementsPositions) {
         dominantGenomeFields.clear();
-        for (int i = 0; i < positions.length; i++) {
-            for (int j = 0; j < positions[i].length; j++) {
-                Vector2d position = new Vector2d(i, j);
-                MapElement elementToDisplay = elementsPositions.elementsToDisplay.getOrDefault(position, null);
 
-                positions[i][j].update(elementToDisplay,
-                        elementsPositions.elements.getOrDefault(position, null));
+        for (Vector2d position : elementsPositions.changedPositions) {
+            MapElement elementToDisplay = elementsPositions.elementsToDisplay.getOrDefault(position, null);
 
-                if (position.equals(elementsPositions.trackedElementPosition)) {
-                    trackedField = positions[i][j];
-                    positions[i][j].setTrackingEffect(true);
-                }
-                if (elementsPositions.dominatingGenomeElementsPositions.contains(position)) {
-                    dominantGenomeFields.add(positions[i][j]);
-                }
+            positions[position.x][position.y].update(elementToDisplay, elementsPositions.elements.getOrDefault(position, null));
+
+            if (position.equals(elementsPositions.trackedElementPosition)) {
+                trackedField = positions[position.x][position.y];
+                positions[position.x][position.y].setTrackingEffect(true);
+            }
+            if (elementsPositions.dominatingGenomeElementsPositions.contains(position)) {
+                dominantGenomeFields.add(positions[position.x][position.y]);
             }
         }
         applyDominantGenomeEffect();

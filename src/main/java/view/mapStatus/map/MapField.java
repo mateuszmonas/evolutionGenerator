@@ -35,6 +35,8 @@ public class MapField extends ImageView {
         Tooltip.install(this, tooltip);
         elementsMenu = new MapFieldContextMenu(listener);
         setOnContextMenuRequested(contextMenuEvent -> elementsMenu.show(this, Side.RIGHT, 0, 0));
+        setImage(MapElement.Icon.GROUND.image);
+        tooltip.setText("ground");
     }
 
     public void setTrackingEffect(boolean show) {

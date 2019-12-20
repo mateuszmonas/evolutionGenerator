@@ -10,6 +10,7 @@ import view.mapStatus.MapStatusView;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapStatus {
 
@@ -36,7 +37,10 @@ public class MapStatus {
 
     public void update(Map<Vector2d, Set<MapElement>> elements, int day) {
         details.day = day;
+        elementsPositions.changedPositions = Stream.concat(elements.keySet().stream(), elementsPositions.elementsToDisplay.keySet().stream())
+                .collect(Collectors.toSet());
         elementsPositions.elements = elements;
+
 
         elementsPositions.elementsToDisplay = elements.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -114,6 +118,7 @@ public class MapStatus {
         public Set<Vector2d> dominatingGenomeElementsPositions = new HashSet<>();
         public MapElement trackedElement = null;
         public Vector2d trackedElementPosition = null;
+        public Set<Vector2d> changedPositions = new HashSet<>();
     }
 
     public static class StatusDetails {
