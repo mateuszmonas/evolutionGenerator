@@ -7,6 +7,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.SepiaTone;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -48,17 +49,16 @@ public class MapField extends ImageView {
 
     public void update(MapElement elementToDisplay, Set<MapElement> elements) {
         this.setEffect(null);
-
+        this.elementToDisplay = elementToDisplay;
         elementsMenu.setElements(elements);
 
-        this.elementToDisplay = elementToDisplay;
-        if (elementToDisplay != null) {
-            setImage(elementToDisplay.getIcon().image);
-            tooltip.setText(elementToDisplay.toString());
-        } else {
-            setImage(MapElement.Icon.GROUND.image);
-            tooltip.setText("ground");
+        Image imageToDisplay = elementToDisplay != null ? elementToDisplay.getIcon().image : MapElement.Icon.GROUND.image;
+        String tooltipString = elementToDisplay != null ? elementToDisplay.toString() : "ground";
+
+        if (getImage()!=imageToDisplay) {
+            setImage(imageToDisplay);
         }
+        tooltip.setText(tooltipString);
 
     }
 }
