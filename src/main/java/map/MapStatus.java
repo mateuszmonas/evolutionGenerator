@@ -37,8 +37,8 @@ public class MapStatus {
 
     public void update(Map<Vector2d, Set<MapElement>> elements, int day) {
         details.day = day;
-        elementsPositions.changedPositions = Stream.concat(elements.keySet().stream(), elementsPositions.elementsToDisplay.keySet().stream())
-                .collect(Collectors.toSet());
+        elementsPositions.changedPositions = new HashSet<>(elements.keySet());
+        elementsPositions.changedPositions.addAll(elementsPositions.elementsToDisplay.keySet());
         elementsPositions.elements = elements;
 
 

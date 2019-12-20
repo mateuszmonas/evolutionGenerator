@@ -1,17 +1,13 @@
 package view.mapStatus.map;
 
 import elements.MapElement;
-import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.SepiaTone;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.Set;
@@ -21,6 +17,7 @@ public class MapField extends ImageView {
     private static Effect trackingEffect = new ColorAdjust(1, 0, 0, 0);
     private static Effect genomeEffect = new SepiaTone(1);
     MapElement elementToDisplay;
+    MapElement.Icon currentIcon;
     Tooltip tooltip;
     MapFieldContextMenu elementsMenu;
 
@@ -54,11 +51,11 @@ public class MapField extends ImageView {
         this.elementToDisplay = elementToDisplay;
         elementsMenu.setElements(elements);
 
-        Image imageToDisplay = elementToDisplay != null ? elementToDisplay.getIcon().image : MapElement.Icon.GROUND.image;
+        MapElement.Icon iconToDisplay = elementToDisplay != null ? elementToDisplay.getIcon() : MapElement.Icon.GROUND;
         String tooltipString = elementToDisplay != null ? elementToDisplay.toString() : "ground";
 
-        if (getImage()!=imageToDisplay) {
-            setImage(imageToDisplay);
+        if (iconToDisplay != currentIcon) {
+            setImage(iconToDisplay.image);
         }
         tooltip.setText(tooltipString);
 
