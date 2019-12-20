@@ -96,15 +96,13 @@ public class Animal extends AbstractMapElement {
     }
 
     public long getDescendantsCount() {
-        return getChildrenStream().count();
+        return getChildrenStream().distinct().count() - 1;
     }
 
     Stream<Animal> getChildrenStream() {
-        if(children.isEmpty()) return Stream.of(this);
-        return children.stream()
+        return Stream.concat(Stream.of(this), children.stream()
                 .map(Animal::getChildrenStream)
-                .flatMap(animalStream -> animalStream)
-                .distinct();
+                .flatMap(animalStream -> animalStream));
     }
 
     @Override
