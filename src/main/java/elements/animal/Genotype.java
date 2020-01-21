@@ -26,7 +26,7 @@ public class Genotype {
             genes.add(i);
         }
         for (int i = geneTypeCount; i < genomeSize; i++) {
-            genes.add(ThreadLocalRandom.current().nextInt(8));
+            genes.add(ThreadLocalRandom.current().nextInt(geneTypeCount));
         }
         genes.sort(Integer::compareTo);
         for (int i = 0; i < genomeSize; i++) {
