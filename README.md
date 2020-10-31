@@ -1,3 +1,5 @@
+__Jak pomogłem daj gwiazdkę.__
+
 # Projekt nr 1 - generator ewolucyjny
 
 Niniejsza treść została zaadaptowana na podstawie opisu oraz ilustracji przygotowanych przez Wojciecha Kosiora.
